@@ -18,10 +18,14 @@ const MAIN_NAV = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Invoices', href: '/invoices', icon: FileText },
   { name: 'Income', href: '/income', icon: Wallet },
-  { name: 'Projects', href: '/projects', icon: FolderKanban },
   { name: 'CRM', href: '/crm', icon: Briefcase },
   { name: 'Customers', href: '/customers', icon: Users },
   { name: 'Vendors', href: '/vendors', icon: Store },
+]
+
+const PROJECTS_NAV = [
+  { name: 'All Projects', href: '/projects', icon: FolderKanban },
+  { name: 'Settings', href: '/projects/settings', icon: Settings },
 ]
 
 const EXPENSES_NAV = [
@@ -66,6 +70,7 @@ export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
   const [expensesOpen, setExpensesOpen] = useState(false)
   const [reportsOpen, setReportsOpen] = useState(false)
+  const [projectsOpen, setProjectsOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
@@ -74,7 +79,8 @@ export function Sidebar() {
   useEffect(() => setMounted(true), [])
 
   const isExpensesActive = pathname.startsWith('/expenses') || pathname.startsWith('/categories')
-  const isReportsActive = pathname.startsWith('/reports')
+  const isReportsActive  = pathname.startsWith('/reports')
+  const isProjectsActive = pathname.startsWith('/projects')
 
   // Auto-open accordion when navigating to a sub-page
   useEffect(() => {
@@ -84,6 +90,10 @@ export function Sidebar() {
   useEffect(() => {
     if (isReportsActive) setReportsOpen(true)
   }, [isReportsActive])
+
+  useEffect(() => {
+    if (isProjectsActive) setProjectsOpen(true)
+  }, [isProjectsActive])
 
   // Hide sidebar on login page
   if (pathname === '/login') return null
@@ -193,6 +203,26 @@ export function Sidebar() {
             </Link>
           )
         })}
+
+        {/* Projects accordion */}
+        <AccordionSection
+          label="Projects"
+          icon={FolderKanban}
+          isActive={isProjectsActive}
+          isOpen={projectsOpen}
+          onToggle={() => setProjectsOpen(p => !p)}
+          rootHref="/projects"
+        >
+          {PROJECTS_NAV.map(({ name, href, icon: Icon }) => (
+            <SubLink
+              key={href}
+              href={href}
+              icon={Icon}
+              name={name}
+              isActive={pathname === href || (href === '/projects' && pathname === '/projects')}
+            />
+          ))}
+        </AccordionSection>
 
         {/* Expenses accordion */}
         <AccordionSection

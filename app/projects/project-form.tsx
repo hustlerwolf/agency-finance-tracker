@@ -6,38 +6,27 @@ import { saveProject } from './actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { ImageUpload } from '@/components/image-upload'
 import { toast } from 'sonner'
-import { X, Plus, ExternalLink } from 'lucide-react'
-
-const PLATFORMS = [
-  'Webflow', 'Framer', 'WordPress', 'Wix', 'Squarespace',
-  'Shopify', 'Next.js', 'React', 'Vue', 'Other',
-]
+import { X, Plus } from 'lucide-react'
 
 const STATUSES = [
-  { value: 'not_started', label: 'Not Started', color: 'bg-gray-500' },
-  { value: 'in_progress', label: 'In Progress', color: 'bg-blue-500' },
-  { value: 'review', label: 'Review', color: 'bg-yellow-500' },
-  { value: 'on_hold', label: 'On Hold', color: 'bg-orange-500' },
-  { value: 'completed', label: 'Completed', color: 'bg-green-500' },
+  { value: 'not_started', label: 'Not Started' },
+  { value: 'in_progress', label: 'In Progress' },
+  { value: 'review',      label: 'Review' },
+  { value: 'on_hold',     label: 'On Hold' },
+  { value: 'completed',   label: 'Completed' },
 ]
 
-const SALES_CHANNELS = [
-  'Direct', 'Referral', 'LinkedIn', 'Instagram', 'Twitter',
-  'Cold Outreach', 'Agency Partner', 'Marketplace', 'Other',
-]
+interface Customer    { id: string; name: string }
+interface ConfigItem  { id: string; name: string; type: string }
 
-const INDUSTRY_OPTIONS = [
-  'E-commerce', 'SaaS', 'Healthcare', 'Finance', 'Real Estate',
-  'Education', 'Food & Beverage', 'Fashion', 'Tech', 'Media',
-  'Non-profit', 'Travel', 'Automotive', 'Legal', 'Other',
-]
-
-const TEAM_MEMBERS = [
-  'Akash', 'Priya', 'Ravi', 'Sneha', 'Mohit', 'Divya', 'Team', 'Freelancer',
-]
-
-interface Customer { id: string; name: string }
+interface ProjectOptions {
+  platforms:    ConfigItem[]
+  salesChannels: ConfigItem[]
+  industries:   ConfigItem[]
+  teamMembers:  ConfigItem[]
+}
 
 interface Project {
   id?: string
@@ -64,13 +53,16 @@ interface Project {
 
 interface ProjectFormProps {
   customers: Customer[]
+  options: ProjectOptions
   project?: Project
 }
+
+// ─── Small helpers ────────────────────────────────────────────────────────────
 
 function FormSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="space-y-4">
-      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider border-b border-white/10 pb-2">
+      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-widest border-b border-white/10 pb-2">
         {title}
       </h3>
       {children}
@@ -78,67 +70,77 @@ function FormSection({ title, children }: { title: string; children: React.React
   )
 }
 
-function SelectField({ label, name, value, options, onChange }: {
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1.5">
+      <Label className="text-xs text-gray-400">{label}</Label>
+      {children}
+    </div>
+  )
+}
+
+function SelectField({ label, name, value, options, onChange, placeholder = '— Select —' }: {
   label: string
   name: string
   value: string
   options: string[]
-  onChange?: (v: string) => void
+  onChange: (v: string) => void
+  placeholder?: string
 }) {
   return (
-    <div className="space-y-1.5">
-      <Label className="text-xs text-gray-400">{label}</Label>
+    <Field label={label}>
       <select
         name={name}
         value={value}
-        onChange={e => onChange?.(e.target.value)}
+        onChange={e => onChange(e.target.value)}
         className="w-full h-9 rounded-md border border-white/10 bg-gray-800 text-sm text-white px-3 focus:outline-none focus:ring-1 focus:ring-green-500"
       >
-        <option value="">— Select —</option>
+        <option value="">{placeholder}</option>
         {options.map(o => <option key={o} value={o}>{o}</option>)}
       </select>
-    </div>
+    </Field>
   )
 }
 
 function LinkField({ label, name, defaultValue }: { label: string; name: string; defaultValue?: string | null }) {
   return (
-    <div className="space-y-1.5">
-      <Label className="text-xs text-gray-400">{label}</Label>
-      <div className="relative">
-        <Input
-          name={name}
-          defaultValue={defaultValue || ''}
-          placeholder="https://"
-          className="bg-gray-800 border-white/10 text-sm pr-8"
-        />
-        <ExternalLink className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-600" />
-      </div>
-    </div>
+    <Field label={label}>
+      <Input
+        name={name}
+        defaultValue={defaultValue || ''}
+        placeholder="https://"
+        className="bg-gray-800 border-white/10 text-sm"
+      />
+    </Field>
   )
 }
 
-export function ProjectForm({ customers, project }: ProjectFormProps) {
+// ─── Main form ────────────────────────────────────────────────────────────────
+
+export function ProjectForm({ customers, options, project }: ProjectFormProps) {
   const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
-  const [loading, setLoading] = useState(false)
-  const [status, setStatus] = useState(project?.status || 'not_started')
-  const [platform, setPlatform] = useState(project?.platform || '')
+  const [loading, setLoading]           = useState(false)
+  const [status, setStatus]             = useState(project?.status || 'not_started')
+  const [platform, setPlatform]         = useState(project?.platform || '')
   const [salesChannel, setSalesChannel] = useState(project?.sales_channel || '')
-  const [designedBy, setDesignedBy] = useState(project?.designed_by || '')
-  const [developedBy, setDevelopedBy] = useState(project?.developed_by || '')
-  const [customerId, setCustomerId] = useState(project?.customer_id || '')
-  const [industry, setIndustry] = useState<string[]>(project?.industry || [])
+  const [designedBy, setDesignedBy]     = useState(project?.designed_by || '')
+  const [developedBy, setDevelopedBy]   = useState(project?.developed_by || '')
+  const [customerId, setCustomerId]     = useState(project?.customer_id || '')
+  const [industry, setIndustry]         = useState<string[]>(project?.industry || [])
   const [showPublicly, setShowPublicly] = useState(project?.show_publicly ?? false)
   const [designPortfolio, setDesignPortfolio] = useState(project?.design_portfolio ?? false)
   const [devPortfolio, setDevPortfolio] = useState(project?.dev_portfolio ?? false)
-  const [industryInput, setIndustryInput] = useState('')
+  const [heroImage, setHeroImage]       = useState<string | null>(project?.hero_image || null)
+
+  const platformNames     = options.platforms.map(p => p.name)
+  const salesChannelNames = options.salesChannels.map(s => s.name)
+  const industryNames     = options.industries.map(i => i.name)
+  const teamMemberNames   = options.teamMembers.map(t => t.name)
 
   function addIndustry(tag: string) {
     if (tag && !industry.includes(tag)) setIndustry(prev => [...prev, tag])
-    setIndustryInput('')
   }
-
   function removeIndustry(tag: string) {
     setIndustry(prev => prev.filter(t => t !== tag))
   }
@@ -147,11 +149,11 @@ export function ProjectForm({ customers, project }: ProjectFormProps) {
     e.preventDefault()
     setLoading(true)
     const fd = new FormData(formRef.current!)
-    // Checkboxes need manual handling
-    fd.set('show_publicly', showPublicly ? 'true' : 'false')
+
+    fd.set('show_publicly',    showPublicly    ? 'true' : 'false')
     fd.set('design_portfolio', designPortfolio ? 'true' : 'false')
-    fd.set('dev_portfolio', devPortfolio ? 'true' : 'false')
-    // Remove existing industry entries and add current ones
+    fd.set('dev_portfolio',    devPortfolio    ? 'true' : 'false')
+    fd.set('hero_image',       heroImage || '')
     fd.delete('industry')
     industry.forEach(t => fd.append('industry', t))
 
@@ -170,23 +172,22 @@ export function ProjectForm({ customers, project }: ProjectFormProps) {
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-8">
       {project?.id && <input type="hidden" name="id" value={project.id} />}
 
-      {/* Basic Info */}
+      {/* ── Basic Info ── */}
       <FormSection title="Basic Info">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="md:col-span-2 space-y-1.5">
-            <Label className="text-xs text-gray-400">Project Name *</Label>
-            <Input
-              name="name"
-              defaultValue={project?.name || ''}
-              required
-              placeholder="My Awesome Project"
-              className="bg-gray-800 border-white/10 text-base font-medium"
-            />
+          <div className="md:col-span-2">
+            <Field label="Project Name *">
+              <Input
+                name="name"
+                defaultValue={project?.name || ''}
+                required
+                placeholder="My Awesome Project"
+                className="bg-gray-800 border-white/10 text-base font-medium"
+              />
+            </Field>
           </div>
 
-          {/* Status */}
-          <div className="space-y-1.5">
-            <Label className="text-xs text-gray-400">Status</Label>
+          <Field label="Status">
             <select
               name="status"
               value={status}
@@ -197,11 +198,9 @@ export function ProjectForm({ customers, project }: ProjectFormProps) {
                 <option key={s.value} value={s.value}>{s.label}</option>
               ))}
             </select>
-          </div>
+          </Field>
 
-          {/* Client */}
-          <div className="space-y-1.5">
-            <Label className="text-xs text-gray-400">Client</Label>
+          <Field label="Client">
             <select
               name="customer_id"
               value={customerId}
@@ -213,51 +212,29 @@ export function ProjectForm({ customers, project }: ProjectFormProps) {
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
-          </div>
+          </Field>
 
-          <SelectField
-            label="Platform"
-            name="platform"
-            value={platform}
-            options={PLATFORMS}
-            onChange={setPlatform}
-          />
+          <SelectField label="Platform" name="platform" value={platform} options={platformNames} onChange={setPlatform} />
+          <SelectField label="Sales Channel" name="sales_channel" value={salesChannel} options={salesChannelNames} onChange={setSalesChannel} />
 
-          <SelectField
-            label="Sales Channel"
-            name="sales_channel"
-            value={salesChannel}
-            options={SALES_CHANNELS}
-            onChange={setSalesChannel}
-          />
-
-          <div className="space-y-1.5">
-            <Label className="text-xs text-gray-400">Start Date</Label>
-            <Input
-              type="date"
-              name="start_date"
-              defaultValue={project?.start_date || ''}
-              className="bg-gray-800 border-white/10 text-sm"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label className="text-xs text-gray-400">Completion Date</Label>
-            <Input
-              type="date"
-              name="complete_date"
-              defaultValue={project?.complete_date || ''}
-              className="bg-gray-800 border-white/10 text-sm"
-            />
-          </div>
+          <Field label="Start Date">
+            <Input type="date" name="start_date" defaultValue={project?.start_date || ''} className="bg-gray-800 border-white/10 text-sm" />
+          </Field>
+          <Field label="Completion Date">
+            <Input type="date" name="complete_date" defaultValue={project?.complete_date || ''} className="bg-gray-800 border-white/10 text-sm" />
+          </Field>
         </div>
       </FormSection>
 
-      {/* Team */}
+      {/* ── Thumbnail ── */}
+      <FormSection title="Thumbnail Image">
+        <ImageUpload value={heroImage} onChange={setHeroImage} />
+      </FormSection>
+
+      {/* ── Team ── */}
       <FormSection title="Team">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
-            <Label className="text-xs text-gray-400">Designed By</Label>
+          <Field label="Designed By">
             <select
               name="designed_by"
               value={designedBy}
@@ -265,11 +242,10 @@ export function ProjectForm({ customers, project }: ProjectFormProps) {
               className="w-full h-9 rounded-md border border-white/10 bg-gray-800 text-sm text-white px-3 focus:outline-none focus:ring-1 focus:ring-green-500"
             >
               <option value="">— Select —</option>
-              {TEAM_MEMBERS.map(m => <option key={m} value={m}>{m}</option>)}
+              {teamMemberNames.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
-          </div>
-          <div className="space-y-1.5">
-            <Label className="text-xs text-gray-400">Developed By</Label>
+          </Field>
+          <Field label="Developed By">
             <select
               name="developed_by"
               value={developedBy}
@@ -277,82 +253,79 @@ export function ProjectForm({ customers, project }: ProjectFormProps) {
               className="w-full h-9 rounded-md border border-white/10 bg-gray-800 text-sm text-white px-3 focus:outline-none focus:ring-1 focus:ring-green-500"
             >
               <option value="">— Select —</option>
-              {TEAM_MEMBERS.map(m => <option key={m} value={m}>{m}</option>)}
+              {teamMemberNames.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
-          </div>
+          </Field>
         </div>
+        {teamMemberNames.length === 0 && (
+          <p className="text-xs text-gray-600 mt-1">
+            No team members yet.{' '}
+            <a href="/projects/settings" className="text-green-500 hover:text-green-400">Add them in Project Settings →</a>
+          </p>
+        )}
       </FormSection>
 
-      {/* Links */}
+      {/* ── Links ── */}
       <FormSection title="Links">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <LinkField label="Live Link" name="live_link" defaultValue={project?.live_link} />
           <LinkField label="Staging Link" name="staging_link" defaultValue={project?.staging_link} />
           <LinkField label="Read-Only Link" name="readonly_link" defaultValue={project?.readonly_link} />
-          <LinkField label="Hero / Thumbnail Image URL" name="hero_image" defaultValue={project?.hero_image} />
-          <LinkField label="Figma Link (Sales)" name="figma_sales_link" defaultValue={project?.figma_sales_link} />
-          <LinkField label="Figma Link (Dev)" name="figma_dev_link" defaultValue={project?.figma_dev_link} />
+          <LinkField label="Figma (Sales)" name="figma_sales_link" defaultValue={project?.figma_sales_link} />
+          <LinkField label="Figma (Dev)" name="figma_dev_link" defaultValue={project?.figma_dev_link} />
         </div>
       </FormSection>
 
-      {/* Industry Tags */}
+      {/* ── Industry Tags ── */}
       <FormSection title="Industry">
         <div className="space-y-2">
-          <div className="flex flex-wrap gap-2">
-            {industry.map(tag => (
-              <span
-                key={tag}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-900/40 text-green-400 text-xs font-medium border border-green-800/50"
-              >
-                {tag}
-                <button type="button" onClick={() => removeIndustry(tag)}>
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            ))}
-          </div>
-          <div className="flex gap-2">
-            <select
-              value={industryInput}
-              onChange={e => setIndustryInput(e.target.value)}
-              className="flex-1 h-9 rounded-md border border-white/10 bg-gray-800 text-sm text-white px-3 focus:outline-none focus:ring-1 focus:ring-green-500"
-            >
-              <option value="">— Add industry tag —</option>
-              {INDUSTRY_OPTIONS.filter(o => !industry.includes(o)).map(o => (
-                <option key={o} value={o}>{o}</option>
+          {industry.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {industry.map(tag => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-900/40 text-green-400 text-xs font-medium border border-green-800/50"
+                >
+                  {tag}
+                  <button type="button" onClick={() => removeIndustry(tag)} className="hover:text-green-200">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
               ))}
-            </select>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="border-white/10 text-gray-300 hover:text-white"
-              onClick={() => addIndustry(industryInput)}
-            >
-              <Plus className="w-4 h-4" />
-            </Button>
-          </div>
+            </div>
+          )}
+          <select
+            onChange={e => { addIndustry(e.target.value); e.target.value = '' }}
+            defaultValue=""
+            className="h-9 rounded-md border border-white/10 bg-gray-800 text-sm text-white px-3 focus:outline-none focus:ring-1 focus:ring-green-500"
+          >
+            <option value="" disabled>+ Add industry tag</option>
+            {industryNames.filter(n => !industry.includes(n)).map(n => (
+              <option key={n} value={n}>{n}</option>
+            ))}
+          </select>
+          {industryNames.length === 0 && (
+            <p className="text-xs text-gray-600">
+              No industries yet.{' '}
+              <a href="/projects/settings" className="text-green-500 hover:text-green-400">Add them in Project Settings →</a>
+            </p>
+          )}
         </div>
       </FormSection>
 
-      {/* Visibility */}
+      {/* ── Portfolio & Visibility ── */}
       <FormSection title="Portfolio & Visibility">
         <div className="space-y-3">
-          {[
-            { label: 'Show Publicly', state: showPublicly, setState: setShowPublicly, description: 'Include in the public-facing website' },
-            { label: 'Show in Design Portfolio', state: designPortfolio, setState: setDesignPortfolio, description: 'Feature in design showcase' },
-            { label: 'Show in Dev Portfolio', state: devPortfolio, setState: setDevPortfolio, description: 'Feature in development showcase' },
-          ].map(({ label, state, setState, description }) => (
-            <label key={label} className="flex items-start gap-3 cursor-pointer group">
-              <div
-                onClick={() => setState(p => !p)}
-                className={[
-                  'mt-0.5 w-5 h-5 rounded flex items-center justify-center flex-shrink-0 border transition-colors',
-                  state
-                    ? 'bg-green-600 border-green-600'
-                    : 'bg-gray-800 border-white/20 group-hover:border-white/40',
-                ].join(' ')}
-              >
+          {([
+            { label: 'Show Publicly',           state: showPublicly,    setState: setShowPublicly,    desc: 'Include in the public-facing website' },
+            { label: 'Show in Design Portfolio', state: designPortfolio, setState: setDesignPortfolio, desc: 'Feature in design showcase' },
+            { label: 'Show in Dev Portfolio',    state: devPortfolio,    setState: setDevPortfolio,    desc: 'Feature in development showcase' },
+          ] as { label: string; state: boolean; setState: (v: (p: boolean) => boolean) => void; desc: string }[]).map(({ label, state, setState, desc }) => (
+            <label key={label} className="flex items-start gap-3 cursor-pointer group" onClick={() => setState(p => !p)}>
+              <div className={[
+                'mt-0.5 w-5 h-5 rounded flex items-center justify-center flex-shrink-0 border transition-colors',
+                state ? 'bg-green-600 border-green-600' : 'bg-gray-800 border-white/20 group-hover:border-white/40',
+              ].join(' ')}>
                 {state && (
                   <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none">
                     <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -361,28 +334,19 @@ export function ProjectForm({ customers, project }: ProjectFormProps) {
               </div>
               <div>
                 <p className="text-sm text-white font-medium">{label}</p>
-                <p className="text-xs text-gray-500">{description}</p>
+                <p className="text-xs text-gray-500">{desc}</p>
               </div>
             </label>
           ))}
         </div>
       </FormSection>
 
-      {/* Actions */}
-      <div className="flex items-center justify-end gap-3 pt-2">
-        <Button
-          type="button"
-          variant="ghost"
-          className="text-gray-400 hover:text-white"
-          onClick={() => router.back()}
-        >
+      {/* ── Actions ── */}
+      <div className="flex items-center justify-end gap-3 pt-2 border-t border-white/10">
+        <Button type="button" variant="ghost" className="text-gray-400 hover:text-white" onClick={() => router.back()}>
           Cancel
         </Button>
-        <Button
-          type="submit"
-          disabled={loading}
-          className="bg-green-600 hover:bg-green-500 text-white"
-        >
+        <Button type="submit" disabled={loading} className="bg-green-600 hover:bg-green-500 text-white min-w-[120px]">
           {loading ? 'Saving…' : (project?.id ? 'Save Changes' : 'Create Project')}
         </Button>
       </div>
