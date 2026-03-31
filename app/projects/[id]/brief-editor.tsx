@@ -1,10 +1,23 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { RichTextEditor } from '@/components/rich-text-editor'
+import dynamic from 'next/dynamic'
 import { updateProjectBrief } from '../actions'
 import { toast } from 'sonner'
 import { Save, Check } from 'lucide-react'
+
+// Tiptap uses browser-only DOM APIs — must never SSR
+const RichTextEditor = dynamic(
+  () => import('@/components/rich-text-editor').then(m => m.RichTextEditor),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="border border-white/10 rounded-lg h-[300px] flex items-center justify-center bg-gray-900/50">
+        <span className="text-xs text-gray-600 animate-pulse">Loading editor…</span>
+      </div>
+    ),
+  }
+)
 
 export function BriefEditor({ projectId, initialBrief }: { projectId: string; initialBrief: string }) {
   const [content, setContent] = useState(initialBrief || '')
