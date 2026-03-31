@@ -53,31 +53,31 @@ export function DashboardClient({ totalIncome, totalExpenses, netProfit, recentA
       
       {/* 1. TOP METRIC CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl border shadow-sm flex flex-col justify-between space-y-4">
+        <div className="bg-card p-6 rounded-lg border shadow-sm flex flex-col justify-between space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-muted-foreground">Total Income</p>
-            <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
-              <ArrowUpRight className="h-5 w-5 text-green-600" />
+            <div className="h-10 w-10 bg-green-100 dark:bg-green-900/40 rounded-lg flex items-center justify-center">
+              <ArrowUpRight className="h-5 w-5 text-green-600 dark:text-green-400" />
             </div>
           </div>
           <h2 className="text-3xl font-bold">{formatCurrency(totalIncome)}</h2>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border shadow-sm flex flex-col justify-between space-y-4">
+        <div className="bg-card p-6 rounded-lg border shadow-sm flex flex-col justify-between space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-muted-foreground">Total Expenses</p>
-            <div className="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center">
-              <ArrowDownRight className="h-5 w-5 text-red-600" />
+            <div className="h-10 w-10 bg-red-100 dark:bg-red-900/40 rounded-lg flex items-center justify-center">
+              <ArrowDownRight className="h-5 w-5 text-red-600 dark:text-red-400" />
             </div>
           </div>
           <h2 className="text-3xl font-bold">{formatCurrency(totalExpenses)}</h2>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border shadow-sm flex flex-col justify-between space-y-4">
+        <div className="bg-card p-6 rounded-lg border shadow-sm flex flex-col justify-between space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-muted-foreground">Net Profit</p>
-            <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <TrendingUp className="h-5 w-5 text-blue-600" />
+            <div className="h-10 w-10 bg-blue-100 dark:bg-blue-900/40 rounded-lg flex items-center justify-center">
+              <TrendingUp className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
           <h2 className="text-3xl font-bold">{formatCurrency(netProfit)}</h2>
@@ -87,7 +87,7 @@ export function DashboardClient({ totalIncome, totalExpenses, netProfit, recentA
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* 2. CASH FLOW CHART */}
-        <div className="bg-white p-6 rounded-xl border shadow-sm lg:col-span-1 space-y-6">
+        <div className="bg-card p-6 rounded-lg border shadow-sm lg:col-span-1 space-y-6">
           <h3 className="font-semibold text-lg flex items-center">
             <Wallet className="h-5 w-5 mr-2 text-muted-foreground" />
             Cash Flow Overview
@@ -113,7 +113,7 @@ export function DashboardClient({ totalIncome, totalExpenses, netProfit, recentA
         </div>
 
         {/* 3. RECENT ACTIVITY FEED */}
-        <div className="bg-white p-6 rounded-xl border shadow-sm lg:col-span-2 space-y-6">
+        <div className="bg-card p-6 rounded-lg border shadow-sm lg:col-span-2 space-y-6">
           <h3 className="font-semibold text-lg">Recent Transactions</h3>
           <div className="border rounded-md">
             <Table>

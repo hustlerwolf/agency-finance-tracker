@@ -85,7 +85,7 @@ export default async function ForexReportPage() {
             <p className="text-xs mt-2 opacity-70 italic">* Money lost to bank spreads & platform fees.</p>
           </div>
           
-          <div className="border rounded-md bg-white overflow-hidden">
+          <div className="border rounded-md bg-card overflow-hidden">
             <div className="bg-slate-50 px-4 py-2 border-b text-xs font-bold uppercase text-slate-500">
               Payment Efficiency
             </div>

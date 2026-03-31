@@ -44,7 +44,7 @@ export function SettingsForm({ initialData }: { initialData: AgencySettings | nu
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="border rounded-lg p-6 bg-white shadow-sm space-y-4">
+      <div className="border rounded-lg p-6 bg-card shadow-sm space-y-4">
         <div className="flex items-center gap-2 pb-2 border-b">
           <Building2 className="h-5 w-5 text-blue-600" />
           <h2 className="font-semibold text-lg">Business Profile</h2>
@@ -65,7 +65,7 @@ export function SettingsForm({ initialData }: { initialData: AgencySettings | nu
         </div>
       </div>
 
-      <div className="border rounded-lg p-6 bg-white shadow-sm space-y-4">
+      <div className="border rounded-lg p-6 bg-card shadow-sm space-y-4">
         <div className="flex items-center gap-2 pb-2 border-b">
           <Landmark className="h-5 w-5 text-green-600" />
           <h2 className="font-semibold text-lg">Tax Details</h2>
@@ -82,7 +82,7 @@ export function SettingsForm({ initialData }: { initialData: AgencySettings | nu
         </div>
       </div>
 
-      <div className="border rounded-lg p-6 bg-white shadow-sm space-y-4">
+      <div className="border rounded-lg p-6 bg-card shadow-sm space-y-4">
         <div className="flex items-center gap-2 pb-2 border-b">
           <FileDigit className="h-5 w-5 text-purple-600" />
           <h2 className="font-semibold text-lg">Invoicing</h2>

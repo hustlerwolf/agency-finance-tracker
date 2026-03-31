@@ -61,7 +61,7 @@ export default async function RevenueReportPage() {
             <p className="text-2xl font-bold mt-1">₹{totalRevenue.toLocaleString('en-IN')}</p>
           </div>
           
-          <div className="border rounded-md bg-white">
+          <div className="border rounded-md bg-card">
             <div className="bg-slate-50 px-4 py-2 border-b text-xs font-bold uppercase text-slate-500 tracking-wider">
               Top Clients
             </div>

@@ -291,7 +291,7 @@ export function CrmClient({
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {stats.map(s => (
-          <div key={s.label} className="border rounded-lg p-4 bg-white shadow-sm text-center">
+          <div key={s.label} className="border rounded-lg p-4 bg-card shadow-sm text-center">
             <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
             <p className="text-xs text-muted-foreground mt-0.5">{s.label}</p>
           </div>
@@ -357,7 +357,7 @@ export function CrmClient({
 
       {/* ── TABLE VIEW ── */}
       {view === 'table' && (
-        <div className="border rounded-md bg-white overflow-hidden">
+        <div className="border rounded-md bg-card overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
@@ -452,7 +452,7 @@ export function CrmClient({
                 <div
                   key={colKey}
                   className={`w-72 flex-shrink-0 flex flex-col rounded-lg border transition-colors ${
-                    isOver ? 'border-primary bg-primary/5' : 'border-border bg-slate-50'
+                    isOver ? 'border-primary bg-primary/5' : 'border-border bg-muted/30'
                   }`}
                   onDragOver={e => { e.preventDefault(); setDragOverColId(colKey) }}
                   onDragLeave={e => {
@@ -474,7 +474,7 @@ export function CrmClient({
                       <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: col.color }} />
                       <span className="font-semibold text-sm">{col.name}</span>
                     </div>
-                    <span className="text-xs bg-white border rounded-full px-2 py-0.5 text-muted-foreground">
+                    <span className="text-xs bg-card border rounded-full px-2 py-0.5 text-muted-foreground">
                       {colLeads.length}
                     </span>
                   </div>
@@ -491,7 +491,7 @@ export function CrmClient({
                           setDragLeadId(lead.id)
                         }}
                         onDragEnd={() => { setDragLeadId(null); setDragOverColId(null) }}
-                        className={`bg-white border rounded-lg p-3 cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md transition-all select-none ${
+                        className={`bg-card border rounded-lg p-3 cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md transition-all select-none ${
                           dragLeadId === lead.id ? 'opacity-40 scale-95' : ''
                         }`}
                       >
@@ -706,7 +706,7 @@ export function CrmClient({
               </h3>
               <div className="space-y-2 mb-4">
                 {stages.map(stage => (
-                  <div key={stage.id} className="flex items-center justify-between border rounded-md px-3 py-2 bg-slate-50">
+                  <div key={stage.id} className="flex items-center justify-between border rounded-md px-3 py-2 bg-muted/40">
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: stage.color }} />
                       <span className="text-sm font-medium">{stage.name}</span>
@@ -726,7 +726,7 @@ export function CrmClient({
                   <p className="text-sm text-muted-foreground">No stages yet.</p>
                 )}
               </div>
-              <form onSubmit={handleSaveStage} className="border rounded-md p-3 bg-white space-y-3">
+              <form onSubmit={handleSaveStage} className="border rounded-md p-3 bg-card space-y-3">
                 <p className="text-sm font-medium text-muted-foreground">
                   {editingStage ? 'Edit Stage' : 'New Stage'}
                 </p>
@@ -771,7 +771,7 @@ export function CrmClient({
               </h3>
               <div className="space-y-2 mb-4">
                 {localSources.map(source => (
-                  <div key={source.id} className="flex items-center justify-between border rounded-md px-3 py-2 bg-slate-50">
+                  <div key={source.id} className="flex items-center justify-between border rounded-md px-3 py-2 bg-muted/40">
                     <span className="text-sm font-medium">{source.name}</span>
                     <div className="flex gap-1.5">
                       <Button variant="outline" size="sm" onClick={() => setEditingSource(source)}>
@@ -787,7 +787,7 @@ export function CrmClient({
                   <p className="text-sm text-muted-foreground">No sources yet.</p>
                 )}
               </div>
-              <form onSubmit={handleSaveSource} className="border rounded-md p-3 bg-white space-y-3">
+              <form onSubmit={handleSaveSource} className="border rounded-md p-3 bg-card space-y-3">
                 <p className="text-sm font-medium text-muted-foreground">
                   {editingSource ? 'Edit Source' : 'New Source'}
                 </p>

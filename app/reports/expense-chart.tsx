@@ -28,7 +28,7 @@ export function ExpenseChart({ data }: { data: ChartData[] }) {
       const item = payload[0].payload; // Access our original ChartData
       
       return (
-        <div className="bg-white p-3 border rounded-md shadow-lg border-slate-200">
+        <div className="bg-card p-3 border rounded-md shadow-lg">
           <p className="font-bold text-slate-900 mb-1">{item.name}</p>
           <p className="text-slate-600 font-mono text-sm">
             ₹{item.value.toLocaleString('en-IN', { 

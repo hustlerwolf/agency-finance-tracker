@@ -234,7 +234,7 @@ export function LeadDetailClient({
         <div className="lg:col-span-1 space-y-4">
 
           {/* Contact details */}
-          <div className="border rounded-lg bg-white p-4 shadow-sm space-y-3">
+          <div className="border rounded-lg bg-card p-4 shadow-sm space-y-3">
             <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">
               Contact Details
             </h2>
@@ -277,7 +277,7 @@ export function LeadDetailClient({
           </div>
 
           {/* Pipeline info */}
-          <div className="border rounded-lg bg-white p-4 shadow-sm space-y-3">
+          <div className="border rounded-lg bg-card p-4 shadow-sm space-y-3">
             <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">
               Pipeline Info
             </h2>
@@ -303,7 +303,7 @@ export function LeadDetailClient({
         <div className="lg:col-span-2 space-y-4">
 
           {/* Requirements */}
-          <div className="border rounded-lg bg-white p-4 shadow-sm">
+          <div className="border rounded-lg bg-card p-4 shadow-sm">
             <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3">
               Requirements & Details
             </h2>
@@ -317,7 +317,7 @@ export function LeadDetailClient({
           </div>
 
           {/* Add note */}
-          <div className="border rounded-lg bg-white p-4 shadow-sm">
+          <div className="border rounded-lg bg-card p-4 shadow-sm">
             <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3">
               Add Activity / Note
             </h2>
@@ -356,7 +356,7 @@ export function LeadDetailClient({
           </div>
 
           {/* Activity timeline */}
-          <div className="border rounded-lg bg-white p-4 shadow-sm">
+          <div className="border rounded-lg bg-card p-4 shadow-sm">
             <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-4">
               Activity Timeline
             </h2>

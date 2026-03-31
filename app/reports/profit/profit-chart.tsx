@@ -45,7 +45,7 @@ export function ProfitChart({ data }: { data: ProfitData[] }) {
       const netProfit = incomeValue - expenseValue;
 
       return (
-        <div className="bg-white p-4 border rounded-md shadow-lg border-slate-200 space-y-2">
+        <div className="bg-card p-4 border rounded-md shadow-lg space-y-2">
           <p className="font-bold text-slate-900 border-b pb-1">{label}</p>
           <div className="text-sm space-y-1">
             <div className="flex justify-between gap-8">

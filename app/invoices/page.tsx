@@ -36,7 +36,7 @@ export default async function InvoicesPage() {
         </Link>
       </div>
 
-      <div className="border rounded-md bg-white">
+      <div className="border rounded-md bg-card">
         <Table>
           <TableHeader>
             <TableRow>

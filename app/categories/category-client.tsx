@@ -82,7 +82,7 @@ export function CategoryClient({ categories }: { categories: Category[] }) {
         </Dialog>
       </div>
 
-      <div className="border rounded-md bg-white">
+      <div className="border rounded-md bg-card">
         <Table>
           <TableHeader>
             <TableRow>

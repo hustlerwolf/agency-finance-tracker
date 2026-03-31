@@ -222,7 +222,7 @@ export function InvoiceForm({
       </div>
 
       {/* Line Items */}
-      <div className="border rounded-md p-4 space-y-4 bg-white shadow-sm">
+      <div className="border rounded-md p-4 space-y-4 bg-card shadow-sm">
         <h3 className="font-semibold text-lg">Line Items</h3>
         <Table>
           <TableHeader>

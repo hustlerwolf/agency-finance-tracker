@@ -33,7 +33,7 @@ export function ForexChart({ data }: { data: ForexData[] }) {
              if (active && payload && payload.length) {
                const d = payload[0].payload;
                return (
-                 <div className="bg-white p-3 border rounded-md shadow-lg text-xs">
+                 <div className="bg-card p-3 border rounded-md shadow-lg text-xs">
                    <p className="font-bold border-b mb-2 pb-1">{d.invoice} ({d.date})</p>
                    <p className="text-slate-600 font-medium">Market Rate: ₹{d.marketRate}</p>
                    <p className="text-blue-600 font-medium">Your Rate: ₹{d.effectiveRate}</p>

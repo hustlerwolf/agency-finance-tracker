@@ -65,7 +65,7 @@ export default async function ProfitReportPage() {
             <p className="text-2xl font-bold mt-1">₹{totalNetProfit.toLocaleString('en-IN')}</p>
           </div>
           
-          <div className="border rounded-md bg-white overflow-hidden">
+          <div className="border rounded-md bg-card overflow-hidden">
             <div className="bg-slate-50 px-4 py-2 border-b text-xs font-bold uppercase text-slate-500 tracking-wider">
               Monthly Snapshot
             </div>
