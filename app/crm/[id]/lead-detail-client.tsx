@@ -77,7 +77,7 @@ export function LeadDetailClient({
   const [lead, setLead] = useState(initialLead)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [editLoading, setEditLoading] = useState(false)
-  const [editStatus, setEditStatus] = useState(lead.status)
+  const [editStatus, setEditStatus] = useState<'open' | 'won' | 'lost'>(lead.status as 'open' | 'won' | 'lost')
 
   const [noteContent, setNoteContent] = useState('')
   const [noteType, setNoteType] = useState<'general' | 'call' | 'email' | 'meeting'>('general')
@@ -499,7 +499,7 @@ export function LeadDetailClient({
                   id="edit_status"
                   name="status"
                   value={editStatus}
-                  onChange={e => setEditStatus(e.target.value)}
+                  onChange={e => setEditStatus(e.target.value as 'open' | 'won' | 'lost')}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="open">Open</option>

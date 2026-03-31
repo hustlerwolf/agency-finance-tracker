@@ -1,46 +1,34 @@
 'use client'
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import { useTheme } from 'next-themes'
 
-interface ChartData {
-  name: string;
-  value: number;
-}
+interface ChartData { name: string; value: number }
+interface TooltipPayload { name: string; value: number; payload: ChartData }
+interface CustomTooltipProps { active?: boolean; payload?: TooltipPayload[] }
 
-// Define the shape of the Recharts internal payload item
-interface TooltipPayload {
-  name: string;
-  value: number;
-  payload: ChartData;
-}
-
-interface CustomTooltipProps {
-  active?: boolean;
-  payload?: TooltipPayload[];
-}
-
-const COLORS = ['#0f172a', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#64748b']
+const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#64748b']
 
 export function ExpenseChart({ data }: { data: ChartData[] }) {
-  
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
+
+  const legendColor = isDark ? '#9ca3af' : '#64748b'
+
   const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
-      const item = payload[0].payload; // Access our original ChartData
-      
+      const item = payload[0].payload
       return (
-        <div className="bg-card p-3 border rounded-md shadow-lg">
-          <p className="font-bold text-slate-900 mb-1">{item.name}</p>
-          <p className="text-slate-600 font-mono text-sm">
-            ₹{item.value.toLocaleString('en-IN', { 
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2 
-            })}
+        <div className="bg-card border rounded-md shadow-lg p-3">
+          <p className="font-bold text-foreground mb-1">{item.name}</p>
+          <p className="text-muted-foreground font-mono text-sm">
+            ₹{item.value.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>
-      );
+      )
     }
-    return null;
-  };
+    return null
+  }
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -60,7 +48,11 @@ export function ExpenseChart({ data }: { data: ChartData[] }) {
           ))}
         </Pie>
         <Tooltip content={<CustomTooltip />} />
-        <Legend verticalAlign="bottom" height={36} />
+        <Legend
+          verticalAlign="bottom"
+          height={36}
+          wrapperStyle={{ color: legendColor, fontSize: '12px' }}
+        />
       </PieChart>
     </ResponsiveContainer>
   )

@@ -8,7 +8,7 @@ import {
   LayoutDashboard, FileText, Wallet, Receipt, Briefcase,
   Users, Store, Tags, BarChart3, Settings, Sun, Moon,
   ChevronLeft, ChevronRight, LogOut, ChevronDown,
-  PieChart, TrendingUp, DollarSign, Globe,
+  PieChart, TrendingUp, DollarSign, Globe, FolderKanban,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -18,10 +18,14 @@ const MAIN_NAV = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Invoices', href: '/invoices', icon: FileText },
   { name: 'Income', href: '/income', icon: Wallet },
-  { name: 'Expenses', href: '/expenses', icon: Receipt },
+  { name: 'Projects', href: '/projects', icon: FolderKanban },
   { name: 'CRM', href: '/crm', icon: Briefcase },
   { name: 'Customers', href: '/customers', icon: Users },
   { name: 'Vendors', href: '/vendors', icon: Store },
+]
+
+const EXPENSES_NAV = [
+  { name: 'All Expenses', href: '/expenses', icon: Receipt },
   { name: 'Categories', href: '/categories', icon: Tags },
 ]
 
@@ -32,10 +36,35 @@ const REPORTS_NAV = [
   { name: 'Forex Analysis', href: '/reports/forex', icon: Globe },
 ]
 
+// ─── Sub-menu link ────────────────────────────────────────────────────────────
+
+function SubLink({ href, icon: Icon, name, isActive }: {
+  href: string
+  icon: React.ElementType
+  name: string
+  isActive: boolean
+}) {
+  return (
+    <Link
+      href={href}
+      className={[
+        'flex items-center gap-2.5 px-2 py-1.5 rounded-md text-xs font-medium transition-colors',
+        isActive
+          ? 'text-green-400 bg-white/5'
+          : 'text-gray-500 hover:text-gray-200 hover:bg-white/5',
+      ].join(' ')}
+    >
+      <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+      <span className="truncate">{name}</span>
+    </Link>
+  )
+}
+
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
+  const [expensesOpen, setExpensesOpen] = useState(false)
   const [reportsOpen, setReportsOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
@@ -44,9 +73,14 @@ export function Sidebar() {
 
   useEffect(() => setMounted(true), [])
 
+  const isExpensesActive = pathname.startsWith('/expenses') || pathname.startsWith('/categories')
   const isReportsActive = pathname.startsWith('/reports')
 
-  // Auto-open reports section when on a reports page
+  // Auto-open accordion when navigating to a sub-page
+  useEffect(() => {
+    if (isExpensesActive) setExpensesOpen(true)
+  }, [isExpensesActive])
+
   useEffect(() => {
     if (isReportsActive) setReportsOpen(true)
   }, [isReportsActive])
@@ -65,7 +99,6 @@ export function Sidebar() {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
   }
 
-  // Shared nav item styles
   function navItemClass(isActive: boolean, extra = '') {
     return [
       'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
@@ -75,6 +108,48 @@ export function Sidebar() {
       collapsed ? 'justify-center' : '',
       extra,
     ].join(' ')
+  }
+
+  // Reusable accordion section (collapsed → plain link, expanded → toggle)
+  function AccordionSection({
+    label, icon: Icon, isActive, isOpen, onToggle, rootHref, children,
+  }: {
+    label: string
+    icon: React.ElementType
+    isActive: boolean
+    isOpen: boolean
+    onToggle: () => void
+    rootHref: string
+    children: React.ReactNode
+  }) {
+    if (collapsed) {
+      return (
+        <Link href={rootHref} title={label} className={navItemClass(isActive)}>
+          <Icon className="w-[18px] h-[18px] flex-shrink-0" />
+        </Link>
+      )
+    }
+    return (
+      <div>
+        <button
+          onClick={onToggle}
+          className={navItemClass(isActive, 'w-full justify-between')}
+        >
+          <span className="flex items-center gap-3">
+            <Icon className="w-[18px] h-[18px] flex-shrink-0" />
+            <span>{label}</span>
+          </span>
+          <ChevronDown
+            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          />
+        </button>
+        {isOpen && (
+          <div className="mt-1 ml-[14px] pl-4 border-l border-white/[0.08] space-y-0.5">
+            {children}
+          </div>
+        )}
+      </div>
+    )
   }
 
   return (
@@ -103,6 +178,7 @@ export function Sidebar() {
       {/* ── Navigation ── */}
       <nav className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-3 space-y-0.5 scrollbar-none">
 
+        {/* Flat nav items */}
         {MAIN_NAV.map(({ name, href, icon: Icon }) => {
           const isActive = pathname.startsWith(href)
           return (
@@ -118,56 +194,48 @@ export function Sidebar() {
           )
         })}
 
+        {/* Expenses accordion */}
+        <AccordionSection
+          label="Expenses"
+          icon={Receipt}
+          isActive={isExpensesActive}
+          isOpen={expensesOpen}
+          onToggle={() => setExpensesOpen(p => !p)}
+          rootHref="/expenses"
+        >
+          {EXPENSES_NAV.map(({ name, href, icon: Icon }) => (
+            <SubLink
+              key={href}
+              href={href}
+              icon={Icon}
+              name={name}
+              isActive={pathname.startsWith(href)}
+            />
+          ))}
+        </AccordionSection>
+
         {/* Divider */}
         <div className="my-2 border-t border-white/[0.06]" />
 
-        {/* Reports: collapsed → link, expanded → accordion */}
-        {collapsed ? (
-          <Link
-            href="/reports"
-            title="Reports"
-            className={navItemClass(isReportsActive)}
-          >
-            <BarChart3 className="w-[18px] h-[18px] flex-shrink-0" />
-          </Link>
-        ) : (
-          <div>
-            <button
-              onClick={() => setReportsOpen(p => !p)}
-              className={navItemClass(isReportsActive, 'w-full justify-between')}
-            >
-              <span className="flex items-center gap-3">
-                <BarChart3 className="w-[18px] h-[18px] flex-shrink-0" />
-                <span>Reports</span>
-              </span>
-              <ChevronDown
-                className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${reportsOpen ? 'rotate-180' : ''}`}
-              />
-            </button>
-            {reportsOpen && (
-              <div className="mt-1 ml-[14px] pl-4 border-l border-white/[0.08] space-y-0.5">
-                {REPORTS_NAV.map(({ name, href, icon: Icon }) => {
-                  const isActive = pathname === href
-                  return (
-                    <Link
-                      key={href}
-                      href={href}
-                      className={[
-                        'flex items-center gap-2.5 px-2 py-1.5 rounded-md text-xs font-medium transition-colors',
-                        isActive
-                          ? 'text-green-400 bg-white/5'
-                          : 'text-gray-500 hover:text-gray-200 hover:bg-white/5',
-                      ].join(' ')}
-                    >
-                      <Icon className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span className="truncate">{name}</span>
-                    </Link>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-        )}
+        {/* Reports accordion */}
+        <AccordionSection
+          label="Reports"
+          icon={BarChart3}
+          isActive={isReportsActive}
+          isOpen={reportsOpen}
+          onToggle={() => setReportsOpen(p => !p)}
+          rootHref="/reports"
+        >
+          {REPORTS_NAV.map(({ name, href, icon: Icon }) => (
+            <SubLink
+              key={href}
+              href={href}
+              icon={Icon}
+              name={name}
+              isActive={pathname === href}
+            />
+          ))}
+        </AccordionSection>
 
         {/* Settings */}
         <Link
