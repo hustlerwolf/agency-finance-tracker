@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Receipt, Wallet, FileText, Users, Store, Tags, BarChart3 } from 'lucide-react'
+import { LayoutDashboard, Receipt, Wallet, FileText, Users, Store, Tags, BarChart3, Briefcase } from 'lucide-react'
 
 export function Navigation() {
   const pathname = usePathname()
@@ -12,6 +12,7 @@ export function Navigation() {
     { name: 'Invoices', href: '/invoices', icon: FileText },
     { name: 'Income', href: '/income', icon: Wallet },
     { name: 'Expenses', href: '/expenses', icon: Receipt },
+    { name: 'CRM', href: '/crm', icon: Briefcase },
     { name: 'Customers', href: '/customers', icon: Users },
     { name: 'Vendors', href: '/vendors', icon: Store },
     { name: 'Categories', href: '/categories', icon: Tags },
