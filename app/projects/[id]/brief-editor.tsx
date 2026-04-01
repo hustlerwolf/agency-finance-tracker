@@ -7,12 +7,12 @@ import { toast } from 'sonner'
 import { Save, Check } from 'lucide-react'
 
 // Tiptap uses browser-only DOM APIs — must never SSR
-const RichTextEditor = dynamic(
-  () => import('@/components/rich-text-editor').then(m => m.RichTextEditor),
+const NotionEditor = dynamic(
+  () => import('@/components/notion-editor').then(m => m.NotionEditor),
   {
     ssr: false,
     loading: () => (
-      <div className="border border-white/10 rounded-lg h-[300px] flex items-center justify-center bg-gray-900/50">
+      <div className="min-h-[200px] flex items-center justify-center">
         <span className="text-xs text-gray-600 animate-pulse">Loading editor…</span>
       </div>
     ),
@@ -39,7 +39,10 @@ export function BriefEditor({ projectId, initialBrief }: { projectId: string; in
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold text-white">Project Brief</h2>
+        <div>
+          <h2 className="text-base font-semibold text-white">Project Brief</h2>
+          <p className="text-xs text-gray-600 mt-0.5">Type <kbd className="px-1 py-0.5 rounded bg-gray-800 text-gray-400 font-mono text-[10px]">/</kbd> for headings, lists, to-dos and more</p>
+        </div>
         <button
           onClick={handleSave}
           disabled={saving}
@@ -50,18 +53,18 @@ export function BriefEditor({ projectId, initialBrief }: { projectId: string; in
               : 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white border border-white/10',
           ].join(' ')}
         >
-          {saved ? (
-            <><Check className="w-3.5 h-3.5" /> Saved</>
-          ) : (
-            <><Save className="w-3.5 h-3.5" /> {saving ? 'Saving…' : 'Save Brief'}</>
-          )}
+          {saved ? <><Check className="w-3.5 h-3.5" /> Saved</> : <><Save className="w-3.5 h-3.5" /> {saving ? 'Saving…' : 'Save Brief'}</>}
         </button>
       </div>
-      <RichTextEditor
-        content={content}
-        onChange={setContent}
-        placeholder="Write your project brief here — goals, scope, tech stack, design notes, client requirements…"
-      />
+
+      <div className="rounded-xl border border-white/10 bg-gray-900/40 px-2 py-3">
+        <NotionEditor
+          content={content}
+          onChange={setContent}
+          placeholder="Write your project brief here… Type '/' for commands"
+          minHeight="280px"
+        />
+      </div>
     </div>
   )
 }

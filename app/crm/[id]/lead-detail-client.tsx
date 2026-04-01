@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -8,6 +9,25 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+
+// Lazy-load Notion editor (browser-only)
+const NotionEditor = dynamic(
+  () => import('@/components/notion-editor').then(m => m.NotionEditor),
+  { ssr: false, loading: () => <div className="min-h-[80px] rounded-md border border-border bg-muted/30 animate-pulse" /> }
+)
+
+function NoteEditorWrapper({ content, onChange }: { content: string; onChange: (v: string) => void }) {
+  return (
+    <div className="rounded-md border border-border bg-background px-2 py-2 min-h-[80px]">
+      <NotionEditor
+        content={content}
+        onChange={onChange}
+        placeholder="Write your note… Type '/' for formatting"
+        minHeight="60px"
+      />
+    </div>
+  )
+}
 import {
   ArrowLeft, Building2, User, Mail, Phone, Globe, Linkedin,
   Calendar, MessageSquare, PhoneCall, AtSign, Users2,
@@ -15,6 +35,7 @@ import {
   ExternalLink, AlertTriangle, Clock,
 } from 'lucide-react'
 import { saveLead, addLeadNote, deleteLeadNote, convertLeadToCustomer } from '../actions'
+import { LeadBrief } from './lead-brief'
 import type { Lead, LeadStage, LeadSource } from '../crm-client'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -110,7 +131,8 @@ export function LeadDetailClient({
 
   async function handleAddNote(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (!noteContent.trim()) return
+    const stripped = noteContent.replace(/<[^>]*>/g, '').trim()
+    if (!stripped) return
     setNoteLoading(true)
     const fd = new FormData()
     fd.append('lead_id', lead.id)
@@ -302,18 +324,9 @@ export function LeadDetailClient({
         {/* Right column: requirements + activity */}
         <div className="lg:col-span-2 space-y-4">
 
-          {/* Requirements */}
+          {/* Lead Brief — Notion-style editor */}
           <div className="border rounded-lg bg-card p-4 shadow-sm">
-            <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground mb-3">
-              Requirements & Details
-            </h2>
-            {lead.requirements ? (
-              <pre className="text-sm whitespace-pre-wrap font-sans leading-relaxed text-foreground">
-                {lead.requirements}
-              </pre>
-            ) : (
-              <p className="text-sm text-muted-foreground italic">No requirements noted yet.</p>
-            )}
+            <LeadBrief leadId={lead.id} initialBrief={lead.requirements || ''} />
           </div>
 
           {/* Add note */}
@@ -342,14 +355,8 @@ export function LeadDetailClient({
                   )
                 })}
               </div>
-              <Textarea
-                value={noteContent}
-                onChange={e => setNoteContent(e.target.value)}
-                placeholder="Write your note here…"
-                rows={3}
-                required
-              />
-              <Button type="submit" size="sm" disabled={noteLoading || !noteContent.trim()}>
+              <NoteEditorWrapper content={noteContent} onChange={setNoteContent} />
+              <Button type="submit" size="sm" disabled={noteLoading || !noteContent.replace(/<[^>]*>/g,'').trim()}>
                 {noteLoading ? 'Adding…' : 'Add Note'}
               </Button>
             </form>
@@ -396,7 +403,11 @@ export function LeadDetailClient({
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
-                        <p className="text-sm mt-1 whitespace-pre-wrap leading-relaxed">{note.note_content}</p>
+                        {note.note_content.startsWith('<') ? (
+                          <div className="notion-prose text-sm mt-1" dangerouslySetInnerHTML={{ __html: note.note_content }} />
+                        ) : (
+                          <p className="text-sm mt-1 whitespace-pre-wrap leading-relaxed">{note.note_content}</p>
+                        )}
                       </div>
                     </div>
                   )

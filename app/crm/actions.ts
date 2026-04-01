@@ -41,6 +41,17 @@ export async function saveLead(formData: FormData) {
   return { success: true }
 }
 
+export async function updateLeadBrief(id: string, brief: string) {
+  const supabase = createClient()
+  const { error } = await supabase
+    .from('leads')
+    .update({ requirements: brief, updated_at: new Date().toISOString() })
+    .eq('id', id)
+  if (error) return { success: false, error: error.message }
+  revalidatePath(`/crm/${id}`)
+  return { success: true }
+}
+
 export async function deleteLead(id: string) {
   const supabase = createClient()
   await supabase.from('lead_notes').delete().eq('lead_id', id)
