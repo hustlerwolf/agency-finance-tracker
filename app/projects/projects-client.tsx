@@ -229,11 +229,12 @@ function ProjectActions({ id, name }: { id: string; name: string }) {
   }
   return (
     <div className="flex items-center gap-1">
-      <Link href={`/projects/${id}`}>
-        <button className="p-1.5 rounded hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
-          <Edit className="w-3.5 h-3.5" />
-        </button>
-      </Link>
+      <button
+        onClick={() => router.push(`/projects/${id}`)}
+        className="p-1.5 rounded hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+      >
+        <Edit className="w-3.5 h-3.5" />
+      </button>
       <button onClick={handleDelete} className="p-1.5 rounded hover:bg-red-900/30 text-gray-400 hover:text-red-400 transition-colors">
         <Trash2 className="w-3.5 h-3.5" />
       </button>
@@ -638,9 +639,12 @@ function GalleryView({ projects }: { projects: Project[] }) {
                 <div className="flex items-center justify-between">
                   {p.platform && <span className="text-xs px-2 py-0.5 rounded bg-gray-800 text-gray-400">{p.platform}</span>}
                   {p.live_link && (
-                    <a href={p.live_link} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                    <button
+                      onClick={e => { e.preventDefault(); e.stopPropagation(); window.open(p.live_link!, '_blank', 'noopener,noreferrer') }}
+                      className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                    >
                       <ExternalLink className="w-3 h-3" />
-                    </a>
+                    </button>
                   )}
                 </div>
                 {p.industry && p.industry.length > 0 && (
