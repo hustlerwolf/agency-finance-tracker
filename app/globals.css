@@ -99,6 +99,66 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted-foreground/40;
   }
+
+  /* ── Tiptap / NotionEditor prose styles ─── */
+  .notion-prose {
+    color: #1a1a1a;
+  }
+  .dark .notion-prose {
+    color: #e5e5e5;
+  }
+  .notion-prose p {
+    color: inherit;
+  }
+  .notion-prose strong {
+    color: #000;
+    font-weight: 700;
+  }
+  .dark .notion-prose strong {
+    color: #fff;
+  }
+  .notion-prose li {
+    color: inherit;
+  }
+  .notion-prose li p {
+    color: inherit;
+  }
+  .notion-prose a,
+  .notion-prose .notion-link {
+    color: #2563eb;
+    text-decoration: underline;
+  }
+  .dark .notion-prose a,
+  .dark .notion-prose .notion-link {
+    color: #60a5fa;
+  }
+  .notion-prose code {
+    background: #f3f4f6;
+    color: #1f2937;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    word-break: break-all;
+  }
+  .dark .notion-prose code {
+    background: #374151;
+    color: #e5e7eb;
+  }
+  .notion-prose hr {
+    border-color: #e5e7eb;
+    margin: 12px 0;
+  }
+  .dark .notion-prose hr {
+    border-color: #374151;
+  }
+  .notion-prose ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .notion-prose ol {
+    list-style: decimal;
+    padding-left: 1.25rem;
+  }
 }
 
 /* ─── Tiptap Rich Text Editor ─────────────────────────────────────────────── */
