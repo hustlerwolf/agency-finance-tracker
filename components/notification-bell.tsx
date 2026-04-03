@@ -188,7 +188,7 @@ export function NotificationBell({ teamMemberId }: { teamMemberId: string }) {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-muted-foreground hover:text-foreground hover:bg-white/6 w-full relative"
+        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-gray-400 hover:text-white hover:bg-white/6 w-full relative"
       >
         <Bell className="w-[18px] h-[18px] flex-shrink-0" />
         <span className="truncate">Notifications</span>
