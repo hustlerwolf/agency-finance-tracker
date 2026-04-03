@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd'
 import { Button } from '@/components/ui/button'
@@ -217,7 +218,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
 
   // Auto-refresh when new tasks are added (e.g. BugHerd webhook creates a task)
   useEffect(() => {
-    const supabase = (await import('@/lib/supabase/client')).createClient()
+    const supabase = createClient()
     const channel = supabase
       .channel('tasks-realtime')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => {
