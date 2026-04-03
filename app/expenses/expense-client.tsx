@@ -103,7 +103,7 @@ export function ExpenseClient({
                     name="currency" 
                     value={selectedCurrency}
                     onChange={(e) => setSelectedCurrency(e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                   >
                     <option value="INR">INR (₹)</option>
                     <option value="USD">USD ($)</option>
@@ -130,7 +130,7 @@ export function ExpenseClient({
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="category_id">Category *</Label>
-                  <select id="category_id" name="category_id" defaultValue={editingExpense?.category_id || ''} required className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                  <select id="category_id" name="category_id" defaultValue={editingExpense?.category_id || ''} required className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm">
                     <option value="">Select Category</option>
                     {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
@@ -138,7 +138,7 @@ export function ExpenseClient({
 
                 <div className="space-y-2">
                   <Label htmlFor="vendor_id">Vendor</Label>
-                  <select id="vendor_id" name="vendor_id" defaultValue={editingExpense?.vendor_id || ''} className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                  <select id="vendor_id" name="vendor_id" defaultValue={editingExpense?.vendor_id || ''} className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm">
                     <option value="">None</option>
                     {vendors.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
                   </select>

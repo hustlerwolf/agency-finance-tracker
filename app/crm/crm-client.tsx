@@ -1,12 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+
+const NotionEditor = dynamic(
+  () => import('@/components/notion-editor').then(m => m.NotionEditor),
+  { ssr: false, loading: () => <div className="min-h-[120px] rounded-md border border-input bg-muted/20 animate-pulse" /> }
+)
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table'
@@ -36,6 +41,9 @@ export interface LeadSource {
   name: string
 }
 
+export interface CrmCompany { id: string; name: string }
+export interface CrmContact { id: string; company_id: string; name: string; designation?: string | null }
+
 export interface Lead {
   id: string
   company_name?: string | null
@@ -52,10 +60,14 @@ export interface Lead {
   status: 'open' | 'won' | 'lost'
   lost_reason?: string | null
   converted_customer_id?: string | null
+  company_id?: string | null
+  contact_id?: string | null
   created_at: string
   updated_at: string
   stage?: LeadStage | null
   source?: LeadSource | null
+  company?: CrmCompany | null
+  contact?: CrmContact | null
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -85,10 +97,14 @@ export function CrmClient({
   leads: initialLeads,
   stages,
   sources: initialSources,
+  companies,
+  contacts: allContacts,
 }: {
   leads: Lead[]
   stages: LeadStage[]
   sources: LeadSource[]
+  companies: CrmCompany[]
+  contacts: CrmContact[]
 }) {
   const [localLeads, setLocalLeads] = useState(initialLeads)
   const [localSources, setLocalSources] = useState(initialSources)
@@ -105,6 +121,9 @@ export function CrmClient({
   const [editingLead, setEditingLead] = useState<Lead | null>(null)
   const [formLoading, setFormLoading] = useState(false)
   const [formStatus, setFormStatus] = useState('open')
+  const [formRequirements, setFormRequirements] = useState('')
+  const [formCompanyId, setFormCompanyId] = useState('')
+  const [formContactId, setFormContactId] = useState('')
 
   // Admin settings
   const [isAdminOpen, setIsAdminOpen] = useState(false)
@@ -154,12 +173,18 @@ export function CrmClient({
   function openAddForm() {
     setEditingLead(null)
     setFormStatus('open')
+    setFormRequirements('')
+    setFormCompanyId('')
+    setFormContactId('')
     setIsFormOpen(true)
   }
 
   function openEditForm(lead: Lead) {
     setEditingLead(lead)
     setFormStatus(lead.status)
+    setFormRequirements(lead.requirements || '')
+    setFormCompanyId(lead.company_id || '')
+    setFormContactId(lead.contact_id || '')
     setIsFormOpen(true)
   }
 
@@ -167,12 +192,19 @@ export function CrmClient({
     setIsFormOpen(false)
     setEditingLead(null)
     setFormStatus('open')
+    setFormRequirements('')
+    setFormCompanyId('')
+    setFormContactId('')
   }
 
   async function handleLeadSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setFormLoading(true)
-    const result = await saveLead(new FormData(e.currentTarget))
+    const fd = new FormData(e.currentTarget)
+    fd.set('requirements', formRequirements)
+    fd.set('company_id', formCompanyId)
+    fd.set('contact_id', formContactId)
+    const result = await saveLead(fd)
     if (result.success) {
       toast.success(editingLead ? 'Lead updated' : 'Lead added')
       closeForm()
@@ -281,8 +313,8 @@ export function CrmClient({
             <Settings2 className="w-4 h-4 mr-2" />
             Pipeline Settings
           </Button>
-          <Button onClick={openAddForm}>
-            <Plus className="w-4 h-4 mr-2" />
+          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={openAddForm}>
+            <Plus className="w-4 h-4 mr-1" />
             Add Lead
           </Button>
         </div>
@@ -312,7 +344,7 @@ export function CrmClient({
         <select
           value={filterStage}
           onChange={e => setFilterStage(e.target.value)}
-          className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+          className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
         >
           <option value="">All Stages</option>
           {stages.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -320,7 +352,7 @@ export function CrmClient({
         <select
           value={filterStatus}
           onChange={e => setFilterStatus(e.target.value)}
-          className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+          className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
         >
           <option value="">All Statuses</option>
           <option value="open">Open</option>
@@ -330,7 +362,7 @@ export function CrmClient({
         <select
           value={filterPriority}
           onChange={e => setFilterPriority(e.target.value)}
-          className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+          className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
         >
           <option value="">All Priorities</option>
           <option value="High">High</option>
@@ -362,6 +394,7 @@ export function CrmClient({
             <TableHeader>
               <TableRow>
                 <TableHead>Lead</TableHead>
+                <TableHead>Company</TableHead>
                 <TableHead>Stage</TableHead>
                 <TableHead>Source</TableHead>
                 <TableHead>Priority</TableHead>
@@ -383,6 +416,18 @@ export function CrmClient({
                         <p className="text-xs text-muted-foreground">{lead.email}</p>
                       )}
                     </Link>
+                  </TableCell>
+                  <TableCell className="text-sm">
+                    {lead.company ? (
+                      <Link href={`/customers/${lead.company_id}`} className="text-primary hover:underline text-sm">
+                        {lead.company.name}
+                      </Link>
+                    ) : lead.company_name ? (
+                      <span className="text-muted-foreground">{lead.company_name}</span>
+                    ) : <span className="text-muted-foreground">—</span>}
+                    {lead.contact && (
+                      <p className="text-xs text-muted-foreground">{lead.contact.name}</p>
+                    )}
                   </TableCell>
                   <TableCell>
                     {lead.stage ? (
@@ -427,7 +472,7 @@ export function CrmClient({
               ))}
               {filtered.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
+                  <TableCell colSpan={8} className="text-center py-10 text-muted-foreground">
                     No leads found. Add your first lead to get started.
                   </TableCell>
                 </TableRow>
@@ -556,7 +601,7 @@ export function CrmClient({
 
       {/* ── LEAD FORM DIALOG ── */}
       <Dialog open={isFormOpen} onOpenChange={open => { if (!open) closeForm() }}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-4xl max-h-[92vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingLead ? 'Edit Lead' : 'Add New Lead'}</DialogTitle>
           </DialogHeader>
@@ -604,7 +649,7 @@ export function CrmClient({
                   id="stage_id"
                   name="stage_id"
                   defaultValue={editingLead?.stage_id || ''}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="">No Stage</option>
                   {stages.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -616,7 +661,7 @@ export function CrmClient({
                   id="source_id"
                   name="source_id"
                   defaultValue={editingLead?.source_id || ''}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="">Unknown</option>
                   {localSources.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -628,7 +673,7 @@ export function CrmClient({
                   id="priority"
                   name="priority"
                   defaultValue={editingLead?.priority || 'Medium'}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="High">High</option>
                   <option value="Medium">Medium</option>
@@ -651,7 +696,7 @@ export function CrmClient({
                   name="status"
                   value={formStatus}
                   onChange={e => setFormStatus(e.target.value)}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="open">Open</option>
                   <option value="won">Won</option>
@@ -671,16 +716,55 @@ export function CrmClient({
               )}
             </div>
 
+            {/* Link to Company & Contact */}
+            <div className="border-t pt-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">Link to Company</p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Company</Label>
+                  <select
+                    value={formCompanyId}
+                    onChange={e => { setFormCompanyId(e.target.value); setFormContactId('') }}
+                    className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="">— No Company —</option>
+                    {companies.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Contact</Label>
+                  <select
+                    value={formContactId}
+                    onChange={e => setFormContactId(e.target.value)}
+                    className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="">— No Contact —</option>
+                    {allContacts
+                      .filter(c => !formCompanyId || c.company_id === formCompanyId)
+                      .map(c => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}{c.designation ? ` (${c.designation})` : ''}
+                        </option>
+                      ))
+                    }
+                  </select>
+                </div>
+              </div>
+            </div>
+
             <div className="space-y-2">
-              <Label htmlFor="requirements">Requirements & Details</Label>
-              <Textarea
-                id="requirements"
-                name="requirements"
-                rows={7}
-                className="font-mono text-sm leading-relaxed"
-                placeholder={`Describe the client's requirements in detail:\n\n• Service needed:\n• Budget range:\n• Timeline:\n• Scope of work:\n• Key contacts:\n• Notes:`}
-                defaultValue={editingLead?.requirements || ''}
-              />
+              <Label>Requirements & Details</Label>
+              <p className="text-xs text-muted-foreground -mt-1">
+                Type <kbd className="px-1 py-0.5 rounded bg-muted font-mono text-[10px]">/</kbd> for headings, lists, to-dos and more
+              </p>
+              <div className="rounded-lg border border-input bg-background px-2 py-2 min-h-[140px]">
+                <NotionEditor
+                  content={formRequirements}
+                  onChange={setFormRequirements}
+                  placeholder="Service needed, budget range, timeline, scope of work… Type '/' for formatting"
+                  minHeight="120px"
+                />
+              </div>
             </div>
 
             <Button type="submit" className="w-full" disabled={formLoading}>

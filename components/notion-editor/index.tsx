@@ -11,13 +11,13 @@ import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
 import Highlight from '@tiptap/extension-highlight'
 import { TextStyle } from '@tiptap/extension-text-style'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { createSlashExtension, SLASH_COMMANDS, type SlashCommand } from './slash-commands'
+import { useEffect, useRef, useState } from 'react'
+import { createSlashExtension, type SlashCommand } from './slash-commands'
 import type { SuggestionProps, SuggestionKeyDownProps } from '@tiptap/suggestion'
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Code,
   Link as LinkIcon, Highlighter, AlignLeft, AlignCenter, AlignRight,
-  Heading1, Heading2, Heading3,
+  Heading1, Heading2,
 } from 'lucide-react'
 
 interface NotionEditorProps {

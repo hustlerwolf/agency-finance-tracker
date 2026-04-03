@@ -114,7 +114,7 @@ export function IncomeClient({
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-tight">Income</h1>
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-          <DialogTrigger asChild><Button className="bg-green-600 hover:bg-green-700 text-white">Log Payment Received</Button></DialogTrigger>
+          <DialogTrigger asChild><Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">Log Payment Received</Button></DialogTrigger>
           <DialogContent>
             <DialogHeader><DialogTitle>{editingIncome ? 'Edit Payment' : 'Log Payment'}</DialogTitle></DialogHeader>
             <form action={handleSubmit} className="space-y-4">
@@ -128,7 +128,7 @@ export function IncomeClient({
                   name="invoice_id" 
                   defaultValue={editingIncome?.invoice_id || ''}
                   onChange={(e) => handleInvoiceSelect(e.target.value)}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="">Direct Income (No Invoice)</option>
                   {invoices.map(inv => (
@@ -159,7 +159,7 @@ export function IncomeClient({
                     name="currency" 
                     value={selectedCurrency}
                     onChange={(e) => setSelectedCurrency(e.target.value)}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                   >
                     <option value="INR">INR (₹)</option>
                     <option value="USD">USD ($)</option>
@@ -198,7 +198,7 @@ export function IncomeClient({
                     value={selectedCustomer}
                     onChange={(e) => setSelectedCustomer(e.target.value)}
                     required 
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                   >
                     <option value="">Select Customer</option>
                     {customers.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}

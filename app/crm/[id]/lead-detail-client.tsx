@@ -7,7 +7,6 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 // Lazy-load Notion editor (browser-only)
@@ -99,6 +98,7 @@ export function LeadDetailClient({
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [editLoading, setEditLoading] = useState(false)
   const [editStatus, setEditStatus] = useState<'open' | 'won' | 'lost'>(lead.status as 'open' | 'won' | 'lost')
+  const [editRequirements, setEditRequirements] = useState(lead.requirements || '')
 
   const [noteContent, setNoteContent] = useState('')
   const [noteType, setNoteType] = useState<'general' | 'call' | 'email' | 'meeting'>('general')
@@ -109,14 +109,17 @@ export function LeadDetailClient({
   // ─── Edit lead ─────────────────────────────────────────────────────────────
 
   function openEdit() {
-    setEditStatus(lead.status)
+    setEditStatus(lead.status as 'open' | 'won' | 'lost')
+    setEditRequirements(lead.requirements || '')
     setIsEditOpen(true)
   }
 
   async function handleEditSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setEditLoading(true)
-    const result = await saveLead(new FormData(e.currentTarget))
+    const fd = new FormData(e.currentTarget)
+    fd.set('requirements', editRequirements)
+    const result = await saveLead(fd)
     if (result.success) {
       toast.success('Lead updated')
       setIsEditOpen(false)
@@ -421,7 +424,7 @@ export function LeadDetailClient({
 
       {/* ── EDIT LEAD DIALOG ── */}
       <Dialog open={isEditOpen} onOpenChange={open => { if (!open) setIsEditOpen(false) }}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-4xl max-h-[92vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Lead</DialogTitle>
           </DialogHeader>
@@ -464,7 +467,7 @@ export function LeadDetailClient({
                   id="edit_stage_id"
                   name="stage_id"
                   defaultValue={lead.stage_id || ''}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="">No Stage</option>
                   {stages.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -476,7 +479,7 @@ export function LeadDetailClient({
                   id="edit_source_id"
                   name="source_id"
                   defaultValue={lead.source_id || ''}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="">Unknown</option>
                   {sources.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -488,7 +491,7 @@ export function LeadDetailClient({
                   id="edit_priority"
                   name="priority"
                   defaultValue={lead.priority}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="High">High</option>
                   <option value="Medium">Medium</option>
@@ -511,7 +514,7 @@ export function LeadDetailClient({
                   name="status"
                   value={editStatus}
                   onChange={e => setEditStatus(e.target.value as 'open' | 'won' | 'lost')}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                 >
                   <option value="open">Open</option>
                   <option value="won">Won</option>
@@ -532,15 +535,18 @@ export function LeadDetailClient({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit_requirements">Requirements & Details</Label>
-              <Textarea
-                id="edit_requirements"
-                name="requirements"
-                rows={7}
-                className="font-mono text-sm leading-relaxed"
-                defaultValue={lead.requirements || ''}
-                placeholder="Describe the client's requirements…"
-              />
+              <Label>Requirements & Details</Label>
+              <p className="text-xs text-muted-foreground -mt-1">
+                Type <kbd className="px-1 py-0.5 rounded bg-muted font-mono text-[10px]">/</kbd> for headings, lists, to-dos and more
+              </p>
+              <div className="rounded-lg border border-input bg-background px-2 py-2 min-h-[140px]">
+                <NotionEditor
+                  content={editRequirements}
+                  onChange={setEditRequirements}
+                  placeholder="Describe the client's requirements… Type '/' for formatting"
+                  minHeight="120px"
+                />
+              </div>
             </div>
 
             <Button type="submit" className="w-full" disabled={editLoading}>

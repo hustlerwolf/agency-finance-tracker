@@ -802,7 +802,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
           </p>
         </div>
         <Link href="/projects/new">
-          <Button className="bg-green-600 hover:bg-green-500 text-white gap-2">
+          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white gap-2">
             <Plus className="w-4 h-4" />
             New Project
           </Button>

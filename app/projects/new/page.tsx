@@ -6,17 +6,20 @@ import { ArrowLeft } from 'lucide-react'
 export default async function NewProjectPage() {
   const supabase = createClient()
 
-  const [{ data: customers }, { data: config }] = await Promise.all([
+  const [{ data: customers }, { data: config }, { data: teamMembersData }] = await Promise.all([
     supabase.from('customers').select('id, name').order('name'),
     supabase.from('project_config').select('*').order('sort_order', { ascending: true }),
+    supabase.from('team_members').select('id, full_name').eq('status', 'active').order('full_name'),
   ])
 
   const all = config || []
+  // Map team_members to same shape as project_config for the form
+  const teamAsConfig = (teamMembersData || []).map(m => ({ id: m.id, type: 'team_member', name: m.full_name, sort_order: 0 }))
   const options = {
     platforms:     all.filter(c => c.type === 'platform'),
     salesChannels: all.filter(c => c.type === 'sales_channel'),
     industries:    all.filter(c => c.type === 'industry'),
-    teamMembers:   all.filter(c => c.type === 'team_member'),
+    teamMembers:   teamAsConfig,
   }
 
   return (

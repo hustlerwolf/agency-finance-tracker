@@ -1,9 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { getCurrentUserAccess } from '@/lib/auth-utils'
+import { isFieldHidden } from '@/lib/field-access'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink, Edit, Calendar, Globe } from 'lucide-react'
 import { BriefEditor } from './brief-editor'
 import { ProjectForm } from '../project-form'
+import { TasksClient } from '@/app/tasks/tasks-client'
 
 const STATUS_STYLES: Record<string, string> = {
   not_started: 'bg-gray-700 text-gray-300',
@@ -38,21 +42,55 @@ function LinkChip({ href, label, icon: Icon }: { href: string; label: string; ic
 
 export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
+  const admin = createAdminClient()
+  const { hiddenFields, isAdmin, teamMemberId } = await getCurrentUserAccess()
+  const h = (field: string) => isFieldHidden(hiddenFields, 'projects', field)
 
-  const [{ data: project }, { data: customers }, { data: config }] = await Promise.all([
+  // For members, get their assigned task IDs in this project
+  let memberTaskIds: string[] | null = null
+  if (!isAdmin && teamMemberId) {
+    const { data: assignments } = await admin
+      .from('task_assignees')
+      .select('task_id, tasks!inner(project_id)')
+      .eq('team_member_id', teamMemberId)
+      .eq('tasks.project_id', params.id)
+    memberTaskIds = (assignments || []).map((a: { task_id: string }) => a.task_id)
+  }
+
+  let projectTaskQuery = admin
+    .from('tasks')
+    .select('*, task_assignees(team_member_id, team_members(id, full_name, profile_photo_url)), task_label_assignments(label_id, task_labels(id, name, color)), task_checklist_items(id, title, is_completed, sort_order), task_comments(id, content, created_at, team_member_id, source, team_members(full_name, profile_photo_url)), task_time_logs(id, started_at, stopped_at, duration_minutes, description, team_member_id, team_members(full_name)), projects(id, name)')
+    .eq('project_id', params.id)
+    .order('task_order')
+
+  // Members only see their assigned tasks
+  if (!isAdmin && memberTaskIds !== null) {
+    if (memberTaskIds.length > 0) {
+      projectTaskQuery = projectTaskQuery.in('id', memberTaskIds)
+    } else {
+      projectTaskQuery = projectTaskQuery.in('id', ['00000000-0000-0000-0000-000000000000']) // no results
+    }
+  }
+
+  const [{ data: project }, { data: customers }, { data: config }, { data: teamMembersData }, { data: projectTasks }, { data: taskStatuses }, { data: taskLabels }] = await Promise.all([
     supabase.from('projects').select('*, customers(name)').eq('id', params.id).single(),
     supabase.from('customers').select('id, name').order('name'),
     supabase.from('project_config').select('*').order('sort_order', { ascending: true }),
+    supabase.from('team_members').select('id, full_name, profile_photo_url').eq('status', 'active').order('full_name'),
+    projectTaskQuery,
+    admin.from('task_statuses').select('*').order('status_order'),
+    admin.from('task_labels').select('*').order('name'),
   ])
 
   if (!project) notFound()
 
   const all = config || []
+  const teamAsConfig = (teamMembersData || []).map(m => ({ id: m.id, type: 'team_member', name: m.full_name, sort_order: 0 }))
   const options = {
     platforms:     all.filter(c => c.type === 'platform'),
     salesChannels: all.filter(c => c.type === 'sales_channel'),
     industries:    all.filter(c => c.type === 'industry'),
-    teamMembers:   all.filter(c => c.type === 'team_member'),
+    teamMembers:   teamAsConfig,
   }
 
   const customerName = Array.isArray(project.customers)
@@ -75,7 +113,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
-            {customerName && <span>Client: <span className="text-gray-300">{customerName}</span></span>}
+            {customerName && !h('customer') && <span>Client: <span className="text-gray-300">{customerName}</span></span>}
             {project.platform && <span>Platform: <span className="text-gray-300">{project.platform}</span></span>}
             {project.start_date && (
               <span className="flex items-center gap-1">
@@ -99,13 +137,13 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
       </div>
 
       {/* ── Quick links ── */}
-      {(project.live_link || project.staging_link || project.readonly_link || project.figma_sales_link || project.figma_dev_link) && (
+      {((!h('live_link') && project.live_link) || (!h('staging_link') && project.staging_link) || (!h('readonly_link') && project.readonly_link) || (!h('figma_sales_link') && project.figma_sales_link) || (!h('figma_dev_link') && project.figma_dev_link)) && (
         <div className="flex flex-wrap gap-2">
-          {project.live_link         && <LinkChip href={project.live_link}         label="Live Site"      icon={Globe} />}
-          {project.staging_link      && <LinkChip href={project.staging_link}      label="Staging"        icon={Globe} />}
-          {project.readonly_link     && <LinkChip href={project.readonly_link}     label="Read-Only"      icon={Globe} />}
-          {project.figma_sales_link  && <LinkChip href={project.figma_sales_link}  label="Figma (Sales)" />}
-          {project.figma_dev_link    && <LinkChip href={project.figma_dev_link}    label="Figma (Dev)"   />}
+          {project.live_link         && !h('live_link')         && <LinkChip href={project.live_link}         label="Live Site"      icon={Globe} />}
+          {project.staging_link      && !h('staging_link')      && <LinkChip href={project.staging_link}      label="Staging"        icon={Globe} />}
+          {project.readonly_link     && !h('readonly_link')     && <LinkChip href={project.readonly_link}     label="Read-Only"      icon={Globe} />}
+          {project.figma_sales_link  && !h('figma_sales_link')  && <LinkChip href={project.figma_sales_link}  label="Figma (Sales)" />}
+          {project.figma_dev_link    && !h('figma_dev_link')    && <LinkChip href={project.figma_dev_link}    label="Figma (Dev)"   />}
         </div>
       )}
 
@@ -122,16 +160,24 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
 
       {/* ── Team / meta cards ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {project.designed_by && (
+        {project.designed_by && !h('designed_by') && (
           <div className="bg-gray-900/50 border border-white/10 rounded-lg p-3">
             <p className="text-xs text-gray-500 mb-1">Designed by</p>
             <p className="text-sm font-medium text-white">{project.designed_by}</p>
           </div>
         )}
-        {project.developed_by && (
+        {!h('developed_by') && (project.developers?.length > 0 || project.developed_by) && (
           <div className="bg-gray-900/50 border border-white/10 rounded-lg p-3">
-            <p className="text-xs text-gray-500 mb-1">Developed by</p>
-            <p className="text-sm font-medium text-white">{project.developed_by}</p>
+            <p className="text-xs text-gray-500 mb-1">Developers</p>
+            {project.developers?.length > 0 ? (
+              <div className="flex flex-wrap gap-1">
+                {project.developers.map((d: string) => (
+                  <span key={d} className="text-xs px-2 py-0.5 rounded-full bg-green-900/30 text-green-400 border border-green-800/40">{d}</span>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm font-medium text-white">{project.developed_by}</p>
+            )}
           </div>
         )}
         {project.sales_channel && (
@@ -154,20 +200,37 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
       </div>
 
       {/* ── Rich-text brief ── */}
-      <div className="bg-gray-900/30 border border-white/10 rounded-xl p-6">
-        <BriefEditor projectId={project.id} initialBrief={project.brief || ''} />
+      {!h('brief') && (project.brief || isAdmin) && (
+        <div className="bg-card border border-border rounded-xl p-6">
+          <BriefEditor projectId={project.id} initialBrief={project.brief || ''} />
+        </div>
+      )}
+
+      {/* ── Project Tasks ── */}
+      <div>
+        <TasksClient
+          tasks={projectTasks || []}
+          statuses={taskStatuses || []}
+          labels={taskLabels || []}
+          members={(teamMembersData || []).map(m => ({ id: m.id, full_name: m.full_name, profile_photo_url: m.profile_photo_url || null }))}
+          projects={[{ id: params.id, name: project.name }]}
+          isAdmin={isAdmin}
+          currentMemberId={teamMemberId}
+        />
       </div>
 
       {/* ── Collapsible edit form ── */}
-      <details className="bg-gray-900/30 border border-white/10 rounded-xl overflow-hidden">
-        <summary className="flex items-center gap-2 px-6 py-4 cursor-pointer text-sm font-medium text-gray-400 hover:text-white transition-colors select-none">
-          <Edit className="w-4 h-4" />
-          Edit Project Details
-        </summary>
-        <div className="px-6 pb-6 border-t border-white/10 pt-6">
-          <ProjectForm customers={customers || []} options={options} project={project} />
-        </div>
-      </details>
+      {isAdmin && (
+        <details className="bg-gray-900/30 border border-white/10 rounded-xl overflow-hidden">
+          <summary className="flex items-center gap-2 px-6 py-4 cursor-pointer text-sm font-medium text-gray-400 hover:text-white transition-colors select-none">
+            <Edit className="w-4 h-4" />
+            Edit Project Details
+          </summary>
+          <div className="px-6 pb-6 border-t border-white/10 pt-6">
+            <ProjectForm customers={customers || []} options={options} project={project} />
+          </div>
+        </details>
+      )}
     </div>
   )
 }

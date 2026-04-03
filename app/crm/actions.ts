@@ -24,6 +24,8 @@ export async function saveLead(formData: FormData) {
     next_action_date: (formData.get('next_action_date') as string) || null,
     status: (formData.get('status') as string) || 'open',
     lost_reason: (formData.get('lost_reason') as string) || null,
+    company_id: (formData.get('company_id') as string) || null,
+    contact_id: (formData.get('contact_id') as string) || null,
     updated_at: new Date().toISOString(),
   }
 
@@ -78,13 +80,14 @@ export async function convertLeadToCustomer(leadId: string) {
   const { data: lead } = await supabase.from('leads').select('*').eq('id', leadId).single()
   if (!lead) return { success: false, error: 'Lead not found' }
 
-  const { data: customer, error: custErr } = await supabase
+  // Create company
+  const { data: company, error: custErr } = await supabase
     .from('customers')
     .insert([{
       name: lead.company_name || lead.contact_person,
       type: 'overseas',
-      email: lead.email || null,
-      phone: lead.phone || null,
+      email: lead.company_name ? null : lead.email,
+      phone: lead.company_name ? null : lead.phone,
       website: lead.website || null,
     }])
     .select()
@@ -92,14 +95,34 @@ export async function convertLeadToCustomer(leadId: string) {
 
   if (custErr) return { success: false, error: custErr.message }
 
+  // Create primary contact from the lead person
+  const { data: contact } = await supabase
+    .from('contacts')
+    .insert([{
+      company_id: company.id,
+      name: lead.contact_person,
+      email: lead.email || null,
+      phone: lead.phone || null,
+      linkedin_url: lead.linkedin_url || null,
+      is_primary: true,
+    }])
+    .select()
+    .single()
+
   await supabase
     .from('leads')
-    .update({ status: 'won', converted_customer_id: customer.id, updated_at: new Date().toISOString() })
+    .update({
+      status: 'won',
+      converted_customer_id: company.id,
+      company_id: company.id,
+      contact_id: contact?.id || null,
+      updated_at: new Date().toISOString(),
+    })
     .eq('id', leadId)
 
   revalidatePath('/crm')
   revalidatePath('/customers')
-  return { success: true, customerId: customer.id }
+  return { success: true, customerId: company.id }
 }
 
 // ─── NOTES ───────────────────────────────────────────────────────────────────

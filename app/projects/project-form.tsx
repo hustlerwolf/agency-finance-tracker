@@ -39,6 +39,7 @@ interface Project {
   hero_image?: string | null
   designed_by?: string | null
   developed_by?: string | null
+  developers?: string[] | null
   sales_channel?: string | null
   industry?: string[] | null
   show_publicly?: boolean
@@ -93,7 +94,7 @@ function SelectField({ label, name, value, options, onChange, placeholder = '—
         name={name}
         value={value}
         onChange={e => onChange(e.target.value)}
-        className="w-full h-9 rounded-md border border-white/10 bg-gray-800 text-sm text-white px-3 focus:outline-none focus:ring-1 focus:ring-green-500"
+        className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
       >
         <option value="">{placeholder}</option>
         {options.map(o => <option key={o} value={o}>{o}</option>)}
@@ -126,6 +127,7 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
   const [salesChannel, setSalesChannel] = useState(project?.sales_channel || '')
   const [designedBy, setDesignedBy]     = useState(project?.designed_by || '')
   const [developedBy, setDevelopedBy]   = useState(project?.developed_by || '')
+  const [developers, setDevelopers]     = useState<string[]>(project?.developers || [])
   const [customerId, setCustomerId]     = useState(project?.customer_id || '')
   const [industry, setIndustry]         = useState<string[]>(project?.industry || [])
   const [showPublicly, setShowPublicly] = useState(project?.show_publicly ?? false)
@@ -156,6 +158,8 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
     fd.set('hero_image',       heroImage || '')
     fd.delete('industry')
     industry.forEach(t => fd.append('industry', t))
+    fd.delete('developers')
+    developers.forEach(d => fd.append('developers', d))
 
     const result = await saveProject(fd)
     if (result.success) {
@@ -192,7 +196,7 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
               name="status"
               value={status}
               onChange={e => setStatus(e.target.value)}
-              className="w-full h-9 rounded-md border border-white/10 bg-gray-800 text-sm text-white px-3 focus:outline-none focus:ring-1 focus:ring-green-500"
+              className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
             >
               {STATUSES.map(s => (
                 <option key={s.value} value={s.value}>{s.label}</option>
@@ -205,7 +209,7 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
               name="customer_id"
               value={customerId}
               onChange={e => setCustomerId(e.target.value)}
-              className="w-full h-9 rounded-md border border-white/10 bg-gray-800 text-sm text-white px-3 focus:outline-none focus:ring-1 focus:ring-green-500"
+              className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
             >
               <option value="">— Select Client —</option>
               {customers.map(c => (
@@ -239,22 +243,34 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
               name="designed_by"
               value={designedBy}
               onChange={e => setDesignedBy(e.target.value)}
-              className="w-full h-9 rounded-md border border-white/10 bg-gray-800 text-sm text-white px-3 focus:outline-none focus:ring-1 focus:ring-green-500"
+              className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
             >
               <option value="">— Select —</option>
               {teamMemberNames.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
           </Field>
-          <Field label="Developed By">
-            <select
-              name="developed_by"
-              value={developedBy}
-              onChange={e => setDevelopedBy(e.target.value)}
-              className="w-full h-9 rounded-md border border-white/10 bg-gray-800 text-sm text-white px-3 focus:outline-none focus:ring-1 focus:ring-green-500"
-            >
-              <option value="">— Select —</option>
-              {teamMemberNames.map(m => <option key={m} value={m}>{m}</option>)}
-            </select>
+          <Field label="Developers (multi)">
+            <div className="space-y-2">
+              {developers.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {developers.map(d => (
+                    <span key={d} className="flex items-center gap-1 text-xs px-2 py-1 rounded-lg bg-green-500/10 text-green-400 border border-green-500/20">
+                      {d}
+                      <button type="button" onClick={() => setDevelopers(prev => prev.filter(x => x !== d))} className="hover:text-red-400">×</button>
+                    </span>
+                  ))}
+                </div>
+              )}
+              <select
+                key={developers.length}
+                defaultValue=""
+                onChange={e => { if (e.target.value && !developers.includes(e.target.value)) setDevelopers(prev => [...prev, e.target.value]) }}
+                className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
+              >
+                <option value="">Add developer...</option>
+                {teamMemberNames.filter(m => !developers.includes(m)).map(m => <option key={m} value={m}>{m}</option>)}
+              </select>
+            </div>
           </Field>
         </div>
         {teamMemberNames.length === 0 && (
@@ -297,7 +313,7 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
           <select
             onChange={e => { addIndustry(e.target.value); e.target.value = '' }}
             defaultValue=""
-            className="h-9 rounded-md border border-white/10 bg-gray-800 text-sm text-white px-3 focus:outline-none focus:ring-1 focus:ring-green-500"
+            className="flex h-10 rounded-lg border border-input bg-background px-3 py-2 text-sm"
           >
             <option value="" disabled>+ Add industry tag</option>
             {industryNames.filter(n => !industry.includes(n)).map(n => (
@@ -346,7 +362,7 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
         <Button type="button" variant="ghost" className="text-gray-400 hover:text-white" onClick={() => router.back()}>
           Cancel
         </Button>
-        <Button type="submit" disabled={loading} className="bg-green-600 hover:bg-green-500 text-white min-w-[120px]">
+        <Button type="submit" disabled={loading} className="bg-green-600 hover:bg-green-700 text-white min-w-[120px]">
           {loading ? 'Saving…' : (project?.id ? 'Save Changes' : 'Create Project')}
         </Button>
       </div>

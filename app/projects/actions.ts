@@ -9,6 +9,7 @@ export async function saveProject(formData: FormData) {
   const id = formData.get('id') as string | null
 
   const industry = formData.getAll('industry') as string[]
+  const developers = formData.getAll('developers') as string[]
 
   const projectData = {
     name: formData.get('name') as string,
@@ -20,6 +21,7 @@ export async function saveProject(formData: FormData) {
     hero_image: formData.get('hero_image') as string || null,
     designed_by: formData.get('designed_by') as string || null,
     developed_by: formData.get('developed_by') as string || null,
+    developers: developers.filter(Boolean),
     sales_channel: formData.get('sales_channel') as string || null,
     industry: industry,
     show_publicly: formData.get('show_publicly') === 'true',
