@@ -182,7 +182,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
               <h2 className="font-semibold flex items-center gap-2"><Shield className="w-4 h-4" /> Access Presets</h2>
               <p className="text-xs text-muted-foreground mt-1">Create reusable access configurations to quickly assign to team members</p>
             </div>
-            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={openPresetAdd}>
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openPresetAdd}>
               <Plus className="w-4 h-4 mr-1" /> New Preset
             </Button>
           </div>
@@ -234,7 +234,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
               <p className="text-[10px] text-muted-foreground">Create a Slack app at api.slack.com, add chat:write scope, install to workspace, and paste the Bot Token here.</p>
             </div>
 
-            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={async () => {
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={async () => {
               const fd = new FormData()
               if (notifSettings?.id) fd.set('id', notifSettings.id)
               fd.set('slack_bot_token', slackToken)
@@ -287,7 +287,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => { setDeptDialogOpen(false); setEditingDept(null) }}>Cancel</Button>
-              <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white">{editingDept ? 'Update' : 'Add'}</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">{editingDept ? 'Update' : 'Add'}</Button>
             </div>
           </form>
         </DialogContent>
@@ -344,7 +344,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
 
             <div className="flex justify-end gap-2 pt-2">
               <Button variant="outline" onClick={() => setPresetDialogOpen(false)}>Cancel</Button>
-              <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={handlePresetSubmit} disabled={!presetName.trim()}>
+              <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handlePresetSubmit} disabled={!presetName.trim()}>
                 {editingPreset ? 'Update Preset' : 'Create Preset'}
               </Button>
             </div>

@@ -134,7 +134,7 @@ export function TaskSettingsClient({ statuses, labels }: { statuses: Status[]; l
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => { setStatusDialog(false); setEditingStatus(null) }}>Cancel</Button>
-              <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white">{editingStatus ? 'Update' : 'Add'}</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">{editingStatus ? 'Update' : 'Add'}</Button>
             </div>
           </form>
         </DialogContent>
@@ -162,7 +162,7 @@ export function TaskSettingsClient({ statuses, labels }: { statuses: Status[]; l
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => { setLabelDialog(false); setEditingLabel(null) }}>Cancel</Button>
-              <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white">{editingLabel ? 'Update' : 'Add'}</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">{editingLabel ? 'Update' : 'Add'}</Button>
             </div>
           </form>
         </DialogContent>

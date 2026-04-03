@@ -114,7 +114,7 @@ export function IncomeClient({
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-tight">Income</h1>
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-          <DialogTrigger asChild><Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">Log Payment Received</Button></DialogTrigger>
+          <DialogTrigger asChild><Button size="sm" className="bg-primary hover:bg-primary/90 text-white">Log Payment Received</Button></DialogTrigger>
           <DialogContent>
             <DialogHeader><DialogTitle>{editingIncome ? 'Edit Payment' : 'Log Payment'}</DialogTitle></DialogHeader>
             <form action={handleSubmit} className="space-y-4">
@@ -215,7 +215,7 @@ export function IncomeClient({
                 <Input id="description" name="description" defaultValue={editingIncome?.description || ''} placeholder="Additional details..." />
               </div>
 
-              <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white" disabled={loading}>
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white" disabled={loading}>
                 {loading ? "Saving..." : (editingIncome ? "Update Payment" : "Log Payment")}
               </Button>
             </form>

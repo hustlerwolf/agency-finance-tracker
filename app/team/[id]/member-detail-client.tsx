@@ -503,7 +503,7 @@ export function MemberDetailClient({
                   onUpdateModulePerms={(mod, action, val) => setModulePerms(prev => ({ ...prev, [mod]: { ...(prev[mod] || {}), [action]: val } }))}
                 />
 
-                <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white" disabled={saving}>
+                <Button type="submit" className="bg-primary hover:bg-primary/90 text-white" disabled={saving}>
                   {saving ? 'Creating...' : 'Create Login Account'}
                 </Button>
               </form>
@@ -556,7 +556,7 @@ export function MemberDetailClient({
                   onUpdateModulePerms={(mod, action, val) => setModulePerms(prev => ({ ...prev, [mod]: { ...(prev[mod] || {}), [action]: val } }))}
                 />
 
-                <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={handleUpdateAccess} disabled={saving}>
+                <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={handleUpdateAccess} disabled={saving}>
                   {saving ? 'Saving...' : 'Save Access Settings'}
                 </Button>
 

@@ -102,7 +102,7 @@ export function ContactsClient({ contacts, companies }: { contacts: Contact[]; c
               View Companies
             </Link>
           </Button>
-          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={() => openAdd()}>
+          <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={() => openAdd()}>
             <Plus className="w-4 h-4 mr-1" />
             Add Contact
           </Button>

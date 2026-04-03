@@ -436,7 +436,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
             <Button size="sm" variant="outline" asChild><Link href="/tasks/settings"><Settings className="w-4 h-4 mr-1" /> Settings</Link></Button>
           )}
           {canCreate && (
-            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Add Task</Button>
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Add Task</Button>
           )}
         </div>
       </div>
@@ -740,7 +740,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
               <div className="flex justify-end gap-2 pt-2">
                 {editingTask && <Button type="button" variant="destructive" size="sm" className="mr-auto" onClick={() => { handleDelete(editingTask.id); setDialogOpen(false) }}>Delete</Button>}
                 <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-                <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white" disabled={saving}>{saving ? 'Saving...' : editingTask ? 'Update' : 'Create Task'}</Button>
+                <Button type="submit" className="bg-primary hover:bg-primary/90 text-white" disabled={saving}>{saving ? 'Saving...' : editingTask ? 'Update' : 'Create Task'}</Button>
               </div>
             </form>
           ) : editingTask && (
@@ -894,7 +894,7 @@ function TaskCommentsAndTimer({ task, isAdmin, currentMemberId, commentText, set
             <div className="flex-1">
               <MentionInput value={commentText} onChange={setCommentText} onSubmit={() => onAddComment(task.id)} members={members} placeholder="Write a comment... Use @ to mention" />
             </div>
-            <Button type="button" size="sm" className="bg-green-600 hover:bg-green-700 text-white mt-0.5" onClick={() => onAddComment(task.id)} disabled={!commentText.trim()}>Post</Button>
+            <Button type="button" size="sm" className="bg-primary hover:bg-primary/90 text-white mt-0.5" onClick={() => onAddComment(task.id)} disabled={!commentText.trim()}>Post</Button>
           </div>
         )}
 

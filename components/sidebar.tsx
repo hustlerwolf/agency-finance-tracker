@@ -89,7 +89,7 @@ function SubLink({ href, icon: Icon, name, isActive }: {
       className={[
         'flex items-center gap-2.5 px-2 py-1.5 rounded-md text-xs font-medium transition-colors',
         isActive
-          ? 'text-green-400 bg-white/5'
+          ? 'text-orange-400 bg-white/5'
           : 'text-gray-500 hover:text-gray-200 hover:bg-white/5',
       ].join(' ')}
     >
@@ -297,7 +297,7 @@ export function Sidebar() {
     <aside
       className={[
         'relative flex flex-col h-screen flex-shrink-0',
-        'bg-gray-900 dark:bg-[#0d1117]',
+        'bg-[#1a1a1a] dark:bg-[#0f0f0f]',
         'border-r border-white/[0.06]',
         'transition-all duration-300 ease-in-out',
         collapsed ? 'w-[68px]' : 'w-[240px]',

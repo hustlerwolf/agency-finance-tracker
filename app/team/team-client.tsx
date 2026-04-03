@@ -208,7 +208,7 @@ export function TeamClient({ members, departments }: { members: TeamMember[]; de
         <div className="flex items-center gap-2">
           <Button variant={view === 'grid' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8" onClick={() => setView('grid')}><LayoutGrid className="w-4 h-4" /></Button>
           <Button variant={view === 'table' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8" onClick={() => setView('table')}><List className="w-4 h-4" /></Button>
-          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Add Member</Button>
+          <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Add Member</Button>
         </div>
       </div>
 
@@ -430,7 +430,7 @@ export function TeamClient({ members, departments }: { members: TeamMember[]; de
 
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white">{editing ? 'Update' : 'Add Member'}</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">{editing ? 'Update' : 'Add Member'}</Button>
             </div>
           </form>
         </DialogContent>

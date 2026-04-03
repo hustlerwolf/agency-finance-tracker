@@ -23,10 +23,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Block indexing on staging/preview deployments */}
-        {process.env.VERCEL_ENV !== 'production' && (
-          <meta name="robots" content="noindex, nofollow" />
-        )}
+        {/* Block all search engine indexing — internal app */}
+        <meta name="robots" content="noindex, nofollow" />
       </head>
       <body className={`${inter.className} flex h-screen overflow-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>

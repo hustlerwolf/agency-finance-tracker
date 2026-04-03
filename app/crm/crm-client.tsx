@@ -313,7 +313,7 @@ export function CrmClient({
             <Settings2 className="w-4 h-4 mr-2" />
             Pipeline Settings
           </Button>
-          <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={openAddForm}>
+          <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openAddForm}>
             <Plus className="w-4 h-4 mr-1" />
             Add Lead
           </Button>

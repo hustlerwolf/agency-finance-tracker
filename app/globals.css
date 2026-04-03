@@ -14,67 +14,67 @@
 
 @layer base {
   :root {
-    /* ── Light mode ───────────────────────────── */
-    --background: 220 14% 96%;        /* Soft off-white page bg */
-    --foreground: 220 15% 10%;        /* Near-black text */
+    /* ── Light mode — Onlee warm white ─────────── */
+    --background: 40 33% 97%;         /* Warm off-white #f8f7f4 */
+    --foreground: 0 0% 9%;            /* Near-black text */
 
     --card: 0 0% 100%;                /* Pure white cards */
-    --card-foreground: 220 15% 10%;
+    --card-foreground: 0 0% 9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 10%;
+    --popover-foreground: 0 0% 9%;
 
-    --primary: 142 70% 28%;           /* Deep green — matches brand accent */
+    --primary: 27 100% 50%;           /* Onlee orange #FF6100 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 91%;
-    --secondary-foreground: 220 15% 20%;
+    --secondary: 35 20% 93%;
+    --secondary-foreground: 0 0% 20%;
 
-    --muted: 220 13% 92%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 35 15% 93%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 220 13% 92%;
-    --accent-foreground: 220 15% 10%;
+    --accent: 35 15% 93%;
+    --accent-foreground: 0 0% 9%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 87%;
-    --input: 220 13% 87%;
-    --ring: 142 70% 28%;
+    --border: 35 12% 88%;
+    --input: 35 12% 88%;
+    --ring: 27 100% 50%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    /* ── Dark mode ────────────────────────────── */
-    --background: 222 47% 5%;         /* Very dark navy page bg */
-    --foreground: 210 35% 93%;
+    /* ── Dark mode — Onlee dark ────────────────── */
+    --background: 0 0% 8%;            /* Very dark #141414 */
+    --foreground: 25 100% 95%;        /* Warm off-white #FFF2EB */
 
-    --card: 220 38% 9%;               /* Slightly lighter than bg for cards */
-    --card-foreground: 210 35% 93%;
+    --card: 0 0% 11%;                 /* Slightly lighter cards */
+    --card-foreground: 25 100% 95%;
 
-    --popover: 220 38% 9%;
-    --popover-foreground: 210 35% 93%;
+    --popover: 0 0% 11%;
+    --popover-foreground: 25 100% 95%;
 
-    --primary: 142 58% 42%;           /* Lighter green for dark mode */
+    --primary: 27 100% 50%;           /* Onlee orange #FF6100 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 33% 16%;
-    --secondary-foreground: 210 35% 93%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 25 100% 95%;
 
-    --muted: 217 33% 16%;
-    --muted-foreground: 215 18% 58%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 55%;
 
-    --accent: 217 33% 16%;
-    --accent-foreground: 210 35% 93%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 25 100% 95%;
 
     --destructive: 0 62% 42%;
-    --destructive-foreground: 210 35% 93%;
+    --destructive-foreground: 25 100% 95%;
 
-    --border: 217 30% 18%;
-    --input: 217 30% 18%;
-    --ring: 142 58% 42%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 27 100% 50%;
   }
 }
 
