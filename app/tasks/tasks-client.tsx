@@ -218,21 +218,19 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams])
 
-  // Auto-refresh: poll for task/comment changes every 8 seconds
-  // This catches BugHerd webhook updates (service-role changes bypass Realtime)
+  // Poll for task/comment changes every 8 seconds — updates only the task board, not the whole page
   useEffect(() => {
     let lastCheck = new Date().toISOString()
+    const TASK_SELECT = '*, task_assignees(team_member_id, team_members(id, full_name, profile_photo_url)), task_label_assignments(label_id, task_labels(id, name, color)), task_checklist_items(id, title, is_completed, sort_order), task_comments(id, content, created_at, team_member_id, source, team_members(full_name, profile_photo_url)), task_time_logs(id, started_at, stopped_at, duration_minutes, description, team_member_id, team_members(full_name)), projects(id, name)'
 
     const interval = setInterval(async () => {
       const supabase = createClient()
 
-      // Check if any tasks were added/updated since last check
+      // Quick check: any changes since last poll?
       const { count: taskChanges } = await supabase
         .from('tasks')
         .select('*', { count: 'exact', head: true })
         .gt('updated_at', lastCheck)
-
-      // Check if any comments were added since last check
       const { count: commentChanges } = await supabase
         .from('task_comments')
         .select('*', { count: 'exact', head: true })
@@ -240,7 +238,22 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
 
       if ((taskChanges && taskChanges > 0) || (commentChanges && commentChanges > 0)) {
         lastCheck = new Date().toISOString()
-        router.refresh()
+
+        // Fetch full task data client-side (same query as server page)
+        const { data: freshTasks } = await supabase
+          .from('tasks')
+          .select(TASK_SELECT)
+          .order('task_order', { ascending: true })
+
+        if (freshTasks) {
+          setTasks(freshTasks as Task[])
+          // Also update editing task if dialog is open
+          setEditingTask(prev => {
+            if (!prev) return null
+            const updated = freshTasks.find((t: Task) => t.id === prev.id)
+            return (updated as Task) || null
+          })
+        }
       }
     }, 8000)
 
