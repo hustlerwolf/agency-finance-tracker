@@ -817,7 +817,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
               {editingTask.description && (
                 <div className="space-y-1">
                   <Label className="text-muted-foreground">Description</Label>
-                  <div className="text-sm space-y-3 text-foreground [&_a]:text-blue-500 [&_a]:underline [&_code]:bg-muted [&_code]:text-foreground [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-lg [&_code]:text-xs [&_code]:break-all [&_hr]:border-border [&_hr]:my-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:font-bold [&_img]:rounded-lg [&_img]:max-w-full" dangerouslySetInnerHTML={{ __html: editingTask.description }} />
+                  <div className="text-sm space-y-3 text-neutral-800 dark:text-neutral-200 [&_a]:text-blue-600 dark:[&_a]:text-blue-400 [&_a]:underline [&_code]:bg-neutral-100 dark:[&_code]:bg-neutral-800 [&_code]:text-neutral-900 dark:[&_code]:text-neutral-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-lg [&_code]:text-xs [&_code]:break-all [&_hr]:border-neutral-200 dark:[&_hr]:border-neutral-700 [&_hr]:my-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:text-neutral-900 dark:[&_strong]:text-white [&_strong]:font-bold [&_img]:rounded-lg [&_img]:max-w-full" dangerouslySetInnerHTML={{ __html: editingTask.description }} />
                 </div>
               )}
 

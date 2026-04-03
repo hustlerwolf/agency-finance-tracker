@@ -490,11 +490,6 @@ export function Sidebar() {
           </AccordionSection>
         )}
 
-        {/* Divider */}
-        {(hasModule('reports') || hasModule('settings')) && (
-          <div className="my-2 border-t border-border" />
-        )}
-
         {/* Reports accordion */}
         {hasModule('reports') && (
           <AccordionSection
@@ -531,18 +526,11 @@ export function Sidebar() {
       </nav>
 
       {/* ── Footer: notifications + theme + sign out ── */}
-      <div className="flex-shrink-0 border-t border-border p-2 space-y-0.5">
+      <div className="flex-shrink-0 p-2 space-y-0.5">
         {/* Notification Bell */}
-        {myTeamMemberId && !collapsed && (
-          <NotificationBell teamMemberId={myTeamMemberId} />
+        {myTeamMemberId && (
+          <NotificationBell teamMemberId={myTeamMemberId} collapsed={collapsed} />
         )}
-        {myTeamMemberId && collapsed && (
-          <div className="relative flex justify-center">
-            <NotificationBell teamMemberId={myTeamMemberId} />
-          </div>
-        )}
-      </div>
-      <div className="flex-shrink-0 border-t border-border p-2 space-y-0.5">
         <button
           onClick={toggleTheme}
           title={collapsed && mounted ? (resolvedTheme === 'dark' ? 'Light mode' : 'Dark mode') : undefined}

@@ -35,7 +35,7 @@ function timeAgo(date: string) {
   return `${days}d ago`
 }
 
-export function NotificationBell({ teamMemberId }: { teamMemberId: string }) {
+export function NotificationBell({ teamMemberId, collapsed = false }: { teamMemberId: string; collapsed?: boolean }) {
   const router = useRouter()
   const [notifications, setNotifications] = useState<AppNotification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
@@ -188,10 +188,10 @@ export function NotificationBell({ teamMemberId }: { teamMemberId: string }) {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-gray-400 hover:text-white hover:bg-white/6 w-full relative"
+        className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-gray-400 hover:text-white hover:bg-white/6 w-full relative ${collapsed ? 'justify-center' : ''}`}
       >
         <Bell className="w-[18px] h-[18px] flex-shrink-0" />
-        <span className="truncate">Notifications</span>
+        {!collapsed && <span className="truncate">Notifications</span>}
         {unreadCount > 0 && (
           <span className="absolute top-1.5 left-7 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1">
             {unreadCount > 9 ? '9+' : unreadCount}
