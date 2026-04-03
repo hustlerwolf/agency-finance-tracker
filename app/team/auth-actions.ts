@@ -26,7 +26,8 @@ export async function createTeamMemberAccount(
   email: string,
   password: string,
   allowedModules: string[],
-  hiddenFields: Record<string, string[]> = {}
+  hiddenFields: Record<string, string[]> = {},
+  role: string = 'member'
 ) {
   try {
     await assertAdmin()
@@ -50,7 +51,7 @@ export async function createTeamMemberAccount(
       .insert({
         id: authUserId,
         full_name: email,
-        role: 'member',
+        role: role === 'admin' ? 'admin' : 'member',
         allowed_modules: allowedModules,
         hidden_fields: hiddenFields,
       })
@@ -67,7 +68,8 @@ export async function createTeamMemberAccount(
 export async function updateTeamMemberAccess(
   authUserId: string,
   allowedModules: string[],
-  hiddenFields: Record<string, string[]> = {}
+  hiddenFields: Record<string, string[]> = {},
+  role: string = 'member'
 ) {
   try {
     await assertAdmin()
@@ -75,7 +77,7 @@ export async function updateTeamMemberAccess(
 
     const { error } = await admin
       .from('user_profiles')
-      .update({ allowed_modules: allowedModules, hidden_fields: hiddenFields })
+      .update({ allowed_modules: allowedModules, hidden_fields: hiddenFields, role: role === 'admin' ? 'admin' : 'member' })
       .eq('id', authUserId)
 
     if (error) return { success: false, error: error.message }

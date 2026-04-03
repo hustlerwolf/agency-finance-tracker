@@ -43,7 +43,8 @@ function LinkChip({ href, label, icon: Icon }: { href: string; label: string; ic
 export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
   const admin = createAdminClient()
-  const { hiddenFields, isAdmin, teamMemberId } = await getCurrentUserAccess()
+  const { hiddenFields, isAdmin, teamMemberId, allowedModules } = await getCurrentUserAccess()
+  const canManageTasks = isAdmin || (allowedModules || []).includes('tasks')
   const h = (field: string) => isFieldHidden(hiddenFields, 'projects', field)
 
   // For members, get their assigned task IDs in this project
@@ -216,6 +217,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
           projects={[{ id: params.id, name: project.name }]}
           isAdmin={isAdmin}
           currentMemberId={teamMemberId}
+          canManage={canManageTasks}
         />
       </div>
 

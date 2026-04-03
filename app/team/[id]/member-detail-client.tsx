@@ -180,6 +180,7 @@ export function MemberDetailClient({
 }) {
   const [tab, setTab] = useState<'overview' | 'leaves' | 'attendance' | 'access'>('overview')
   const [selectedModules, setSelectedModules] = useState<string[]>(memberProfile?.allowed_modules || [])
+  const [selectedRole, setSelectedRole] = useState<string>(memberProfile?.role || 'member')
   const [hiddenFields, setHiddenFields] = useState<Record<string, string[]>>(memberProfile?.hidden_fields || {})
   const [expandedModule, setExpandedModule] = useState<string | null>(null)
   const [accountEmail, setAccountEmail] = useState(m.email || '')
@@ -201,7 +202,7 @@ export function MemberDetailClient({
     e.preventDefault()
     if (!accountEmail || !accountPassword) return
     setSaving(true)
-    const res = await createTeamMemberAccount(m.id, accountEmail, accountPassword, selectedModules, hiddenFields)
+    const res = await createTeamMemberAccount(m.id, accountEmail, accountPassword, selectedModules, hiddenFields, selectedRole)
     setSaving(false)
     if (res.success) toast.success('Login account created')
     else toast.error(res.error)
@@ -210,7 +211,7 @@ export function MemberDetailClient({
   async function handleUpdateAccess() {
     if (!m.auth_user_id) return
     setSaving(true)
-    const res = await updateTeamMemberAccess(m.auth_user_id, selectedModules, hiddenFields)
+    const res = await updateTeamMemberAccess(m.auth_user_id, selectedModules, hiddenFields, selectedRole)
     setSaving(false)
     if (res.success) toast.success('Access updated')
     else toast.error(res.error)
@@ -437,6 +438,27 @@ export function MemberDetailClient({
                   </div>
                 </div>
 
+                {/* Role selector */}
+                <div className="space-y-2">
+                  <Label>Role</Label>
+                  <div className="flex gap-2">
+                    <label className={`flex-1 flex items-center gap-2 p-3 rounded-lg border cursor-pointer transition-colors ${selectedRole === 'admin' ? 'border-blue-500/50 bg-blue-500/10' : 'border-border hover:bg-muted/50'}`}>
+                      <input type="radio" name="role" value="admin" checked={selectedRole === 'admin'} onChange={() => setSelectedRole('admin')} />
+                      <div>
+                        <p className="text-sm font-medium">Admin</p>
+                        <p className="text-[10px] text-muted-foreground">Full access to everything. Can manage team, settings, and all modules.</p>
+                      </div>
+                    </label>
+                    <label className={`flex-1 flex items-center gap-2 p-3 rounded-lg border cursor-pointer transition-colors ${selectedRole === 'member' ? 'border-green-500/50 bg-green-500/10' : 'border-border hover:bg-muted/50'}`}>
+                      <input type="radio" name="role" value="member" checked={selectedRole === 'member'} onChange={() => setSelectedRole('member')} />
+                      <div>
+                        <p className="text-sm font-medium">Member</p>
+                        <p className="text-[10px] text-muted-foreground">Access only to assigned modules. Can create and manage within allowed modules.</p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
                 {/* Quick preset apply */}
                 {presets.length > 0 && (
                   <div className="space-y-2">
@@ -467,6 +489,27 @@ export function MemberDetailClient({
               </form>
             ) : (
               <div className="space-y-6">
+                {/* Role selector */}
+                <div className="space-y-2">
+                  <Label>Role</Label>
+                  <div className="flex gap-2">
+                    <label className={`flex-1 flex items-center gap-2 p-3 rounded-lg border cursor-pointer transition-colors ${selectedRole === 'admin' ? 'border-blue-500/50 bg-blue-500/10' : 'border-border hover:bg-muted/50'}`}>
+                      <input type="radio" name="role_edit" value="admin" checked={selectedRole === 'admin'} onChange={() => setSelectedRole('admin')} />
+                      <div>
+                        <p className="text-sm font-medium">Admin</p>
+                        <p className="text-[10px] text-muted-foreground">Full access to everything</p>
+                      </div>
+                    </label>
+                    <label className={`flex-1 flex items-center gap-2 p-3 rounded-lg border cursor-pointer transition-colors ${selectedRole === 'member' ? 'border-green-500/50 bg-green-500/10' : 'border-border hover:bg-muted/50'}`}>
+                      <input type="radio" name="role_edit" value="member" checked={selectedRole === 'member'} onChange={() => setSelectedRole('member')} />
+                      <div>
+                        <p className="text-sm font-medium">Member</p>
+                        <p className="text-[10px] text-muted-foreground">Access only to assigned modules</p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
                 {/* Quick preset apply */}
                 {presets.length > 0 && (
                   <div className="space-y-2">

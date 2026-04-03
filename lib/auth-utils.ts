@@ -28,5 +28,7 @@ export async function getCurrentUserAccess() {
     .single()
   const teamMemberId = tm?.id || null
 
-  return { user, isAdmin, teamMemberId, hiddenFields }
+  const allowedModules: string[] = profile?.allowed_modules || []
+
+  return { user, isAdmin, teamMemberId, hiddenFields, allowedModules }
 }

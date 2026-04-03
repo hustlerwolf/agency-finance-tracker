@@ -193,9 +193,9 @@ function TaskCard({ task, onClick, currentMemberId, onStartTimer, onStopTimer, i
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export function TasksClient({ tasks: initialTasks, statuses, labels, members, projects, isAdmin, currentMemberId }: {
+export function TasksClient({ tasks: initialTasks, statuses, labels, members, projects, isAdmin, currentMemberId, canManage = false }: {
   tasks: Task[]; statuses: TaskStatus[]; labels: TaskLabel[]
-  members: Member[]; projects: Project[]; isAdmin: boolean; currentMemberId?: string | null
+  members: Member[]; projects: Project[]; isAdmin: boolean; currentMemberId?: string | null; canManage?: boolean
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -307,7 +307,8 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
 
   // ─── Handlers ─────────────────────────────────────────────────────────────
 
-  const canEdit = isAdmin // only admin/PM can edit tasks
+  // Admin or anyone with tasks module access can create/edit
+  const canEdit = isAdmin || canManage
 
   function openAdd() {
     setEditingTask(null); setFormDesc(''); setFormAssignees([]); setFormLabels([]); setFormThumbnail(null); setDialogOpen(true)

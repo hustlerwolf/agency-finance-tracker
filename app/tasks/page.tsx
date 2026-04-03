@@ -5,7 +5,8 @@ import { TasksClient } from './tasks-client'
 export const dynamic = 'force-dynamic'
 
 export default async function TasksPage() {
-  const { isAdmin, teamMemberId } = await getCurrentUserAccess()
+  const { isAdmin, teamMemberId, allowedModules } = await getCurrentUserAccess()
+  const canManage = isAdmin || (allowedModules || []).includes('tasks')
   const supabase = createAdminClient()
 
   // For members, first get their assigned task IDs
@@ -29,7 +30,7 @@ export default async function TasksPage() {
       // No assigned tasks — pass empty array
       return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <TasksClient tasks={[]} statuses={[]} labels={[]} members={[]} projects={[]} isAdmin={false} currentMemberId={teamMemberId} />
+          <TasksClient tasks={[]} statuses={[]} labels={[]} members={[]} projects={[]} isAdmin={false} currentMemberId={teamMemberId} canManage={canManage} />
         </div>
       )
     }
@@ -60,6 +61,7 @@ export default async function TasksPage() {
         projects={projects || []}
         isAdmin={isAdmin}
         currentMemberId={teamMemberId}
+        canManage={canManage}
       />
     </div>
   )
