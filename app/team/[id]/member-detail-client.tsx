@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
   ArrowLeft, Mail, Phone, Calendar, Building2, Briefcase,
-  CreditCard, IndianRupee, Clock, FileCheck, Shield, Key, ChevronDown,
+  CreditCard, IndianRupee, FileCheck, Shield, Key, ChevronDown,
 } from 'lucide-react'
 import { ALL_MODULES, MODULE_LABELS, type ModuleSlug } from '@/lib/modules'
 import { MODULE_FIELDS, MODULES_WITH_FIELDS, type FieldDef } from '@/lib/field-access'

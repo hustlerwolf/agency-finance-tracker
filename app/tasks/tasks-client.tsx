@@ -217,8 +217,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
 
   // Auto-refresh when new tasks are added (e.g. BugHerd webhook creates a task)
   useEffect(() => {
-    const { createClient } = require('@/lib/supabase/client')
-    const supabase = createClient()
+    const supabase = (await import('@/lib/supabase/client')).createClient()
     const channel = supabase
       .channel('tasks-realtime')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => {

@@ -101,6 +101,7 @@ export function LeavesClient({ leaves, members, isAdmin = true }: { leaves: Leav
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function handleDelete(id: string) {
     if (!confirm('Delete this leave request?')) return
     const res = await deleteLeaveRequest(id)

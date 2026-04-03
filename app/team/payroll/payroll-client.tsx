@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/table'
 import {
   Plus, FileText, CheckCircle2, Clock, Pencil, Download,
-  Calendar, IndianRupee, ArrowRight,
+  Calendar, IndianRupee, ArrowRight, ChevronUp,
 } from 'lucide-react'
 import { createPayrollRun, updatePayrollSlip, finalizePayrollRun, markPayrollPaid } from '../actions'
 
