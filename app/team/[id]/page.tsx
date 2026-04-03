@@ -30,11 +30,11 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ i
 
   if (!member) notFound()
 
-  let memberProfile: { role: string; allowed_modules: string[]; hidden_fields: Record<string, string[]> } | null = null
+  let memberProfile: { role: string; allowed_modules: string[]; hidden_fields: Record<string, string[]>; module_permissions: Record<string, Record<string, boolean>> } | null = null
   if (member.auth_user_id && isAdmin) {
     const { data } = await admin
       .from('user_profiles')
-      .select('role, allowed_modules, hidden_fields')
+      .select('role, allowed_modules, hidden_fields, module_permissions')
       .eq('id', member.auth_user_id)
       .single()
     memberProfile = data

@@ -28,6 +28,29 @@ export const MODULE_LABELS: Record<ModuleSlug, string> = {
   settings: 'Settings',
 }
 
+// ─── Module Action Permissions ────────────────────────────────────────────────
+
+export const MODULE_ACTIONS = ['create', 'edit', 'delete'] as const
+export type ModuleAction = (typeof MODULE_ACTIONS)[number]
+
+export type ModulePermissions = Record<string, Record<string, boolean>>
+
+// Modules that support action-level permissions
+export const MODULES_WITH_ACTIONS: ModuleSlug[] = ['crm', 'projects', 'tasks', 'knowledge-base', 'team', 'finance']
+
+export function hasPermission(
+  modulePermissions: ModulePermissions | null | undefined,
+  module: string,
+  action: ModuleAction,
+  isAdmin: boolean
+): boolean {
+  if (isAdmin) return true
+  if (!modulePermissions) return true // No restrictions = all allowed (backward compatible)
+  const perms = modulePermissions[module]
+  if (!perms) return true // Module not in permissions = all allowed
+  return perms[action] !== false // Default true unless explicitly false
+}
+
 // Maps each module to the URL prefixes it owns
 const MODULE_ROUTES: Record<ModuleSlug, string[]> = {
   dashboard: ['/dashboard'],

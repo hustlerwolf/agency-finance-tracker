@@ -10,7 +10,7 @@ import {
   ArrowLeft, Mail, Phone, Calendar, Building2, Briefcase,
   CreditCard, IndianRupee, FileCheck, Shield, Key, ChevronDown,
 } from 'lucide-react'
-import { ALL_MODULES, MODULE_LABELS, type ModuleSlug } from '@/lib/modules'
+import { ALL_MODULES, MODULE_LABELS, MODULES_WITH_ACTIONS, MODULE_ACTIONS, type ModuleSlug } from '@/lib/modules'
 import { MODULE_FIELDS, MODULES_WITH_FIELDS, type FieldDef } from '@/lib/field-access'
 import { createTeamMemberAccount, updateTeamMemberAccess, applyPresetToMember, resetTeamMemberPassword } from '../auth-actions'
 
@@ -33,6 +33,7 @@ interface MemberProfile {
   role: string
   allowed_modules: string[]
   hidden_fields: Record<string, string[]>
+  module_permissions: Record<string, Record<string, boolean>>
 }
 interface AccessPreset {
   id: string; name: string; allowed_modules: string[]
@@ -90,12 +91,14 @@ function InfoRow({ icon: Icon, label, value }: { icon: React.ElementType; label:
 
 // ─── Access Configurator (module + field checkboxes) ──────────────────────────
 
-function AccessConfigurator({ selectedModules, hiddenFields, expandedModule, onToggleModule, onUpdateHiddenFields, onExpandModule }: {
+function AccessConfigurator({ selectedModules, hiddenFields, expandedModule, onToggleModule, onUpdateHiddenFields, onExpandModule, modulePerms, onUpdateModulePerms }: {
   selectedModules: string[]; hiddenFields: Record<string, string[]>
   expandedModule: string | null
   onToggleModule: (slug: string) => void
   onUpdateHiddenFields: (module: string, fields: string[]) => void
   onExpandModule: (slug: string | null) => void
+  modulePerms?: Record<string, Record<string, boolean>>
+  onUpdateModulePerms?: (module: string, action: string, value: boolean) => void
 }) {
   return (
     <div className="space-y-2">
@@ -122,6 +125,20 @@ function AccessConfigurator({ selectedModules, hiddenFields, expandedModule, onT
                   </button>
                 )}
               </div>
+              {/* Action permissions (create/edit/delete) */}
+              {enabled && MODULES_WITH_ACTIONS.includes(slug) && onUpdateModulePerms && (
+                <div className="ml-6 mt-1 flex gap-3">
+                  {MODULE_ACTIONS.map(action => {
+                    const checked = modulePerms?.[slug]?.[action] !== false
+                    return (
+                      <label key={action} className={`flex items-center gap-1.5 text-xs cursor-pointer ${checked ? 'text-green-400' : 'text-muted-foreground'}`}>
+                        <input type="checkbox" checked={checked} onChange={() => onUpdateModulePerms(slug, action, !checked)} className="rounded w-3 h-3" />
+                        <span className="capitalize">{action}</span>
+                      </label>
+                    )
+                  })}
+                </div>
+              )}
               {enabled && hasFields && isExpanded && (
                 <FieldCheckboxes
                   module={slug}
@@ -181,6 +198,7 @@ export function MemberDetailClient({
   const [tab, setTab] = useState<'overview' | 'leaves' | 'attendance' | 'access'>('overview')
   const [selectedModules, setSelectedModules] = useState<string[]>(memberProfile?.allowed_modules || [])
   const [selectedRole, setSelectedRole] = useState<string>(memberProfile?.role || 'member')
+  const [modulePerms, setModulePerms] = useState<Record<string, Record<string, boolean>>>(memberProfile?.module_permissions || {})
   const [hiddenFields, setHiddenFields] = useState<Record<string, string[]>>(memberProfile?.hidden_fields || {})
   const [expandedModule, setExpandedModule] = useState<string | null>(null)
   const [accountEmail, setAccountEmail] = useState(m.email || '')
@@ -202,7 +220,7 @@ export function MemberDetailClient({
     e.preventDefault()
     if (!accountEmail || !accountPassword) return
     setSaving(true)
-    const res = await createTeamMemberAccount(m.id, accountEmail, accountPassword, selectedModules, hiddenFields, selectedRole)
+    const res = await createTeamMemberAccount(m.id, accountEmail, accountPassword, selectedModules, hiddenFields, selectedRole, modulePerms)
     setSaving(false)
     if (res.success) toast.success('Login account created')
     else toast.error(res.error)
@@ -211,7 +229,7 @@ export function MemberDetailClient({
   async function handleUpdateAccess() {
     if (!m.auth_user_id) return
     setSaving(true)
-    const res = await updateTeamMemberAccess(m.auth_user_id, selectedModules, hiddenFields, selectedRole)
+    const res = await updateTeamMemberAccess(m.auth_user_id, selectedModules, hiddenFields, selectedRole, modulePerms)
     setSaving(false)
     if (res.success) toast.success('Access updated')
     else toast.error(res.error)
@@ -481,6 +499,8 @@ export function MemberDetailClient({
                   onToggleModule={toggleModule}
                   onUpdateHiddenFields={updateHiddenFields}
                   onExpandModule={setExpandedModule}
+                  modulePerms={modulePerms}
+                  onUpdateModulePerms={(mod, action, val) => setModulePerms(prev => ({ ...prev, [mod]: { ...(prev[mod] || {}), [action]: val } }))}
                 />
 
                 <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white" disabled={saving}>
@@ -532,6 +552,8 @@ export function MemberDetailClient({
                   onToggleModule={toggleModule}
                   onUpdateHiddenFields={updateHiddenFields}
                   onExpandModule={setExpandedModule}
+                  modulePerms={modulePerms}
+                  onUpdateModulePerms={(mod, action, val) => setModulePerms(prev => ({ ...prev, [mod]: { ...(prev[mod] || {}), [action]: val } }))}
                 />
 
                 <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={handleUpdateAccess} disabled={saving}>

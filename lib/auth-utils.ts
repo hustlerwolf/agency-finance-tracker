@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import type { HiddenFieldsMap } from '@/lib/field-access'
+import type { ModulePermissions } from '@/lib/modules'
 
 // Get current user's role, team_member_id, and hidden_fields (for use in server components/actions)
 export async function getCurrentUserAccess() {
@@ -13,7 +14,7 @@ export async function getCurrentUserAccess() {
   const admin = createAdminClient()
   const { data: profile } = await admin
     .from('user_profiles')
-    .select('role, allowed_modules, hidden_fields')
+    .select('role, allowed_modules, hidden_fields, module_permissions')
     .eq('id', user.id)
     .single()
 
@@ -29,6 +30,7 @@ export async function getCurrentUserAccess() {
   const teamMemberId = tm?.id || null
 
   const allowedModules: string[] = profile?.allowed_modules || []
+  const modulePermissions: ModulePermissions = (isAdmin ? {} : profile?.module_permissions) || {}
 
-  return { user, isAdmin, teamMemberId, hiddenFields, allowedModules }
+  return { user, isAdmin, teamMemberId, hiddenFields, allowedModules, modulePermissions }
 }

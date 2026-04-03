@@ -193,9 +193,10 @@ function TaskCard({ task, onClick, currentMemberId, onStartTimer, onStopTimer, i
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export function TasksClient({ tasks: initialTasks, statuses, labels, members, projects, isAdmin, currentMemberId, canManage = false }: {
+export function TasksClient({ tasks: initialTasks, statuses, labels, members, projects, isAdmin, currentMemberId, canManage = false, permissions = {} }: {
   tasks: Task[]; statuses: TaskStatus[]; labels: TaskLabel[]
   members: Member[]; projects: Project[]; isAdmin: boolean; currentMemberId?: string | null; canManage?: boolean
+  permissions?: Record<string, Record<string, boolean>>
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -307,8 +308,11 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
 
   // ─── Handlers ─────────────────────────────────────────────────────────────
 
-  // Admin or anyone with tasks module access can create/edit
-  const canEdit = isAdmin || canManage
+  // Check action-level permissions for tasks
+  const taskPerms = permissions?.tasks || {}
+  const canCreate = isAdmin || (canManage && taskPerms.create !== false)
+  const canEdit = isAdmin || (canManage && taskPerms.edit !== false)
+  const canDelete = isAdmin || (canManage && taskPerms.delete !== false)
 
   function openAdd() {
     setEditingTask(null); setFormDesc(''); setFormAssignees([]); setFormLabels([]); setFormThumbnail(null); setDialogOpen(true)
@@ -429,10 +433,10 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
           <Button variant={view === 'board' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8" onClick={() => setView('board')}><LayoutGrid className="w-4 h-4" /></Button>
           <Button variant={view === 'list' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8" onClick={() => setView('list')}><List className="w-4 h-4" /></Button>
           {isAdmin && (
-            <>
-              <Button size="sm" variant="outline" asChild><Link href="/tasks/settings"><Settings className="w-4 h-4 mr-1" /> Settings</Link></Button>
-              <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Add Task</Button>
-            </>
+            <Button size="sm" variant="outline" asChild><Link href="/tasks/settings"><Settings className="w-4 h-4 mr-1" /> Settings</Link></Button>
+          )}
+          {canCreate && (
+            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Add Task</Button>
           )}
         </div>
       </div>
@@ -504,7 +508,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
                               {...provided.dragHandleProps}
                               className={snapshot.isDragging ? 'opacity-80 rotate-2' : ''}
                             >
-                              <TaskCard task={task} onClick={() => openEdit(task)} currentMemberId={currentMemberId} onStartTimer={handleStartTimer} onStopTimer={handleStopTimer} showCheckbox={isAdmin} isSelected={selectedIds.has(task.id)} onToggleSelect={() => toggleSelect(task.id)} />
+                              <TaskCard task={task} onClick={() => openEdit(task)} currentMemberId={currentMemberId} onStartTimer={handleStartTimer} onStopTimer={handleStopTimer} showCheckbox={canDelete} isSelected={selectedIds.has(task.id)} onToggleSelect={() => toggleSelect(task.id)} />
                             </div>
                           )}
                         </Draggable>
@@ -531,7 +535,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
                         <Draggable key={task.id} draggableId={task.id} index={index}>
                           {(provided, snapshot) => (
                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={snapshot.isDragging ? 'opacity-80 rotate-2' : ''}>
-                              <TaskCard task={task} onClick={() => openEdit(task)} currentMemberId={currentMemberId} onStartTimer={handleStartTimer} onStopTimer={handleStopTimer} showCheckbox={isAdmin} isSelected={selectedIds.has(task.id)} onToggleSelect={() => toggleSelect(task.id)} />
+                              <TaskCard task={task} onClick={() => openEdit(task)} currentMemberId={currentMemberId} onStartTimer={handleStartTimer} onStopTimer={handleStopTimer} showCheckbox={canDelete} isSelected={selectedIds.has(task.id)} onToggleSelect={() => toggleSelect(task.id)} />
                             </div>
                           )}
                         </Draggable>
