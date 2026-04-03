@@ -90,7 +90,7 @@ function SubLink({ href, icon: Icon, name, isActive }: {
         'flex items-center gap-2.5 px-2 py-1.5 rounded-md text-xs font-medium transition-colors',
         isActive
           ? 'text-orange-400 bg-white/5'
-          : 'text-gray-500 hover:text-gray-200 hover:bg-white/5',
+          : 'text-muted-foreground hover:text-gray-200 hover:bg-white/5',
       ].join(' ')}
     >
       <Icon className="w-3.5 h-3.5 flex-shrink-0" />
@@ -244,8 +244,8 @@ export function Sidebar() {
     return [
       'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
       isActive
-        ? 'bg-white/12 text-white'
-        : 'text-gray-400 hover:text-white hover:bg-white/6',
+        ? 'bg-white/12 text-foreground'
+        : 'text-muted-foreground hover:text-foreground hover:bg-white/6',
       collapsed ? 'justify-center' : '',
       extra,
     ].join(' ')
@@ -281,11 +281,11 @@ export function Sidebar() {
             <span>{label}</span>
           </span>
           <ChevronDown
-            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
           />
         </button>
         {isOpen && (
-          <div className="mt-1 ml-[14px] pl-4 border-l border-white/[0.08] space-y-0.5">
+          <div className="mt-1 ml-[14px] pl-4 border-l border-border space-y-0.5">
             {children}
           </div>
         )}
@@ -298,13 +298,13 @@ export function Sidebar() {
       className={[
         'relative flex flex-col h-screen flex-shrink-0',
         'bg-[#1a1a1a] dark:bg-[#0f0f0f]',
-        'border-r border-white/[0.06]',
+        'border-r border-border',
         'transition-all duration-300 ease-in-out',
         collapsed ? 'w-[68px]' : 'w-[240px]',
       ].join(' ')}
     >
       {/* ── Logo / App name ── */}
-      <div className={`flex items-center h-[60px] px-3 border-b border-white/[0.06] flex-shrink-0 ${collapsed ? 'justify-center' : 'gap-3'}`}>
+      <div className={`flex items-center h-[60px] px-3 border-b border-border flex-shrink-0 ${collapsed ? 'justify-center' : 'gap-3'}`}>
         {collapsed ? (
           <img src="/icon.svg" alt="Onlee" className="w-8 h-8 flex-shrink-0" />
         ) : (
@@ -492,7 +492,7 @@ export function Sidebar() {
 
         {/* Divider */}
         {(hasModule('reports') || hasModule('settings')) && (
-          <div className="my-2 border-t border-white/[0.06]" />
+          <div className="my-2 border-t border-border" />
         )}
 
         {/* Reports accordion */}
@@ -531,7 +531,7 @@ export function Sidebar() {
       </nav>
 
       {/* ── Footer: notifications + theme + sign out ── */}
-      <div className="flex-shrink-0 border-t border-white/[0.06] p-2 space-y-0.5">
+      <div className="flex-shrink-0 border-t border-border p-2 space-y-0.5">
         {/* Notification Bell */}
         {myTeamMemberId && !collapsed && (
           <NotificationBell teamMemberId={myTeamMemberId} />
@@ -542,7 +542,7 @@ export function Sidebar() {
           </div>
         )}
       </div>
-      <div className="flex-shrink-0 border-t border-white/[0.06] p-2 space-y-0.5">
+      <div className="flex-shrink-0 border-t border-border p-2 space-y-0.5">
         <button
           onClick={toggleTheme}
           title={collapsed && mounted ? (resolvedTheme === 'dark' ? 'Light mode' : 'Dark mode') : undefined}
@@ -567,7 +567,7 @@ export function Sidebar() {
           title={collapsed ? 'Sign out' : undefined}
           className={[
             'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors w-full',
-            'text-gray-400 hover:text-red-400 hover:bg-white/5',
+            'text-muted-foreground hover:text-red-400 hover:bg-white/5',
             collapsed ? 'justify-center' : '',
           ].join(' ')}
         >
@@ -580,11 +580,11 @@ export function Sidebar() {
       <button
         onClick={() => setCollapsed(p => !p)}
         title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gray-800 border border-gray-600 hover:bg-gray-700 flex items-center justify-center transition-colors z-20 shadow-md"
+        className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-muted border border-gray-600 hover:bg-muted flex items-center justify-center transition-colors z-20 shadow-md"
       >
         {collapsed
-          ? <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
-          : <ChevronLeft className="w-3.5 h-3.5 text-gray-300" />
+          ? <ChevronRight className="w-3.5 h-3.5 text-foreground" />
+          : <ChevronLeft className="w-3.5 h-3.5 text-foreground" />
         }
       </button>
     </aside>

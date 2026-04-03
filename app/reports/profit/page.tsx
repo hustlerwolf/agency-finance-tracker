@@ -48,12 +48,12 @@ export default async function ProfitReportPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3 h-[450px] border rounded-md p-6 bg-muted/30">
+        <div className="lg:col-span-3 h-[450px] border rounded-lg p-6 bg-muted/30">
           <ProfitChart data={chartData} />
         </div>
 
         <div className="space-y-4">
-          <div className={`p-4 rounded-md shadow-sm border ${
+          <div className={`p-4 rounded-lg shadow-sm border ${
             totalNetProfit >= 0
               ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-200'
               : 'bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-800 text-red-900 dark:text-red-200'
@@ -62,7 +62,7 @@ export default async function ProfitReportPage() {
             <p className="text-2xl font-bold mt-1">₹{totalNetProfit.toLocaleString('en-IN')}</p>
           </div>
 
-          <div className="border rounded-md bg-card overflow-hidden">
+          <div className="border rounded-lg bg-card overflow-hidden">
             <div className="bg-muted px-4 py-2 border-b text-xs font-bold uppercase text-muted-foreground tracking-wider">
               Monthly Snapshot
             </div>

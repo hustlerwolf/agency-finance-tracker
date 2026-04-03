@@ -59,18 +59,18 @@ export default async function ForexReportPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3 h-[450px] border rounded-md p-6 bg-muted/30">
+        <div className="lg:col-span-3 h-[450px] border rounded-lg p-6 bg-muted/30">
           <ForexChart data={tableData} />
         </div>
 
         <div className="space-y-4">
-          <div className="p-4 bg-red-600 text-white rounded-md shadow-md">
+          <div className="p-4 bg-red-600 text-foreground rounded-lg shadow-md">
             <h3 className="text-sm font-medium opacity-80">Total Leakage (Fees)</h3>
             <p className="text-2xl font-bold mt-1">₹{totalLeakage.toLocaleString('en-IN')}</p>
             <p className="text-xs mt-2 opacity-70 italic">* Money lost to bank spreads & platform fees.</p>
           </div>
 
-          <div className="border rounded-md bg-card overflow-hidden">
+          <div className="border rounded-lg bg-card overflow-hidden">
             <div className="bg-muted px-4 py-2 border-b text-xs font-bold uppercase text-muted-foreground">
               Payment Efficiency
             </div>

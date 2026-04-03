@@ -13,7 +13,7 @@ const NotionEditor = dynamic(
     ssr: false,
     loading: () => (
       <div className="min-h-[200px] flex items-center justify-center">
-        <span className="text-xs text-gray-600 animate-pulse">Loading editor…</span>
+        <span className="text-xs text-muted-foreground animate-pulse">Loading editor…</span>
       </div>
     ),
   }
@@ -40,8 +40,8 @@ export function BriefEditor({ projectId, initialBrief }: { projectId: string; in
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-base font-semibold text-white">Project Brief</h2>
-          <p className="text-xs text-gray-600 mt-0.5">Type <kbd className="px-1 py-0.5 rounded bg-gray-800 text-gray-400 font-mono text-[10px]">/</kbd> for headings, lists, to-dos and more</p>
+          <h2 className="text-base font-semibold text-foreground">Project Brief</h2>
+          <p className="text-xs text-muted-foreground mt-0.5">Type <kbd className="px-1 py-0.5 rounded bg-muted text-muted-foreground font-mono text-[10px]">/</kbd> for headings, lists, to-dos and more</p>
         </div>
         <button
           onClick={handleSave}
@@ -50,14 +50,14 @@ export function BriefEditor({ projectId, initialBrief }: { projectId: string; in
             'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all',
             saved
               ? 'bg-green-900/40 text-green-400 border border-green-800/50'
-              : 'bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white border border-white/10',
+              : 'bg-muted hover:bg-muted text-foreground hover:text-foreground border border-border',
           ].join(' ')}
         >
           {saved ? <><Check className="w-3.5 h-3.5" /> Saved</> : <><Save className="w-3.5 h-3.5" /> {saving ? 'Saving…' : 'Save Brief'}</>}
         </button>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-gray-900/40 px-2 py-3">
+      <div className="rounded-xl border border-border bg-card/40 px-2 py-3">
         <NotionEditor
           content={content}
           onChange={setContent}

@@ -161,14 +161,14 @@ function TaskCard({ task, onClick, currentMemberId, onStartTimer, onStopTimer, i
         {currentMemberId && (onStartTimer || onStopTimer) ? (
           runningLog ? (
             isMyRunning ? (
-              <button onClick={e => { e.stopPropagation(); onStopTimer?.(runningLog.id) }} className="flex items-center gap-1 px-2 py-1 rounded-md bg-red-500/15 text-red-400 hover:bg-red-500/25 transition-colors text-[10px] font-medium" title="Stop timer">
+              <button onClick={e => { e.stopPropagation(); onStopTimer?.(runningLog.id) }} className="flex items-center gap-1 px-2 py-1 rounded-lg bg-red-500/15 text-red-400 hover:bg-red-500/25 transition-colors text-[10px] font-medium" title="Stop timer">
                 <StopCircle className="w-3 h-3" /> <RunningTimer startedAt={runningLog.started_at} />
               </button>
             ) : (
               <span className="flex items-center gap-1 text-[10px] text-yellow-400"><Clock className="w-3 h-3" /> Running</span>
             )
           ) : (
-            <button onClick={e => { e.stopPropagation(); onStartTimer?.(task.id) }} className="flex items-center gap-1 px-2 py-1 rounded-md bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors text-[10px] font-medium opacity-0 group-hover:opacity-100" title="Start timer">
+            <button onClick={e => { e.stopPropagation(); onStartTimer?.(task.id) }} className="flex items-center gap-1 px-2 py-1 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors text-[10px] font-medium opacity-0 group-hover:opacity-100" title="Start timer">
               <Play className="w-3 h-3" /> Start
             </button>
           )
@@ -180,7 +180,7 @@ function TaskCard({ task, onClick, currentMemberId, onStartTimer, onStopTimer, i
             {assignees.slice(0, 3).map(a => (
               a.profile_photo_url
                 ? <img key={a.id} src={a.profile_photo_url} alt="" className="w-6 h-6 rounded-full object-cover" title={a.full_name} />
-                : <div key={a.id} className={`w-6 h-6 rounded-full ${avatarColor(a.full_name)} flex items-center justify-center text-white text-[9px] font-medium`} title={a.full_name}>{getInitials(a.full_name)}</div>
+                : <div key={a.id} className={`w-6 h-6 rounded-full ${avatarColor(a.full_name)} flex items-center justify-center text-foreground text-[9px] font-medium`} title={a.full_name}>{getInitials(a.full_name)}</div>
             ))}
             {assignees.length > 3 && <span className="text-[10px] text-muted-foreground">+{assignees.length - 3}</span>}
           </div>
@@ -436,7 +436,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
             <Button size="sm" variant="outline" asChild><Link href="/tasks/settings"><Settings className="w-4 h-4 mr-1" /> Settings</Link></Button>
           )}
           {canCreate && (
-            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Add Task</Button>
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Add Task</Button>
           )}
         </div>
       </div>
@@ -590,7 +590,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
                     <td className="px-4 py-3">
                       <div className="flex -space-x-1">
                         {assignees.slice(0, 3).map(a => (
-                          <div key={a.id} className={`w-6 h-6 rounded-full ${avatarColor(a.full_name)} flex items-center justify-center text-white text-[9px] font-medium border-2 border-card`} title={a.full_name}>{getInitials(a.full_name)}</div>
+                          <div key={a.id} className={`w-6 h-6 rounded-full ${avatarColor(a.full_name)} flex items-center justify-center text-foreground text-[9px] font-medium border-2 border-card`} title={a.full_name}>{getInitials(a.full_name)}</div>
                         ))}
                       </div>
                     </td>
@@ -740,7 +740,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
               <div className="flex justify-end gap-2 pt-2">
                 {editingTask && <Button type="button" variant="destructive" size="sm" className="mr-auto" onClick={() => { handleDelete(editingTask.id); setDialogOpen(false) }}>Delete</Button>}
                 <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-                <Button type="submit" className="bg-primary hover:bg-primary/90 text-white" disabled={saving}>{saving ? 'Saving...' : editingTask ? 'Update' : 'Create Task'}</Button>
+                <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground" disabled={saving}>{saving ? 'Saving...' : editingTask ? 'Update' : 'Create Task'}</Button>
               </div>
             </form>
           ) : editingTask && (
@@ -894,7 +894,7 @@ function TaskCommentsAndTimer({ task, isAdmin, currentMemberId, commentText, set
             <div className="flex-1">
               <MentionInput value={commentText} onChange={setCommentText} onSubmit={() => onAddComment(task.id)} members={members} placeholder="Write a comment... Use @ to mention" />
             </div>
-            <Button type="button" size="sm" className="bg-primary hover:bg-primary/90 text-white mt-0.5" onClick={() => onAddComment(task.id)} disabled={!commentText.trim()}>Post</Button>
+            <Button type="button" size="sm" className="bg-primary hover:bg-primary/90 text-foreground mt-0.5" onClick={() => onAddComment(task.id)} disabled={!commentText.trim()}>Post</Button>
           </div>
         )}
 
@@ -909,7 +909,7 @@ function TaskCommentsAndTimer({ task, isAdmin, currentMemberId, commentText, set
                 <div key={c.id} className="flex gap-2.5 group">
                   {c.team_members?.profile_photo_url
                     ? <img src={c.team_members.profile_photo_url} alt="" className="w-7 h-7 rounded-full object-cover flex-shrink-0 mt-0.5" />
-                    : <div className={`w-7 h-7 rounded-full ${isBugherdComment ? 'bg-orange-600' : avatarColor(displayName)} flex items-center justify-center text-white text-[9px] font-medium flex-shrink-0 mt-0.5`}>{getInitials(displayName)}</div>
+                    : <div className={`w-7 h-7 rounded-full ${isBugherdComment ? 'bg-orange-600' : avatarColor(displayName)} flex items-center justify-center text-foreground text-[9px] font-medium flex-shrink-0 mt-0.5`}>{getInitials(displayName)}</div>
                   }
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">

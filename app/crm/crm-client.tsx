@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 
 const NotionEditor = dynamic(
   () => import('@/components/notion-editor').then(m => m.NotionEditor),
-  { ssr: false, loading: () => <div className="min-h-[120px] rounded-md border border-input bg-muted/20 animate-pulse" /> }
+  { ssr: false, loading: () => <div className="min-h-[120px] rounded-lg border border-input bg-muted/20 animate-pulse" /> }
 )
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -81,7 +81,7 @@ const PRIORITY_STYLE: Record<string, string> = {
 const STATUS_STYLE: Record<string, string> = {
   open: 'bg-blue-100 text-blue-700',
   won: 'bg-emerald-100 text-emerald-700',
-  lost: 'bg-gray-100 text-gray-500',
+  lost: 'bg-gray-100 text-muted-foreground',
 }
 
 const STATUS_LABEL: Record<string, string> = { open: 'Open', won: 'Won', lost: 'Lost' }
@@ -313,7 +313,7 @@ export function CrmClient({
             <Settings2 className="w-4 h-4 mr-2" />
             Pipeline Settings
           </Button>
-          <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openAddForm}>
+          <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={openAddForm}>
             <Plus className="w-4 h-4 mr-1" />
             Add Lead
           </Button>
@@ -369,7 +369,7 @@ export function CrmClient({
           <option value="Medium">Medium</option>
           <option value="Low">Low</option>
         </select>
-        <div className="flex border rounded-md overflow-hidden">
+        <div className="flex border rounded-lg overflow-hidden">
           <button
             onClick={() => setView('table')}
             title="Table view"
@@ -389,7 +389,7 @@ export function CrmClient({
 
       {/* ── TABLE VIEW ── */}
       {view === 'table' && (
-        <div className="border rounded-md bg-card overflow-hidden">
+        <div className="border rounded-lg bg-card overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
@@ -790,7 +790,7 @@ export function CrmClient({
               </h3>
               <div className="space-y-2 mb-4">
                 {stages.map(stage => (
-                  <div key={stage.id} className="flex items-center justify-between border rounded-md px-3 py-2 bg-muted/40">
+                  <div key={stage.id} className="flex items-center justify-between border rounded-lg px-3 py-2 bg-muted/40">
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: stage.color }} />
                       <span className="text-sm font-medium">{stage.name}</span>
@@ -810,7 +810,7 @@ export function CrmClient({
                   <p className="text-sm text-muted-foreground">No stages yet.</p>
                 )}
               </div>
-              <form onSubmit={handleSaveStage} className="border rounded-md p-3 bg-card space-y-3">
+              <form onSubmit={handleSaveStage} className="border rounded-lg p-3 bg-card space-y-3">
                 <p className="text-sm font-medium text-muted-foreground">
                   {editingStage ? 'Edit Stage' : 'New Stage'}
                 </p>
@@ -855,7 +855,7 @@ export function CrmClient({
               </h3>
               <div className="space-y-2 mb-4">
                 {localSources.map(source => (
-                  <div key={source.id} className="flex items-center justify-between border rounded-md px-3 py-2 bg-muted/40">
+                  <div key={source.id} className="flex items-center justify-between border rounded-lg px-3 py-2 bg-muted/40">
                     <span className="text-sm font-medium">{source.name}</span>
                     <div className="flex gap-1.5">
                       <Button variant="outline" size="sm" onClick={() => setEditingSource(source)}>
@@ -871,7 +871,7 @@ export function CrmClient({
                   <p className="text-sm text-muted-foreground">No sources yet.</p>
                 )}
               </div>
-              <form onSubmit={handleSaveSource} className="border rounded-md p-3 bg-card space-y-3">
+              <form onSubmit={handleSaveSource} className="border rounded-lg p-3 bg-card space-y-3">
                 <p className="text-sm font-medium text-muted-foreground">
                   {editingSource ? 'Edit Source' : 'New Source'}
                 </p>

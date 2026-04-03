@@ -52,7 +52,7 @@ interface AttendanceEntry {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const STATUS_COLORS: Record<string, string> = {
-  active: 'bg-green-500/15 text-green-400', inactive: 'bg-gray-500/15 text-gray-400', on_leave: 'bg-yellow-500/15 text-yellow-400',
+  active: 'bg-green-500/15 text-green-400', inactive: 'bg-gray-500/15 text-muted-foreground', on_leave: 'bg-yellow-500/15 text-yellow-400',
 }
 const LEAVE_STATUS_COLORS: Record<string, string> = {
   pending: 'bg-yellow-500/15 text-yellow-400', approved: 'bg-green-500/15 text-green-400', rejected: 'bg-red-500/15 text-red-400',
@@ -60,7 +60,7 @@ const LEAVE_STATUS_COLORS: Record<string, string> = {
 const ATT_STATUS_COLORS: Record<string, string> = {
   present: 'bg-green-500/15 text-green-400', absent: 'bg-red-500/15 text-red-400',
   half_day: 'bg-yellow-500/15 text-yellow-400', on_leave: 'bg-blue-500/15 text-blue-400',
-  holiday: 'bg-purple-500/15 text-purple-400', weekend: 'bg-gray-500/15 text-gray-400',
+  holiday: 'bg-purple-500/15 text-purple-400', weekend: 'bg-gray-500/15 text-muted-foreground',
 }
 const EMP_TYPES: Record<string, string> = { full_time: 'Full-time', part_time: 'Part-time', freelancer: 'Freelancer', intern: 'Intern' }
 
@@ -120,7 +120,7 @@ function AccessConfigurator({ selectedModules, hiddenFields, expandedModule, onT
                   {hiddenCount > 0 && <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-500/15 text-red-400 ml-auto">{hiddenCount} hidden</span>}
                 </label>
                 {enabled && hasFields && fields.length > 0 && (
-                  <button type="button" className="h-8 w-8 flex items-center justify-center rounded-md hover:bg-muted/50 flex-shrink-0" onClick={() => onExpandModule(isExpanded ? null : slug)}>
+                  <button type="button" className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted/50 flex-shrink-0" onClick={() => onExpandModule(isExpanded ? null : slug)}>
                     <ChevronDown className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                   </button>
                 )}
@@ -173,7 +173,7 @@ function FieldCheckboxes({ module, hiddenFields, onChange }: {
           <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{group}</p>
           <div className="flex flex-wrap gap-1.5">
             {gFields.map(f => (
-              <label key={f.key} className={`text-xs px-2.5 py-1 rounded-md border cursor-pointer transition-colors ${hiddenFields.includes(f.key) ? 'bg-red-500/15 border-red-500/30 text-red-400 line-through' : 'bg-green-500/10 border-green-500/30 text-green-400'}`}>
+              <label key={f.key} className={`text-xs px-2.5 py-1 rounded-lg border cursor-pointer transition-colors ${hiddenFields.includes(f.key) ? 'bg-red-500/15 border-red-500/30 text-red-400 line-through' : 'bg-green-500/10 border-green-500/30 text-green-400'}`}>
                 <input type="checkbox" className="sr-only" checked={!hiddenFields.includes(f.key)} onChange={() => toggle(f.key)} />
                 {f.label}
               </label>
@@ -272,7 +272,7 @@ export function MemberDetailClient({
         {m.profile_photo_url ? (
           <img src={m.profile_photo_url} alt="" className="w-20 h-20 rounded-xl object-cover" />
         ) : (
-          <div className={`w-20 h-20 rounded-xl ${avatarColor(m.full_name)} flex items-center justify-center text-white font-bold text-2xl`}>{getInitials(m.full_name)}</div>
+          <div className={`w-20 h-20 rounded-xl ${avatarColor(m.full_name)} flex items-center justify-center text-foreground font-bold text-2xl`}>{getInitials(m.full_name)}</div>
         )}
         <div>
           <h1 className="text-2xl font-bold">{m.full_name}</h1>
@@ -437,7 +437,7 @@ export function MemberDetailClient({
             <div className="flex items-center gap-2 mb-4">
               <Shield className="w-5 h-5 text-muted-foreground" />
               <h3 className="font-semibold text-sm">Login Account</h3>
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ml-auto ${hasAuthAccount ? 'bg-green-500/15 text-green-400' : 'bg-gray-500/15 text-gray-400'}`}>
+              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ml-auto ${hasAuthAccount ? 'bg-green-500/15 text-green-400' : 'bg-gray-500/15 text-muted-foreground'}`}>
                 {hasAuthAccount ? 'Active' : 'No Account'}
               </span>
             </div>
@@ -503,7 +503,7 @@ export function MemberDetailClient({
                   onUpdateModulePerms={(mod, action, val) => setModulePerms(prev => ({ ...prev, [mod]: { ...(prev[mod] || {}), [action]: val } }))}
                 />
 
-                <Button type="submit" className="bg-primary hover:bg-primary/90 text-white" disabled={saving}>
+                <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground" disabled={saving}>
                   {saving ? 'Creating...' : 'Create Login Account'}
                 </Button>
               </form>
@@ -556,7 +556,7 @@ export function MemberDetailClient({
                   onUpdateModulePerms={(mod, action, val) => setModulePerms(prev => ({ ...prev, [mod]: { ...(prev[mod] || {}), [action]: val } }))}
                 />
 
-                <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={handleUpdateAccess} disabled={saving}>
+                <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={handleUpdateAccess} disabled={saving}>
                   {saving ? 'Saving...' : 'Save Access Settings'}
                 </Button>
 

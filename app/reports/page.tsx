@@ -33,7 +33,7 @@ export default async function ExpenseReportPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 h-[400px] border rounded-md p-4 bg-muted/30 flex items-center justify-center">
+        <div className="lg:col-span-2 h-[400px] border rounded-lg p-4 bg-muted/30 flex items-center justify-center">
           {chartData.length > 0 ? (
             <ExpenseChart data={chartData} />
           ) : (
@@ -42,14 +42,14 @@ export default async function ExpenseReportPage() {
         </div>
 
         <div className="space-y-4">
-          <div className="p-4 bg-primary text-primary-foreground rounded-md">
+          <div className="p-4 bg-primary text-primary-foreground rounded-lg">
             <h3 className="text-sm font-medium opacity-80">Total INR Expenses</h3>
             <p className="text-3xl font-bold mt-1">
               ₹{totalExpenses.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
             </p>
           </div>
 
-          <div className="border rounded-md overflow-hidden bg-card">
+          <div className="border rounded-lg overflow-hidden bg-card">
             <div className="bg-muted px-4 py-2 border-b font-medium text-sm text-muted-foreground">
               Category Summary
             </div>

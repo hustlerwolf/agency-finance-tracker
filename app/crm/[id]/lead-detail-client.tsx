@@ -12,12 +12,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 // Lazy-load Notion editor (browser-only)
 const NotionEditor = dynamic(
   () => import('@/components/notion-editor').then(m => m.NotionEditor),
-  { ssr: false, loading: () => <div className="min-h-[80px] rounded-md border border-border bg-muted/30 animate-pulse" /> }
+  { ssr: false, loading: () => <div className="min-h-[80px] rounded-lg border border-border bg-muted/30 animate-pulse" /> }
 )
 
 function NoteEditorWrapper({ content, onChange }: { content: string; onChange: (v: string) => void }) {
   return (
-    <div className="rounded-md border border-border bg-background px-2 py-2 min-h-[80px]">
+    <div className="rounded-lg border border-border bg-background px-2 py-2 min-h-[80px]">
       <NotionEditor
         content={content}
         onChange={onChange}
@@ -59,7 +59,7 @@ const PRIORITY_STYLE: Record<string, string> = {
 const STATUS_STYLE: Record<string, string> = {
   open: 'bg-blue-100 text-blue-700',
   won: 'bg-emerald-100 text-emerald-700',
-  lost: 'bg-gray-100 text-gray-500',
+  lost: 'bg-gray-100 text-muted-foreground',
 }
 
 const NOTE_TYPE_META = {
@@ -225,7 +225,7 @@ export function LeadDetailClient({
           {lead.status !== 'won' && (
             <Button
               size="sm"
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              className="bg-emerald-600 hover:bg-emerald-700 text-foreground"
               onClick={handleConvert}
               disabled={converting}
             >
@@ -346,7 +346,7 @@ export function LeadDetailClient({
                       key={type}
                       type="button"
                       onClick={() => setNoteType(type)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border transition-all ${
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
                         noteType === type
                           ? `${color} border-current`
                           : 'bg-background border-border hover:bg-muted'

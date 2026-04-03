@@ -49,7 +49,7 @@ export default function LoginPage({
               </p>
             )}
 
-            <Button type="submit" className="w-full bg-gradient-to-r from-[#FEB800] to-[#FF6100] hover:from-[#FEB800]/90 hover:to-[#FF6100]/90 text-white border-0">
+            <Button type="submit" className="w-full bg-gradient-to-r from-[#FEB800] to-[#FF6100] hover:from-[#FEB800]/90 hover:to-[#FF6100]/90 text-foreground border-0">
               Sign in
             </Button>
           </form>

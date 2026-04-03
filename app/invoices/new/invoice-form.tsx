@@ -222,7 +222,7 @@ export function InvoiceForm({
       </div>
 
       {/* Line Items */}
-      <div className="border rounded-md p-4 space-y-4 bg-card shadow-sm">
+      <div className="border rounded-lg p-4 space-y-4 bg-card shadow-sm">
         <h3 className="font-semibold text-lg">Line Items</h3>
         <Table>
           <TableHeader>
@@ -252,7 +252,7 @@ export function InvoiceForm({
             ))}
           </TableBody>
         </Table>
-        <Button type="button" variant="outline" size="sm" onClick={addLineItem} className="mt-2 rounded-md">
+        <Button type="button" variant="outline" size="sm" onClick={addLineItem} className="mt-2 rounded-lg">
           <Plus className="h-4 w-4 mr-2" /> Add Item
         </Button>
       </div>
@@ -304,10 +304,10 @@ export function InvoiceForm({
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
-        <Button type="submit" variant="outline" className="rounded-md" onClick={() => setSubmitAction('save')} disabled={loading}>
+        <Button type="submit" variant="outline" className="rounded-lg" onClick={() => setSubmitAction('save')} disabled={loading}>
           {loading ? "Processing..." : (initialInvoice ? "Update Only" : "Save Invoice Only")}
         </Button>
-        <Button type="submit" className="rounded-md" onClick={() => setSubmitAction('save_and_view')} disabled={loading}>
+        <Button type="submit" className="rounded-lg" onClick={() => setSubmitAction('save_and_view')} disabled={loading}>
           {loading ? "Processing..." : (initialInvoice ? "Update & View PDF" : "Save & View PDF")}
         </Button>
       </div>

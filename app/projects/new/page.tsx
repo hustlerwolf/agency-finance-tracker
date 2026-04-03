@@ -26,20 +26,20 @@ export default async function NewProjectPage() {
     <div className="p-6 max-w-3xl mx-auto">
       <Link
         href="/projects"
-        className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors mb-6"
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to Projects
       </Link>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">New Project</h1>
-        <p className="text-gray-400 text-sm mt-1">
+        <h1 className="text-2xl font-bold text-foreground">New Project</h1>
+        <p className="text-muted-foreground text-sm mt-1">
           Fill in the details below — you can add the rich-text brief after creating.
         </p>
       </div>
 
-      <div className="bg-gray-900/50 border border-white/10 rounded-xl p-6">
+      <div className="bg-card border border-border rounded-xl p-6">
         <ProjectForm customers={customers || []} options={options} />
       </div>
     </div>

@@ -59,7 +59,7 @@ type Conjunction = 'AND' | 'OR'
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const STATUS_STYLES: Record<string, { bg: string; text: string; dot: string }> = {
-  not_started: { bg: 'bg-gray-800',       text: 'text-gray-400',   dot: 'bg-gray-500' },
+  not_started: { bg: 'bg-muted',       text: 'text-muted-foreground',   dot: 'bg-gray-500' },
   in_progress:  { bg: 'bg-blue-900/30',   text: 'text-blue-400',   dot: 'bg-blue-500' },
   review:       { bg: 'bg-yellow-900/30', text: 'text-yellow-400', dot: 'bg-yellow-500' },
   on_hold:      { bg: 'bg-orange-900/30', text: 'text-orange-400', dot: 'bg-orange-500' },
@@ -231,11 +231,11 @@ function ProjectActions({ id, name }: { id: string; name: string }) {
     <div className="flex items-center gap-1">
       <button
         onClick={() => router.push(`/projects/${id}`)}
-        className="p-1.5 rounded hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+        className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors"
       >
         <Edit className="w-3.5 h-3.5" />
       </button>
-      <button onClick={handleDelete} className="p-1.5 rounded hover:bg-red-900/30 text-gray-400 hover:text-red-400 transition-colors">
+      <button onClick={handleDelete} className="p-1.5 rounded hover:bg-red-900/30 text-muted-foreground hover:text-red-400 transition-colors">
         <Trash2 className="w-3.5 h-3.5" />
       </button>
     </div>
@@ -255,7 +255,7 @@ function FilterValueInput({ def, operator, value, onChange }: {
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
-        className="h-8 rounded-md border border-white/10 bg-gray-800 text-xs text-white px-2 focus:outline-none focus:ring-1 focus:ring-green-500 min-w-[120px]"
+        className="h-8 rounded-lg border border-border bg-muted text-xs text-foreground px-2 focus:outline-none focus:ring-1 focus:ring-green-500 min-w-[120px]"
       >
         <option value="">Select…</option>
         {def.options.map(o => (
@@ -270,7 +270,7 @@ function FilterValueInput({ def, operator, value, onChange }: {
         type="date"
         value={value}
         onChange={e => onChange(e.target.value)}
-        className="h-8 rounded-md border border-white/10 bg-gray-800 text-xs text-white px-2 focus:outline-none focus:ring-1 focus:ring-green-500"
+        className="h-8 rounded-lg border border-border bg-muted text-xs text-foreground px-2 focus:outline-none focus:ring-1 focus:ring-green-500"
       />
     )
   }
@@ -280,7 +280,7 @@ function FilterValueInput({ def, operator, value, onChange }: {
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder="Value…"
-      className="h-8 rounded-md border border-white/10 bg-gray-800 text-xs text-white px-2 focus:outline-none focus:ring-1 focus:ring-green-500 min-w-[120px]"
+      className="h-8 rounded-lg border border-border bg-muted text-xs text-foreground px-2 focus:outline-none focus:ring-1 focus:ring-green-500 min-w-[120px]"
     />
   )
 }
@@ -312,19 +312,19 @@ function FilterRow({ rule, onUpdate, onRemove, showConjunction, conjunction, onC
       {showConjunction ? (
         <button
           onClick={() => onConjunctionChange(conjunction === 'AND' ? 'OR' : 'AND')}
-          className="w-10 h-8 rounded-md bg-gray-700 hover:bg-gray-600 border border-white/10 text-xs font-bold text-gray-300 transition-colors"
+          className="w-10 h-8 rounded-lg bg-muted hover:bg-gray-600 border border-border text-xs font-bold text-foreground transition-colors"
         >
           {conjunction}
         </button>
       ) : (
-        <span className="w-10 text-xs text-gray-500 text-center">Where</span>
+        <span className="w-10 text-xs text-muted-foreground text-center">Where</span>
       )}
 
       {/* Field picker */}
       <select
         value={rule.field}
         onChange={e => changeField(e.target.value as FieldDef['key'])}
-        className="h-8 rounded-md border border-white/10 bg-gray-800 text-xs text-white px-2 focus:outline-none focus:ring-1 focus:ring-green-500"
+        className="h-8 rounded-lg border border-border bg-muted text-xs text-foreground px-2 focus:outline-none focus:ring-1 focus:ring-green-500"
       >
         {FIELD_DEFS.map(f => <option key={f.key} value={f.key}>{f.label}</option>)}
       </select>
@@ -333,7 +333,7 @@ function FilterRow({ rule, onUpdate, onRemove, showConjunction, conjunction, onC
       <select
         value={rule.operator}
         onChange={e => changeOperator(e.target.value as Operator)}
-        className="h-8 rounded-md border border-white/10 bg-gray-800 text-xs text-white px-2 focus:outline-none focus:ring-1 focus:ring-green-500"
+        className="h-8 rounded-lg border border-border bg-muted text-xs text-foreground px-2 focus:outline-none focus:ring-1 focus:ring-green-500"
       >
         {operators.map(o => <option key={o.op} value={o.op}>{o.label}</option>)}
       </select>
@@ -349,7 +349,7 @@ function FilterRow({ rule, onUpdate, onRemove, showConjunction, conjunction, onC
       {/* Remove */}
       <button
         onClick={onRemove}
-        className="p-1.5 rounded hover:bg-white/10 text-gray-600 hover:text-gray-300 transition-colors"
+        className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors"
       >
         <X className="w-3.5 h-3.5" />
       </button>
@@ -374,16 +374,16 @@ function FilterPanel({ rules, setRules, conjunction, setConjunction }: {
   }
 
   return (
-    <div className="bg-gray-900 border border-white/10 rounded-xl p-4 space-y-3 shadow-2xl">
+    <div className="bg-card border border-border rounded-xl p-4 space-y-3 shadow-2xl">
       <div className="flex items-center justify-between mb-1">
-        <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Filter rules</span>
+        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Filter rules</span>
         {rules.length > 1 && (
-          <span className="text-xs text-gray-600">Click AND/OR to toggle</span>
+          <span className="text-xs text-muted-foreground">Click AND/OR to toggle</span>
         )}
       </div>
 
       {rules.length === 0 && (
-        <p className="text-xs text-gray-600 py-2">No filters applied. Add a rule below.</p>
+        <p className="text-xs text-muted-foreground py-2">No filters applied. Add a rule below.</p>
       )}
 
       <div className="space-y-2">
@@ -409,10 +409,10 @@ function FilterPanel({ rules, setRules, conjunction, setConjunction }: {
       </button>
 
       {rules.length > 0 && (
-        <div className="flex justify-end pt-1 border-t border-white/[0.06]">
+        <div className="flex justify-end pt-1 border-t border-border">
           <button
             onClick={() => setRules([])}
-            className="text-xs text-gray-600 hover:text-gray-400 transition-colors"
+            className="text-xs text-muted-foreground hover:text-muted-foreground transition-colors"
           >
             Clear all filters
           </button>
@@ -435,8 +435,8 @@ function ColumnPanel({ visible, setVisible }: {
     setVisible(next)
   }
   return (
-    <div className="bg-gray-900 border border-white/10 rounded-xl p-4 space-y-1 shadow-2xl min-w-[200px]">
-      <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest block mb-2">Columns</span>
+    <div className="bg-card border border-border rounded-xl p-4 space-y-1 shadow-2xl min-w-[200px]">
+      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest block mb-2">Columns</span>
       {ALL_COLUMNS.map(col => (
         <button
           key={col.key}
@@ -444,11 +444,11 @@ function ColumnPanel({ visible, setVisible }: {
           className="flex items-center gap-2.5 w-full px-1 py-1.5 rounded hover:bg-white/5 text-xs text-left transition-colors"
         >
           <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-colors ${
-            visible.has(col.key) ? 'bg-green-600 border-green-600' : 'border-white/20 bg-gray-800'
+            visible.has(col.key) ? 'bg-green-600 border-green-600' : 'border-white/20 bg-muted'
           }`}>
-            {visible.has(col.key) && <Check className="w-2.5 h-2.5 text-white" />}
+            {visible.has(col.key) && <Check className="w-2.5 h-2.5 text-foreground" />}
           </div>
-          <span className={visible.has(col.key) ? 'text-gray-300' : 'text-gray-600'}>{col.label}</span>
+          <span className={visible.has(col.key) ? 'text-foreground' : 'text-muted-foreground'}>{col.label}</span>
         </button>
       ))}
     </div>
@@ -483,10 +483,10 @@ function TableView({ projects, visibleCols }: { projects: Project[]; visibleCols
   function SortTh({ colKey, label }: { colKey: string; label: string }) {
     const active = sortKey === colKey
     return (
-      <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">
+      <th className="text-left px-3 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">
         <button
           onClick={() => handleSort(colKey)}
-          className={`flex items-center gap-1 hover:text-gray-200 transition-colors ${active ? 'text-white' : ''}`}
+          className={`flex items-center gap-1 hover:text-gray-200 transition-colors ${active ? 'text-foreground' : ''}`}
         >
           {label}
           <ArrowUpDown className={`w-3 h-3 ${active ? 'text-green-400' : 'text-gray-700'}`} />
@@ -497,10 +497,10 @@ function TableView({ projects, visibleCols }: { projects: Project[]; visibleCols
 
   const v = visibleCols
   return (
-    <div className="overflow-x-auto rounded-xl border border-white/10">
+    <div className="overflow-x-auto rounded-xl border border-border">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-white/10 bg-gray-900/80">
+          <tr className="border-b border-border bg-card/80">
             {v.has('name')          && <SortTh colKey="name"          label="Project" />}
             {v.has('client')        && <SortTh colKey="client"        label="Client" />}
             {v.has('status')        && <SortTh colKey="status"        label="Status" />}
@@ -508,11 +508,11 @@ function TableView({ projects, visibleCols }: { projects: Project[]; visibleCols
             {v.has('sales_channel') && <SortTh colKey="sales_channel" label="Sales Channel" />}
             {v.has('designed_by')   && <SortTh colKey="designed_by"   label="Designer" />}
             {v.has('developed_by')  && <SortTh colKey="developed_by"  label="Developer" />}
-            {v.has('industry')      && <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Industry</th>}
+            {v.has('industry')      && <th className="text-left px-3 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Industry</th>}
             {v.has('start_date')    && <SortTh colKey="start_date"    label="Start" />}
             {v.has('complete_date') && <SortTh colKey="complete_date" label="Deadline" />}
-            {v.has('portfolio')     && <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Portfolio</th>}
-            {v.has('live_link')     && <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Links</th>}
+            {v.has('portfolio')     && <th className="text-left px-3 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Portfolio</th>}
+            {v.has('live_link')     && <th className="text-left px-3 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Links</th>}
             <th className="px-3 py-3 w-16" />
           </tr>
         </thead>
@@ -523,28 +523,28 @@ function TableView({ projects, visibleCols }: { projects: Project[]; visibleCols
               <tr key={p.id} className="hover:bg-white/[0.02] transition-colors group">
                 {v.has('name') && (
                   <td className="px-3 py-3 max-w-[220px]">
-                    <Link href={`/projects/${p.id}`} className="font-medium text-white hover:text-green-400 transition-colors block truncate">
+                    <Link href={`/projects/${p.id}`} className="font-medium text-foreground hover:text-green-400 transition-colors block truncate">
                       {p.name}
                     </Link>
                   </td>
                 )}
                 {v.has('client') && (
-                  <td className="px-3 py-3 text-gray-400 whitespace-nowrap">{customerName || '—'}</td>
+                  <td className="px-3 py-3 text-muted-foreground whitespace-nowrap">{customerName || '—'}</td>
                 )}
                 {v.has('status') && (
                   <td className="px-3 py-3"><StatusBadge status={p.status} /></td>
                 )}
                 {v.has('platform') && (
-                  <td className="px-3 py-3 text-gray-400 whitespace-nowrap text-xs">{p.platform || '—'}</td>
+                  <td className="px-3 py-3 text-muted-foreground whitespace-nowrap text-xs">{p.platform || '—'}</td>
                 )}
                 {v.has('sales_channel') && (
-                  <td className="px-3 py-3 text-gray-400 whitespace-nowrap text-xs">{p.sales_channel || '—'}</td>
+                  <td className="px-3 py-3 text-muted-foreground whitespace-nowrap text-xs">{p.sales_channel || '—'}</td>
                 )}
                 {v.has('designed_by') && (
-                  <td className="px-3 py-3 text-gray-400 whitespace-nowrap text-xs">{p.designed_by || '—'}</td>
+                  <td className="px-3 py-3 text-muted-foreground whitespace-nowrap text-xs">{p.designed_by || '—'}</td>
                 )}
                 {v.has('developed_by') && (
-                  <td className="px-3 py-3 text-gray-400 whitespace-nowrap text-xs">{p.developed_by || '—'}</td>
+                  <td className="px-3 py-3 text-muted-foreground whitespace-nowrap text-xs">{p.developed_by || '—'}</td>
                 )}
                 {v.has('industry') && (
                   <td className="px-3 py-3">
@@ -554,16 +554,16 @@ function TableView({ projects, visibleCols }: { projects: Project[]; visibleCols
                           <span key={t} className="text-xs px-1.5 py-0.5 rounded-full bg-green-900/30 text-green-500 border border-green-800/30 whitespace-nowrap">{t}</span>
                         ))}
                       </div>
-                    ) : <span className="text-gray-600 text-xs">—</span>}
+                    ) : <span className="text-muted-foreground text-xs">—</span>}
                   </td>
                 )}
                 {v.has('start_date') && (
-                  <td className="px-3 py-3 text-gray-400 whitespace-nowrap text-xs">
+                  <td className="px-3 py-3 text-muted-foreground whitespace-nowrap text-xs">
                     {p.start_date ? new Date(p.start_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' }) : '—'}
                   </td>
                 )}
                 {v.has('complete_date') && (
-                  <td className="px-3 py-3 text-gray-400 whitespace-nowrap text-xs">
+                  <td className="px-3 py-3 text-muted-foreground whitespace-nowrap text-xs">
                     {p.complete_date ? new Date(p.complete_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' }) : '—'}
                   </td>
                 )}
@@ -573,7 +573,7 @@ function TableView({ projects, visibleCols }: { projects: Project[]; visibleCols
                       {p.show_publicly    && <span className="text-xs px-1.5 py-0.5 rounded bg-blue-900/30 text-blue-400 border border-blue-800/40 whitespace-nowrap">Public</span>}
                       {p.design_portfolio && <span className="text-xs px-1.5 py-0.5 rounded bg-purple-900/30 text-purple-400 border border-purple-800/40 whitespace-nowrap">Design</span>}
                       {p.dev_portfolio    && <span className="text-xs px-1.5 py-0.5 rounded bg-orange-900/30 text-orange-400 border border-orange-800/40 whitespace-nowrap">Dev</span>}
-                      {!p.show_publicly && !p.design_portfolio && !p.dev_portfolio && <span className="text-xs text-gray-600">—</span>}
+                      {!p.show_publicly && !p.design_portfolio && !p.dev_portfolio && <span className="text-xs text-muted-foreground">—</span>}
                     </div>
                   </td>
                 )}
@@ -586,11 +586,11 @@ function TableView({ projects, visibleCols }: { projects: Project[]; visibleCols
                         </a>
                       )}
                       {p.staging_link && (
-                        <a href={p.staging_link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-300 whitespace-nowrap">
+                        <a href={p.staging_link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground whitespace-nowrap">
                           <Globe className="w-3 h-3" /> Staging
                         </a>
                       )}
-                      {!p.live_link && !p.staging_link && <span className="text-xs text-gray-600">—</span>}
+                      {!p.live_link && !p.staging_link && <span className="text-xs text-muted-foreground">—</span>}
                     </div>
                   </td>
                 )}
@@ -605,7 +605,7 @@ function TableView({ projects, visibleCols }: { projects: Project[]; visibleCols
         </tbody>
       </table>
       {sorted.length === 0 && (
-        <div className="py-12 text-center text-gray-600 text-sm">No projects match your filters.</div>
+        <div className="py-12 text-center text-muted-foreground text-sm">No projects match your filters.</div>
       )}
     </div>
   )
@@ -620,24 +620,24 @@ function GalleryView({ projects }: { projects: Project[] }) {
         const customerName = getCustomerName(p)
         return (
           <Link key={p.id} href={`/projects/${p.id}`} className="group">
-            <div className="bg-gray-900/50 border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-all hover:shadow-lg hover:shadow-black/20">
-              <div className="relative h-40 bg-gray-800">
+            <div className="bg-card border border-border rounded-xl overflow-hidden hover:border-white/20 transition-all hover:shadow-lg hover:shadow-black/20">
+              <div className="relative h-40 bg-muted">
                 {p.hero_image ? (
                   <img src={p.hero_image} alt={p.name} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-xl bg-gray-700 flex items-center justify-center">
-                      <Globe className="w-6 h-6 text-gray-600" />
+                    <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center">
+                      <Globe className="w-6 h-6 text-muted-foreground" />
                     </div>
                   </div>
                 )}
                 <div className="absolute top-2 right-2"><StatusBadge status={p.status} /></div>
               </div>
               <div className="p-4 space-y-2">
-                <h3 className="font-semibold text-white group-hover:text-green-400 transition-colors truncate">{p.name}</h3>
-                {customerName && <p className="text-xs text-gray-500 truncate">{customerName}</p>}
+                <h3 className="font-semibold text-foreground group-hover:text-green-400 transition-colors truncate">{p.name}</h3>
+                {customerName && <p className="text-xs text-muted-foreground truncate">{customerName}</p>}
                 <div className="flex items-center justify-between">
-                  {p.platform && <span className="text-xs px-2 py-0.5 rounded bg-gray-800 text-gray-400">{p.platform}</span>}
+                  {p.platform && <span className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground">{p.platform}</span>}
                   {p.live_link && (
                     <button
                       onClick={e => { e.preventDefault(); e.stopPropagation(); window.open(p.live_link!, '_blank', 'noopener,noreferrer') }}
@@ -690,14 +690,14 @@ function KanbanView({ projects }: { projects: Project[] }) {
                 const customerName = getCustomerName(p)
                 return (
                   <Link key={p.id} href={`/projects/${p.id}`}>
-                    <div className="bg-gray-900/60 border border-white/10 rounded-lg p-3 hover:border-white/20 transition-all cursor-pointer group space-y-2">
-                      {p.hero_image && <img src={p.hero_image} alt={p.name} className="w-full h-20 object-cover rounded-md" />}
-                      <p className="text-sm font-medium text-white group-hover:text-green-400 transition-colors">{p.name}</p>
-                      {customerName && <p className="text-xs text-gray-500">{customerName}</p>}
+                    <div className="bg-card/60 border border-border rounded-lg p-3 hover:border-white/20 transition-all cursor-pointer group space-y-2">
+                      {p.hero_image && <img src={p.hero_image} alt={p.name} className="w-full h-20 object-cover rounded-lg" />}
+                      <p className="text-sm font-medium text-foreground group-hover:text-green-400 transition-colors">{p.name}</p>
+                      {customerName && <p className="text-xs text-muted-foreground">{customerName}</p>}
                       <div className="flex items-center justify-between">
-                        {p.platform && <span className="text-xs px-1.5 py-0.5 rounded bg-gray-800 text-gray-500">{p.platform}</span>}
+                        {p.platform && <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{p.platform}</span>}
                         {p.start_date && (
-                          <span className="text-xs text-gray-600 flex items-center gap-1">
+                          <span className="text-xs text-muted-foreground flex items-center gap-1">
                             <Calendar className="w-3 h-3" />
                             {new Date(p.start_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                           </span>
@@ -715,8 +715,8 @@ function KanbanView({ projects }: { projects: Project[] }) {
                 )
               })}
               {items.length === 0 && (
-                <div className="border border-dashed border-white/10 rounded-lg p-4 text-center">
-                  <p className="text-xs text-gray-600">No projects</p>
+                <div className="border border-dashed border-border rounded-lg p-4 text-center">
+                  <p className="text-xs text-muted-foreground">No projects</p>
                 </div>
               )}
             </div>
@@ -794,15 +794,15 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Projects</h1>
-          <p className="text-gray-400 text-sm mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Projects</h1>
+          <p className="text-muted-foreground text-sm mt-1">
             {filtered.length !== projects.length
               ? `${filtered.length} of ${projects.length} shown`
               : `${projects.length} total · ${active} active · ${completed} completed`}
           </p>
         </div>
         <Link href="/projects/new">
-          <Button size="sm" className="bg-primary hover:bg-primary/90 text-white gap-2">
+          <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground gap-2">
             <Plus className="w-4 h-4" />
             New Project
           </Button>
@@ -813,12 +813,12 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
       <div className="flex flex-wrap items-center gap-2">
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search projects…"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="pl-9 bg-gray-900 border-white/10 text-sm w-56"
+            className="pl-9 bg-card border-border text-sm w-56"
           />
         </div>
 
@@ -827,15 +827,15 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
           align="left"
           trigger={
             <button className={[
-              'flex items-center gap-1.5 h-9 px-3 rounded-md border text-sm font-medium transition-colors',
+              'flex items-center gap-1.5 h-9 px-3 rounded-lg border text-sm font-medium transition-colors',
               activeRules > 0
                 ? 'border-green-600/60 bg-green-900/20 text-green-400'
-                : 'border-white/10 bg-gray-900 text-gray-400 hover:text-white hover:border-white/20',
+                : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-white/20',
             ].join(' ')}>
               <SlidersHorizontal className="w-3.5 h-3.5" />
               Filter
               {activeRules > 0 && (
-                <span className="ml-0.5 bg-green-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                <span className="ml-0.5 bg-green-600 text-foreground text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
                   {activeRules}
                 </span>
               )}
@@ -856,7 +856,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
         {activeRules > 0 && (
           <button
             onClick={() => setRules([])}
-            className="flex items-center gap-1 h-9 px-2.5 rounded-md border border-white/10 bg-gray-900 text-xs text-gray-400 hover:text-white transition-colors"
+            className="flex items-center gap-1 h-9 px-2.5 rounded-lg border border-border bg-card text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             <X className="w-3 h-3" />
             Clear filters
@@ -871,7 +871,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
           <Popover
             align="right"
             trigger={
-              <button className="flex items-center gap-1.5 h-9 px-3 rounded-md border border-white/10 bg-gray-900 text-sm text-gray-400 hover:text-white hover:border-white/20 transition-colors">
+              <button className="flex items-center gap-1.5 h-9 px-3 rounded-lg border border-border bg-card text-sm text-muted-foreground hover:text-foreground hover:border-white/20 transition-colors">
                 <Eye className="w-3.5 h-3.5" />
                 Columns
               </button>
@@ -882,7 +882,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
         )}
 
         {/* View toggle */}
-        <div className="flex items-center gap-1 bg-gray-900 border border-white/10 rounded-lg p-1">
+        <div className="flex items-center gap-1 bg-card border border-border rounded-lg p-1">
           {([
             { v: 'table',   icon: List,       label: 'Table' },
             { v: 'gallery', icon: LayoutGrid, label: 'Gallery' },
@@ -893,8 +893,8 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
               onClick={() => setView(v)}
               title={label}
               className={[
-                'flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors',
-                view === v ? 'bg-white/15 text-white' : 'text-gray-500 hover:text-gray-300',
+                'flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors',
+                view === v ? 'bg-white/15 text-foreground' : 'text-muted-foreground hover:text-foreground',
               ].join(' ')}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -907,17 +907,17 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
       {/* Active filter summary chips */}
       {activeRules > 0 && (
         <div className="flex flex-wrap gap-2 items-center">
-          <span className="text-xs text-gray-600">Filtering by:</span>
+          <span className="text-xs text-muted-foreground">Filtering by:</span>
           {rules.map((r, i) => {
             const def = FIELD_DEFS.find(f => f.key === r.field)
             const opLabel = OPERATORS_BY_TYPE[def?.type || 'text'].find(o => o.op === r.operator)?.label
             return (
-              <span key={r.id} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-gray-800 border border-white/10 text-xs text-gray-300">
-                {i > 0 && <span className="text-gray-600 font-bold text-[10px]">{conjunction}</span>}
-                <span className="text-gray-400">{def?.label}</span>
-                <span className="text-gray-600">{opLabel}</span>
-                {r.value && <span className="text-white font-medium">{STATUS_LABELS[r.value] || r.value}</span>}
-                <button onClick={() => setRules(rules.filter(x => x.id !== r.id))} className="text-gray-600 hover:text-gray-300 ml-0.5">
+              <span key={r.id} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-muted border border-border text-xs text-foreground">
+                {i > 0 && <span className="text-muted-foreground font-bold text-[10px]">{conjunction}</span>}
+                <span className="text-muted-foreground">{def?.label}</span>
+                <span className="text-muted-foreground">{opLabel}</span>
+                {r.value && <span className="text-foreground font-medium">{STATUS_LABELS[r.value] || r.value}</span>}
+                <button onClick={() => setRules(rules.filter(x => x.id !== r.id))} className="text-muted-foreground hover:text-foreground ml-0.5">
                   <X className="w-3 h-3" />
                 </button>
               </span>
@@ -930,8 +930,8 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
       {filtered.length === 0 ? (
         <div className="text-center py-20">
           <Globe className="w-12 h-12 text-gray-700 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-400">No projects match your filters</h3>
-          <p className="text-gray-600 text-sm mt-1">Try adjusting or clearing your filters.</p>
+          <h3 className="text-lg font-medium text-muted-foreground">No projects match your filters</h3>
+          <p className="text-muted-foreground text-sm mt-1">Try adjusting or clearing your filters.</p>
           <button onClick={() => { setRules([]); setSearch('') }} className="mt-4 text-sm text-green-500 hover:text-green-400">
             Clear all filters
           </button>

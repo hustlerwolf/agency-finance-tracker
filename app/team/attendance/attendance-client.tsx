@@ -43,7 +43,7 @@ const STATUS_CONFIG: Record<string, { color: string; icon: React.ElementType; la
   half_day: { color: 'bg-yellow-500/15 text-yellow-400 border-yellow-500/30', icon: AlertCircle, label: 'Half Day' },
   on_leave: { color: 'bg-blue-500/15 text-blue-400 border-blue-500/30', icon: Clock, label: 'On Leave' },
   holiday: { color: 'bg-purple-500/15 text-purple-400 border-purple-500/30', icon: CheckCircle2, label: 'Holiday' },
-  weekend: { color: 'bg-gray-500/15 text-gray-400 border-gray-500/30', icon: Clock, label: 'Weekend' },
+  weekend: { color: 'bg-gray-500/15 text-muted-foreground border-gray-500/30', icon: Clock, label: 'Weekend' },
 }
 
 function fmt(d: string) { return new Date(d).toLocaleDateString('en-IN', { weekday: 'short', day: '2-digit', month: 'short' }) }
@@ -119,7 +119,7 @@ export function AttendanceClient({ attendance, members, today, isAdmin = true }:
           <h1 className="text-2xl font-bold">{isAdmin ? 'Attendance' : 'My Attendance'}</h1>
           <p className="text-sm text-muted-foreground mt-1">Last 30 days · {attendance.length} records</p>
         </div>
-        <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Mark Attendance</Button>
+        <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Mark Attendance</Button>
       </div>
 
       {/* Today's quick stats */}
@@ -183,7 +183,7 @@ export function AttendanceClient({ attendance, members, today, isAdmin = true }:
                       </div>
                     </div>
                     {a.daily_update && (
-                      <p className="text-xs text-muted-foreground bg-muted/50 rounded-md px-3 py-2 flex-1 min-w-0 line-clamp-2">{a.daily_update}</p>
+                      <p className="text-xs text-muted-foreground bg-muted/50 rounded-lg px-3 py-2 flex-1 min-w-0 line-clamp-2">{a.daily_update}</p>
                     )}
                   </div>
                 )
@@ -248,7 +248,7 @@ export function AttendanceClient({ attendance, members, today, isAdmin = true }:
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={() => { setDialogOpen(false); setEditing(null) }}>Cancel</Button>
-              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">{editing ? 'Update' : 'Mark Attendance'}</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground">{editing ? 'Update' : 'Mark Attendance'}</Button>
             </div>
           </form>
         </DialogContent>

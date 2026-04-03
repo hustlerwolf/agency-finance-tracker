@@ -95,7 +95,7 @@ export function ExpenseClient({
                 <Input id="date" name="date" type="date" defaultValue={editingExpense ? editingExpense.date : new Date().toISOString().split('T')[0]} required />
               </div>
 
-              <div className="grid grid-cols-3 gap-4 border p-4 rounded-md bg-slate-50">
+              <div className="grid grid-cols-3 gap-4 border p-4 rounded-lg bg-slate-50">
                 <div className="space-y-2">
                   <Label htmlFor="currency">Currency *</Label>
                   <select 
@@ -165,7 +165,7 @@ export function ExpenseClient({
         </Dialog>
       </div>
 
-      <div className="border rounded-md">
+      <div className="border rounded-lg">
         <Table>
           <TableHeader>
             <TableRow>
@@ -200,8 +200,8 @@ export function ExpenseClient({
                   ₹{expense.inr_amount.toFixed(2)}
                 </TableCell>
                 <TableCell className="text-right space-x-2">
-                  <Button variant="outline" size="sm" className="rounded-md" onClick={() => openEditModal(expense)}>Edit</Button>
-                  <Button variant="destructive" size="sm" className="rounded-md" onClick={() => handleDelete(expense.id)}>Delete</Button>
+                  <Button variant="outline" size="sm" className="rounded-lg" onClick={() => openEditModal(expense)}>Edit</Button>
+                  <Button variant="destructive" size="sm" className="rounded-lg" onClick={() => handleDelete(expense.id)}>Delete</Button>
                 </TableCell>
               </TableRow>
             ))}

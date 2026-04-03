@@ -98,14 +98,14 @@ export function CompaniesClient({ companies }: { companies: Company[] }) {
               View Contacts
             </Link>
           </Button>
-          <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openAdd}>
+          <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={openAdd}>
             <Plus className="w-4 h-4 mr-1" />
             Add Company
           </Button>
         </div>
       </div>
 
-      <div className="border rounded-md bg-card">
+      <div className="border rounded-lg bg-card">
         <Table>
           <TableHeader>
             <TableRow>

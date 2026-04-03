@@ -22,7 +22,7 @@ export function RevenueChart({ data }: { data: RevenueData[] }) {
     if (active && payload && payload.length) {
       const item = payload[0].payload
       return (
-        <div className="bg-card border rounded-md shadow-lg p-3">
+        <div className="bg-card border rounded-lg shadow-lg p-3">
           <p className="font-bold text-foreground mb-1">{item.name}</p>
           <p className="text-green-600 dark:text-green-400 font-mono text-sm font-bold">
             ₹{item.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}

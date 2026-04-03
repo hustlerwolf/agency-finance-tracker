@@ -12,7 +12,7 @@ const NotionEditor = dynamic(
     ssr: false,
     loading: () => (
       <div className="min-h-[160px] flex items-center justify-center">
-        <span className="text-xs text-gray-600 animate-pulse">Loading editor…</span>
+        <span className="text-xs text-muted-foreground animate-pulse">Loading editor…</span>
       </div>
     ),
   }
@@ -39,7 +39,7 @@ export function LeadBrief({ leadId, initialBrief }: { leadId: string; initialBri
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <FileText className="w-4 h-4 text-gray-500" />
+          <FileText className="w-4 h-4 text-muted-foreground" />
           <div>
             <h2 className="text-sm font-semibold text-foreground">Lead Brief</h2>
             <p className="text-xs text-muted-foreground mt-0.5">

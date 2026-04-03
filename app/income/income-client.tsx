@@ -114,14 +114,14 @@ export function IncomeClient({
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-tight">Income</h1>
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-          <DialogTrigger asChild><Button size="sm" className="bg-primary hover:bg-primary/90 text-white">Log Payment Received</Button></DialogTrigger>
+          <DialogTrigger asChild><Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground">Log Payment Received</Button></DialogTrigger>
           <DialogContent>
             <DialogHeader><DialogTitle>{editingIncome ? 'Edit Payment' : 'Log Payment'}</DialogTitle></DialogHeader>
             <form action={handleSubmit} className="space-y-4">
               
               {editingIncome && <input type="hidden" name="id" value={editingIncome.id} />}
 
-              <div className="space-y-2 bg-slate-50 p-4 border rounded-md">
+              <div className="space-y-2 bg-slate-50 p-4 border rounded-lg">
                 <Label htmlFor="invoice_id">Link to Invoice</Label>
                 <select 
                   id="invoice_id" 
@@ -151,7 +151,7 @@ export function IncomeClient({
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 border p-4 rounded-md bg-green-50/50">
+              <div className="grid grid-cols-3 gap-4 border p-4 rounded-lg bg-green-50/50">
                 <div className="space-y-2">
                   <Label htmlFor="currency">Currency *</Label>
                   <select 
@@ -215,7 +215,7 @@ export function IncomeClient({
                 <Input id="description" name="description" defaultValue={editingIncome?.description || ''} placeholder="Additional details..." />
               </div>
 
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white" disabled={loading}>
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-foreground" disabled={loading}>
                 {loading ? "Saving..." : (editingIncome ? "Update Payment" : "Log Payment")}
               </Button>
             </form>
@@ -223,7 +223,7 @@ export function IncomeClient({
         </Dialog>
       </div>
 
-      <div className="border rounded-md">
+      <div className="border rounded-lg">
         <Table>
           <TableHeader>
             <TableRow>
@@ -261,8 +261,8 @@ export function IncomeClient({
                 </TableCell>
                 <TableCell className="text-right space-x-2">
                   {/* BEAUTIFULLY ROUNDED BUTTONS */}
-                  <Button variant="outline" size="sm" className="rounded-md" onClick={() => openEditModal(income)}>Edit</Button>
-                  <Button variant="destructive" size="sm" className="rounded-md" onClick={() => handleDelete(income.id)}>Delete</Button>
+                  <Button variant="outline" size="sm" className="rounded-lg" onClick={() => openEditModal(income)}>Edit</Button>
+                  <Button variant="destructive" size="sm" className="rounded-lg" onClick={() => handleDelete(income.id)}>Delete</Button>
                 </TableCell>
               </TableRow>
             ))}

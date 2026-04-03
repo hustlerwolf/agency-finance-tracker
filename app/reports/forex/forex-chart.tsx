@@ -35,7 +35,7 @@ export function ForexChart({ data }: { data: ForexData[] }) {
             if (active && payload && payload.length) {
               const d = payload[0].payload
               return (
-                <div className="bg-card border rounded-md shadow-lg p-3 text-xs">
+                <div className="bg-card border rounded-lg shadow-lg p-3 text-xs">
                   <p className="font-bold border-b border-border mb-2 pb-1 text-foreground">
                     {d.invoice} ({d.date})
                   </p>

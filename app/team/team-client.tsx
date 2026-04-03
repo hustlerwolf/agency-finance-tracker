@@ -58,7 +58,7 @@ export interface TeamMember {
 
 const STATUS_COLORS: Record<string, string> = {
   active: 'bg-green-500/15 text-green-400 border-green-500/30',
-  inactive: 'bg-gray-500/15 text-gray-400 border-gray-500/30',
+  inactive: 'bg-gray-500/15 text-muted-foreground border-gray-500/30',
   on_leave: 'bg-yellow-500/15 text-yellow-400 border-yellow-500/30',
 }
 
@@ -109,7 +109,7 @@ function MemberCard({ m, onEdit, onDelete }: { m: TeamMember; onEdit: () => void
           {m.profile_photo_url ? (
             <img src={m.profile_photo_url} alt="" className="w-12 h-12 rounded-full object-cover" />
           ) : (
-            <div className={`w-12 h-12 rounded-full ${avatarColor(m.full_name)} flex items-center justify-center text-white font-semibold text-sm`}>
+            <div className={`w-12 h-12 rounded-full ${avatarColor(m.full_name)} flex items-center justify-center text-foreground font-semibold text-sm`}>
               {getInitials(m.full_name)}
             </div>
           )}
@@ -208,7 +208,7 @@ export function TeamClient({ members, departments }: { members: TeamMember[]; de
         <div className="flex items-center gap-2">
           <Button variant={view === 'grid' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8" onClick={() => setView('grid')}><LayoutGrid className="w-4 h-4" /></Button>
           <Button variant={view === 'table' ? 'secondary' : 'ghost'} size="icon" className="h-8 w-8" onClick={() => setView('table')}><List className="w-4 h-4" /></Button>
-          <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Add Member</Button>
+          <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Add Member</Button>
         </div>
       </div>
 
@@ -264,7 +264,7 @@ export function TeamClient({ members, departments }: { members: TeamMember[]; de
                       {m.profile_photo_url ? (
                         <img src={m.profile_photo_url} alt="" className="w-8 h-8 rounded-full object-cover" />
                       ) : (
-                        <div className={`w-8 h-8 rounded-full ${avatarColor(m.full_name)} flex items-center justify-center text-white font-medium text-xs`}>{getInitials(m.full_name)}</div>
+                        <div className={`w-8 h-8 rounded-full ${avatarColor(m.full_name)} flex items-center justify-center text-foreground font-medium text-xs`}>{getInitials(m.full_name)}</div>
                       )}
                       <span className="font-medium text-sm">{m.full_name}</span>
                     </Link>
@@ -430,7 +430,7 @@ export function TeamClient({ members, departments }: { members: TeamMember[]; de
 
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">{editing ? 'Update' : 'Add Member'}</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground">{editing ? 'Update' : 'Add Member'}</Button>
             </div>
           </form>
         </DialogContent>

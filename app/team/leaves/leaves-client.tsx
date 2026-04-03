@@ -119,7 +119,7 @@ export function LeavesClient({ leaves, members, isAdmin = true }: { leaves: Leav
             {pendingCount > 0 ? `${pendingCount} pending request${pendingCount > 1 ? 's' : ''}` : 'No pending requests'}
           </p>
         </div>
-        <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={() => setDialogOpen(true)}><Plus className="w-4 h-4 mr-1" /> Apply Leave</Button>
+        <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={() => setDialogOpen(true)}><Plus className="w-4 h-4 mr-1" /> Apply Leave</Button>
       </div>
 
       {/* Filters */}
@@ -247,7 +247,7 @@ export function LeavesClient({ leaves, members, isAdmin = true }: { leaves: Leav
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">Submit Request</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground">Submit Request</Button>
             </div>
           </form>
         </DialogContent>

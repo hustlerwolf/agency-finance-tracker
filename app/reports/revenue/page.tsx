@@ -37,7 +37,7 @@ export default async function RevenueReportPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3 h-[450px] border rounded-md p-6 bg-muted/30">
+        <div className="lg:col-span-3 h-[450px] border rounded-lg p-6 bg-muted/30">
           {chartData.length > 0 ? (
             <RevenueChart data={chartData} />
           ) : (
@@ -48,12 +48,12 @@ export default async function RevenueReportPage() {
         </div>
 
         <div className="space-y-4">
-          <div className="p-4 bg-green-600 text-white rounded-md shadow-sm">
+          <div className="p-4 bg-green-600 text-foreground rounded-lg shadow-sm">
             <h3 className="text-sm font-medium opacity-80">Total Revenue (INR)</h3>
             <p className="text-2xl font-bold mt-1">₹{totalRevenue.toLocaleString('en-IN')}</p>
           </div>
 
-          <div className="border rounded-md bg-card overflow-hidden">
+          <div className="border rounded-lg bg-card overflow-hidden">
             <div className="bg-muted px-4 py-2 border-b text-xs font-bold uppercase text-muted-foreground tracking-wider">
               Top Clients
             </div>

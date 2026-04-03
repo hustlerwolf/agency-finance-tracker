@@ -32,11 +32,11 @@ export default async function InvoicesPage() {
           <p className="text-muted-foreground">Manage and view your generated invoices.</p>
         </div>
         <Link href="/invoices/new">
-          <Button className="rounded-md">Create New Invoice</Button>
+          <Button className="rounded-lg">Create New Invoice</Button>
         </Link>
       </div>
 
-      <div className="border rounded-md bg-card">
+      <div className="border rounded-lg bg-card">
         <Table>
           <TableHeader>
             <TableRow>

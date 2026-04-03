@@ -63,7 +63,7 @@ interface ProjectFormProps {
 function FormSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="space-y-4">
-      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-widest border-b border-white/10 pb-2">
+      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest border-b border-border pb-2">
         {title}
       </h3>
       {children}
@@ -74,7 +74,7 @@ function FormSection({ title, children }: { title: string; children: React.React
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <Label className="text-xs text-gray-400">{label}</Label>
+      <Label className="text-xs text-muted-foreground">{label}</Label>
       {children}
     </div>
   )
@@ -110,7 +110,7 @@ function LinkField({ label, name, defaultValue }: { label: string; name: string;
         name={name}
         defaultValue={defaultValue || ''}
         placeholder="https://"
-        className="bg-gray-800 border-white/10 text-sm"
+        className="bg-muted border-border text-sm"
       />
     </Field>
   )
@@ -186,7 +186,7 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
                 defaultValue={project?.name || ''}
                 required
                 placeholder="My Awesome Project"
-                className="bg-gray-800 border-white/10 text-base font-medium"
+                className="bg-muted border-border text-base font-medium"
               />
             </Field>
           </div>
@@ -222,10 +222,10 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
           <SelectField label="Sales Channel" name="sales_channel" value={salesChannel} options={salesChannelNames} onChange={setSalesChannel} />
 
           <Field label="Start Date">
-            <Input type="date" name="start_date" defaultValue={project?.start_date || ''} className="bg-gray-800 border-white/10 text-sm" />
+            <Input type="date" name="start_date" defaultValue={project?.start_date || ''} className="bg-muted border-border text-sm" />
           </Field>
           <Field label="Completion Date">
-            <Input type="date" name="complete_date" defaultValue={project?.complete_date || ''} className="bg-gray-800 border-white/10 text-sm" />
+            <Input type="date" name="complete_date" defaultValue={project?.complete_date || ''} className="bg-muted border-border text-sm" />
           </Field>
         </div>
       </FormSection>
@@ -274,7 +274,7 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
           </Field>
         </div>
         {teamMemberNames.length === 0 && (
-          <p className="text-xs text-gray-600 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             No team members yet.{' '}
             <a href="/projects/settings" className="text-green-500 hover:text-green-400">Add them in Project Settings →</a>
           </p>
@@ -321,7 +321,7 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
             ))}
           </select>
           {industryNames.length === 0 && (
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-muted-foreground">
               No industries yet.{' '}
               <a href="/projects/settings" className="text-green-500 hover:text-green-400">Add them in Project Settings →</a>
             </p>
@@ -340,17 +340,17 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
             <label key={label} className="flex items-start gap-3 cursor-pointer group" onClick={() => setState(p => !p)}>
               <div className={[
                 'mt-0.5 w-5 h-5 rounded flex items-center justify-center flex-shrink-0 border transition-colors',
-                state ? 'bg-green-600 border-green-600' : 'bg-gray-800 border-white/20 group-hover:border-white/40',
+                state ? 'bg-green-600 border-green-600' : 'bg-muted border-white/20 group-hover:border-white/40',
               ].join(' ')}>
                 {state && (
-                  <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none">
+                  <svg className="w-3 h-3 text-foreground" viewBox="0 0 12 12" fill="none">
                     <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 )}
               </div>
               <div>
-                <p className="text-sm text-white font-medium">{label}</p>
-                <p className="text-xs text-gray-500">{desc}</p>
+                <p className="text-sm text-foreground font-medium">{label}</p>
+                <p className="text-xs text-muted-foreground">{desc}</p>
               </div>
             </label>
           ))}
@@ -358,11 +358,11 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
       </FormSection>
 
       {/* ── Actions ── */}
-      <div className="flex items-center justify-end gap-3 pt-2 border-t border-white/10">
-        <Button type="button" variant="ghost" className="text-gray-400 hover:text-white" onClick={() => router.back()}>
+      <div className="flex items-center justify-end gap-3 pt-2 border-t border-border">
+        <Button type="button" variant="ghost" className="text-muted-foreground hover:text-foreground" onClick={() => router.back()}>
           Cancel
         </Button>
-        <Button type="submit" disabled={loading} className="bg-primary hover:bg-primary/90 text-white min-w-[120px]">
+        <Button type="submit" disabled={loading} className="bg-primary hover:bg-primary/90 text-foreground min-w-[120px]">
           {loading ? 'Saving…' : (project?.id ? 'Save Changes' : 'Create Project')}
         </Button>
       </div>

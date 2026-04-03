@@ -103,7 +103,7 @@ export function SettingsForm({ initialData }: { initialData: AgencySettings | nu
         </div>
       </div>
 
-      <Button type="submit" className="w-full rounded-md" disabled={loading}>
+      <Button type="submit" className="w-full rounded-lg" disabled={loading}>
         {loading ? "Saving..." : "Save Settings"}
       </Button>
     </form>

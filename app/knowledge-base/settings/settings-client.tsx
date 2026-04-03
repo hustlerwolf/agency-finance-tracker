@@ -61,7 +61,7 @@ function ConfigItem({
   }
 
   return (
-    <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-md border border-border bg-muted/30 group">
+    <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-border bg-muted/30 group">
       {isEditing ? (
         <div className="flex items-center gap-2 flex-1">
           <Input

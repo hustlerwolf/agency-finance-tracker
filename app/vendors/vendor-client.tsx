@@ -105,7 +105,7 @@ export function VendorClient({ vendors }: { vendors: Vendor[] }) {
         </Dialog>
       </div>
 
-      <div className="border rounded-md">
+      <div className="border rounded-lg">
         <Table>
           <TableHeader>
             <TableRow>
@@ -130,8 +130,8 @@ export function VendorClient({ vendors }: { vendors: Vendor[] }) {
                   {vendor.notes || '-'}
                 </TableCell>
                 <TableCell className="text-right space-x-2">
-                  <Button variant="outline" size="sm" className="rounded-md" onClick={() => openEditModal(vendor)}>Edit</Button>
-                  <Button variant="destructive" size="sm" className="rounded-md" onClick={() => handleDelete(vendor.id)}>Delete</Button>
+                  <Button variant="outline" size="sm" className="rounded-lg" onClick={() => openEditModal(vendor)}>Edit</Button>
+                  <Button variant="destructive" size="sm" className="rounded-lg" onClick={() => handleDelete(vendor.id)}>Delete</Button>
                 </TableCell>
               </TableRow>
             ))}

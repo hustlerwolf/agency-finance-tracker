@@ -23,18 +23,18 @@ export default async function ProjectSettingsPage() {
       <div>
         <Link
           href="/projects"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors mb-4"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Projects
         </Link>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-gray-800 border border-white/10 flex items-center justify-center">
-            <Settings className="w-4.5 h-4.5 text-gray-400" />
+          <div className="w-9 h-9 rounded-lg bg-muted border border-border flex items-center justify-center">
+            <Settings className="w-4.5 h-4.5 text-muted-foreground" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">Project Settings</h1>
-            <p className="text-sm text-gray-400 mt-0.5">
+            <h1 className="text-xl font-bold text-foreground">Project Settings</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">
               Manage dropdown options used across all project forms
             </p>
           </div>

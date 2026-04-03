@@ -57,7 +57,7 @@ function BubbleToolbar({ editor }: { editor: ReturnType<typeof useEditor> }) {
   ]
 
   return (
-    <div className="flex items-center gap-0.5 bg-gray-900 border border-white/15 rounded-lg shadow-xl p-1">
+    <div className="flex items-center gap-0.5 bg-card border border-white/15 rounded-lg shadow-xl p-1">
       {tools.map(({ icon: Icon, active, run, title }, i) => (
         <button
           key={i}
@@ -65,7 +65,7 @@ function BubbleToolbar({ editor }: { editor: ReturnType<typeof useEditor> }) {
           title={title}
           className={[
             'p-1.5 rounded transition-colors',
-            active ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white hover:bg-white/10',
+            active ? 'bg-white/20 text-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-white/10',
           ].join(' ')}
         >
           <Icon className="w-3.5 h-3.5" />
@@ -94,9 +94,9 @@ function SlashMenu({ items, selectedIndex, onSelect }: {
   return (
     <div
       ref={ref}
-      className="bg-gray-900 border border-white/15 rounded-xl shadow-2xl overflow-hidden w-64 py-1"
+      className="bg-card border border-white/15 rounded-xl shadow-2xl overflow-hidden w-64 py-1"
     >
-      <div className="px-3 py-1.5 text-[10px] font-semibold text-gray-600 uppercase tracking-widest">
+      <div className="px-3 py-1.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">
         Blocks
       </div>
       {items.map((cmd, i) => (
@@ -105,15 +105,15 @@ function SlashMenu({ items, selectedIndex, onSelect }: {
           onMouseDown={e => { e.preventDefault(); onSelect(cmd) }}
           className={[
             'flex items-center gap-3 w-full px-3 py-2 text-left transition-colors',
-            i === selectedIndex ? 'bg-white/8 text-white' : 'text-gray-300 hover:bg-white/5',
+            i === selectedIndex ? 'bg-white/8 text-foreground' : 'text-foreground hover:bg-white/5',
           ].join(' ')}
         >
-          <div className="w-8 h-8 rounded-lg bg-gray-800 border border-white/10 flex items-center justify-center flex-shrink-0 font-mono text-xs font-bold text-gray-300">
+          <div className="w-8 h-8 rounded-lg bg-muted border border-border flex items-center justify-center flex-shrink-0 font-mono text-xs font-bold text-foreground">
             {cmd.icon}
           </div>
           <div className="min-w-0">
             <p className="text-sm font-medium leading-tight">{cmd.title}</p>
-            <p className="text-xs text-gray-600 leading-tight truncate">{cmd.description}</p>
+            <p className="text-xs text-muted-foreground leading-tight truncate">{cmd.description}</p>
           </div>
         </button>
       ))}

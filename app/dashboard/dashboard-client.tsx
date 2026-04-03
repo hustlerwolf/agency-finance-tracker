@@ -115,7 +115,7 @@ export function DashboardClient({ totalIncome, totalExpenses, netProfit, recentA
         {/* 3. RECENT ACTIVITY FEED */}
         <div className="bg-card p-6 rounded-lg border shadow-sm lg:col-span-2 space-y-6">
           <h3 className="font-semibold text-lg">Recent Transactions</h3>
-          <div className="border rounded-md">
+          <div className="border rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>

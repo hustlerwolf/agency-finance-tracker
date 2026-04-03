@@ -49,7 +49,7 @@ function FieldSelector({ module, hiddenFields, onChange }: {
           <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{group}</p>
           <div className="flex flex-wrap gap-1.5">
             {gFields.map(f => (
-              <label key={f.key} className={`text-xs px-2.5 py-1 rounded-md border cursor-pointer transition-colors ${hiddenFields.includes(f.key) ? 'bg-red-500/15 border-red-500/30 text-red-400 line-through' : 'bg-green-500/10 border-green-500/30 text-green-400'}`}>
+              <label key={f.key} className={`text-xs px-2.5 py-1 rounded-lg border cursor-pointer transition-colors ${hiddenFields.includes(f.key) ? 'bg-red-500/15 border-red-500/30 text-red-400 line-through' : 'bg-green-500/10 border-green-500/30 text-green-400'}`}>
                 <input type="checkbox" className="sr-only" checked={!hiddenFields.includes(f.key)} onChange={() => toggle(f.key)} />
                 {f.label}
               </label>
@@ -160,7 +160,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
           </div>
           <div className="space-y-2">
             {departments.map(d => (
-              <div key={d.id} className="flex items-center justify-between p-3 rounded-md border border-border hover:bg-muted/50 transition-colors">
+              <div key={d.id} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors">
                 <div>
                   <p className="text-sm font-medium">{d.name}</p>
                   {d.description && <p className="text-xs text-muted-foreground">{d.description}</p>}
@@ -182,7 +182,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
               <h2 className="font-semibold flex items-center gap-2"><Shield className="w-4 h-4" /> Access Presets</h2>
               <p className="text-xs text-muted-foreground mt-1">Create reusable access configurations to quickly assign to team members</p>
             </div>
-            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openPresetAdd}>
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={openPresetAdd}>
               <Plus className="w-4 h-4 mr-1" /> New Preset
             </Button>
           </div>
@@ -234,7 +234,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
               <p className="text-[10px] text-muted-foreground">Create a Slack app at api.slack.com, add chat:write scope, install to workspace, and paste the Bot Token here.</p>
             </div>
 
-            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={async () => {
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={async () => {
               const fd = new FormData()
               if (notifSettings?.id) fd.set('id', notifSettings.id)
               fd.set('slack_bot_token', slackToken)
@@ -287,7 +287,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => { setDeptDialogOpen(false); setEditingDept(null) }}>Cancel</Button>
-              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">{editingDept ? 'Update' : 'Add'}</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground">{editingDept ? 'Update' : 'Add'}</Button>
             </div>
           </form>
         </DialogContent>
@@ -344,7 +344,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
 
             <div className="flex justify-end gap-2 pt-2">
               <Button variant="outline" onClick={() => setPresetDialogOpen(false)}>Cancel</Button>
-              <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handlePresetSubmit} disabled={!presetName.trim()}>
+              <Button className="bg-primary hover:bg-primary/90 text-foreground" onClick={handlePresetSubmit} disabled={!presetName.trim()}>
                 {editingPreset ? 'Update Preset' : 'Create Preset'}
               </Button>
             </div>

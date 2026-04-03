@@ -108,7 +108,7 @@ function AttachmentCard({
         {/* Delete button */}
         <button
           onClick={onDelete}
-          className="absolute top-2 right-2 z-10 bg-black/50 hover:bg-destructive text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-all"
+          className="absolute top-2 right-2 z-10 bg-black/50 hover:bg-destructive text-foreground rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-all"
         >
           <X className="w-3.5 h-3.5" />
         </button>

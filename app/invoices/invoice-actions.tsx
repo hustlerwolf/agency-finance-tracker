@@ -32,10 +32,10 @@ export function InvoiceActions({ invoiceId }: { invoiceId: string }) {
 
   return (
     <div className="flex justify-end space-x-2">
-      <Button variant="outline" size="sm" className="rounded-md" onClick={handleEdit}>
+      <Button variant="outline" size="sm" className="rounded-lg" onClick={handleEdit}>
         Edit
       </Button>
-      <Button variant="destructive" size="sm" className="rounded-md" disabled={loading} onClick={handleDelete}>
+      <Button variant="destructive" size="sm" className="rounded-lg" disabled={loading} onClick={handleDelete}>
         Delete
       </Button>
     </div>

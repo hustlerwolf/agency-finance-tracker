@@ -142,7 +142,7 @@ export function MentionInput({ value, onChange, onSubmit, members, placeholder =
               {m.profile_photo_url ? (
                 <img src={m.profile_photo_url} alt="" className="w-6 h-6 rounded-full object-cover" />
               ) : (
-                <div className={`w-6 h-6 rounded-full ${avatarColor(m.full_name)} flex items-center justify-center text-white text-[9px] font-medium`}>{getInitials(m.full_name)}</div>
+                <div className={`w-6 h-6 rounded-full ${avatarColor(m.full_name)} flex items-center justify-center text-foreground text-[9px] font-medium`}>{getInitials(m.full_name)}</div>
               )}
               <span>{m.full_name}</span>
             </button>

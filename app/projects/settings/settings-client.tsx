@@ -74,20 +74,20 @@ function ConfigSection({ type, title, description, items: initialItems, icon }: 
   }
 
   return (
-    <div className="bg-gray-900/50 border border-white/10 rounded-xl overflow-hidden">
+    <div className="bg-card border border-border rounded-xl overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border">
         <div className="flex items-center gap-3">
           <span className="text-xl">{icon}</span>
           <div>
-            <h3 className="text-sm font-semibold text-white">{title}</h3>
-            <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+            <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
           </div>
         </div>
         <Button
           size="sm"
           variant="outline"
-          className="border-white/10 text-gray-400 hover:text-white hover:border-white/20 gap-1.5 text-xs h-8"
+          className="border-border text-muted-foreground hover:text-foreground hover:border-white/20 gap-1.5 text-xs h-8"
           onClick={() => { setAdding(true); setNewName('') }}
         >
           <Plus className="w-3.5 h-3.5" />
@@ -99,7 +99,7 @@ function ConfigSection({ type, title, description, items: initialItems, icon }: 
       <div className="divide-y divide-white/[0.05]">
         {items.length === 0 && !adding && (
           <div className="px-5 py-6 text-center">
-            <p className="text-sm text-gray-600">No {title.toLowerCase()} yet.</p>
+            <p className="text-sm text-muted-foreground">No {title.toLowerCase()} yet.</p>
             <button
               onClick={() => setAdding(true)}
               className="text-xs text-green-500 hover:text-green-400 mt-1"
@@ -123,7 +123,7 @@ function ConfigSection({ type, title, description, items: initialItems, icon }: 
                     if (e.key === 'Escape') setEditingId(null)
                   }}
                   autoFocus
-                  className="flex-1 h-8 text-sm bg-gray-800 border-white/20"
+                  className="flex-1 h-8 text-sm bg-muted border-white/20"
                 />
                 <button
                   onClick={() => handleRename(item.id)}
@@ -134,25 +134,25 @@ function ConfigSection({ type, title, description, items: initialItems, icon }: 
                 </button>
                 <button
                   onClick={() => setEditingId(null)}
-                  className="p-1 rounded text-gray-500 hover:bg-white/10 transition-colors"
+                  className="p-1 rounded text-muted-foreground hover:bg-white/10 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </>
             ) : (
               <>
-                <span className="flex-1 text-sm text-gray-300">{item.name}</span>
+                <span className="flex-1 text-sm text-foreground">{item.name}</span>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => startEdit(item)}
-                    className="p-1.5 rounded hover:bg-white/10 text-gray-500 hover:text-gray-300 transition-colors"
+                    className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <Pencil className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => handleDelete(item.id, item.name)}
                     disabled={loading}
-                    className="p-1.5 rounded hover:bg-red-900/30 text-gray-500 hover:text-red-400 transition-colors"
+                    className="p-1.5 rounded hover:bg-red-900/30 text-muted-foreground hover:text-red-400 transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -164,7 +164,7 @@ function ConfigSection({ type, title, description, items: initialItems, icon }: 
 
         {/* Add new row */}
         {adding && (
-          <div className="flex items-center gap-3 px-5 py-3 bg-gray-800/30">
+          <div className="flex items-center gap-3 px-5 py-3 bg-muted/30">
             <div className="w-4 h-4 flex-shrink-0" />
             <Input
               value={newName}
@@ -175,7 +175,7 @@ function ConfigSection({ type, title, description, items: initialItems, icon }: 
               }}
               autoFocus
               placeholder={`New ${title.slice(0, -1).toLowerCase()}…`}
-              className="flex-1 h-8 text-sm bg-gray-800 border-white/20"
+              className="flex-1 h-8 text-sm bg-muted border-white/20"
             />
             <button
               onClick={handleAdd}
@@ -186,7 +186,7 @@ function ConfigSection({ type, title, description, items: initialItems, icon }: 
             </button>
             <button
               onClick={() => { setAdding(false); setNewName('') }}
-              className="p-1 rounded text-gray-500 hover:bg-white/10 transition-colors"
+              className="p-1 rounded text-muted-foreground hover:bg-white/10 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -195,8 +195,8 @@ function ConfigSection({ type, title, description, items: initialItems, icon }: 
       </div>
 
       {/* Count */}
-      <div className="px-5 py-2 border-t border-white/[0.05] bg-gray-900/30">
-        <span className="text-xs text-gray-600">{items.length} item{items.length !== 1 ? 's' : ''}</span>
+      <div className="px-5 py-2 border-t border-white/[0.05] bg-card/50">
+        <span className="text-xs text-muted-foreground">{items.length} item{items.length !== 1 ? 's' : ''}</span>
       </div>
     </div>
   )

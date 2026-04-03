@@ -41,8 +41,8 @@ function ToolbarButton({
       className={[
         'p-1.5 rounded transition-colors',
         active
-          ? 'bg-white/15 text-white'
-          : 'text-gray-400 hover:text-white hover:bg-white/10',
+          ? 'bg-white/15 text-foreground'
+          : 'text-muted-foreground hover:text-foreground hover:bg-white/10',
       ].join(' ')}
     >
       {children}
@@ -117,9 +117,9 @@ export function RichTextEditor({ content, onChange, readOnly = false, placeholde
   }
 
   return (
-    <div className="border border-white/10 rounded-lg overflow-hidden bg-gray-900/50">
+    <div className="border border-border rounded-lg overflow-hidden bg-card">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 p-2 border-b border-white/10 bg-gray-900">
+      <div className="flex flex-wrap items-center gap-0.5 p-2 border-b border-border bg-card">
         {/* History */}
         <ToolbarButton title="Undo" onClick={() => editor.chain().focus().undo().run()}>
           <Undo className="w-3.5 h-3.5" />

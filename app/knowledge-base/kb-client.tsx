@@ -114,13 +114,13 @@ function GalleryCard({
         <div className="relative">
           <button
             onClick={e => { e.stopPropagation(); setMenuOpen(v => !v) }}
-            className="bg-black/50 hover:bg-black/70 text-white rounded-full p-1 transition-colors"
+            className="bg-black/50 hover:bg-black/70 text-foreground rounded-full p-1 transition-colors"
           >
             <MoreVertical className="w-4 h-4" />
           </button>
           {menuOpen && (
             <div
-              className="absolute right-0 top-7 bg-popover border border-border rounded-md shadow-lg py-1 w-28 z-50"
+              className="absolute right-0 top-7 bg-popover border border-border rounded-lg shadow-lg py-1 w-28 z-50"
               onClick={e => e.stopPropagation()}
             >
               <button
@@ -336,7 +336,7 @@ export function KbClient({
               <List className="w-4 h-4" />
             </button>
           </div>
-          <Button size="sm" onClick={openAddForm} className="bg-primary hover:bg-primary/90 text-white">
+          <Button size="sm" onClick={openAddForm} className="bg-primary hover:bg-primary/90 text-foreground">
             <Plus className="w-4 h-4 mr-1" />
             Add Entry
           </Button>

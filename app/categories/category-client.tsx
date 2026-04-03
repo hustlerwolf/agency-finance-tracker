@@ -82,7 +82,7 @@ export function CategoryClient({ categories }: { categories: Category[] }) {
         </Dialog>
       </div>
 
-      <div className="border rounded-md bg-card">
+      <div className="border rounded-lg bg-card">
         <Table>
           <TableHeader>
             <TableRow>
@@ -97,8 +97,8 @@ export function CategoryClient({ categories }: { categories: Category[] }) {
                 <TableCell className="font-medium">{category.name}</TableCell>
                 <TableCell className="text-muted-foreground">{category.description || '-'}</TableCell>
                 <TableCell className="text-right space-x-2">
-                  <Button variant="outline" size="sm" className="rounded-md" onClick={() => openEditModal(category)}>Edit</Button>
-                  <Button variant="destructive" size="sm" className="rounded-md" onClick={() => handleDelete(category.id)}>Delete</Button>
+                  <Button variant="outline" size="sm" className="rounded-lg" onClick={() => openEditModal(category)}>Edit</Button>
+                  <Button variant="destructive" size="sm" className="rounded-lg" onClick={() => handleDelete(category.id)}>Delete</Button>
                 </TableCell>
               </TableRow>
             ))}
