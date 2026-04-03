@@ -87,7 +87,7 @@ export default async function DashboardPage() {
     <div className="p-8 max-w-6xl mx-auto space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back. Here is your agency financial overview.</p>
+        <p className="text-muted-foreground">Welcome back. Here is your overview.</p>
       </div>
 
       <DashboardClient

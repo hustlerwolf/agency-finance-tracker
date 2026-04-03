@@ -8,8 +8,11 @@ import { Toaster } from 'sonner'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Onlee Agency Finance Tracker',
-  description: 'Internal financial management and cash flow tracking.',
+  title: 'Onlee ERP',
+  description: 'Agency management platform — CRM, Projects, Tasks, HRMS, Finance.',
+  icons: {
+    icon: '/icon.svg',
+  },
 }
 
 export default function RootLayout({
@@ -19,6 +22,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Block indexing on staging/preview deployments */}
+        {process.env.VERCEL_ENV !== 'production' && (
+          <meta name="robots" content="noindex, nofollow" />
+        )}
+      </head>
       <body className={`${inter.className} flex h-screen overflow-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <Sidebar />

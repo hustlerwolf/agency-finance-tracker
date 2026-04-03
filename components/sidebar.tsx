@@ -305,14 +305,10 @@ export function Sidebar() {
     >
       {/* ── Logo / App name ── */}
       <div className={`flex items-center h-[60px] px-3 border-b border-white/[0.06] flex-shrink-0 ${collapsed ? 'justify-center' : 'gap-3'}`}>
-        <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
-          <span className="text-white font-bold text-sm leading-none">O</span>
-        </div>
-        {!collapsed && (
-          <div className="overflow-hidden">
-            <p className="font-semibold text-white text-sm leading-tight truncate">Onlee Agency</p>
-            <p className="text-[11px] text-gray-500 leading-tight">Finance Tracker</p>
-          </div>
+        {collapsed ? (
+          <img src="/icon.svg" alt="Onlee" className="w-8 h-8 flex-shrink-0" />
+        ) : (
+          <img src="/logo-light.svg" alt="Onlee ERP" className="h-7 flex-shrink-0" />
         )}
       </div>
 
