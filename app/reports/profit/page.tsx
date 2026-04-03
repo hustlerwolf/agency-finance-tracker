@@ -55,7 +55,7 @@ export default async function ProfitReportPage() {
         <div className="space-y-4">
           <div className={`p-4 rounded-lg shadow-sm border ${
             totalNetProfit >= 0
-              ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-200'
+              ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-500 text-blue-900 dark:text-blue-200'
               : 'bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-800 text-red-900 dark:text-red-200'
           }`}>
             <h3 className="text-sm font-medium opacity-80">Lifetime Net Profit</h3>

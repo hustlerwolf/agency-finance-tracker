@@ -128,7 +128,7 @@ function ConfigSection({ type, title, description, items: initialItems, icon }: 
                 <button
                   onClick={() => handleRename(item.id)}
                   disabled={loading}
-                  className="p-1 rounded text-green-400 hover:bg-green-900/30 transition-colors"
+                  className="p-1 rounded text-green-400 hover:bg-green-500/10 transition-colors"
                 >
                   <Check className="w-4 h-4" />
                 </button>
@@ -180,7 +180,7 @@ function ConfigSection({ type, title, description, items: initialItems, icon }: 
             <button
               onClick={handleAdd}
               disabled={loading || !newName.trim()}
-              className="p-1 rounded text-green-400 hover:bg-green-900/30 transition-colors disabled:opacity-40"
+              className="p-1 rounded text-green-400 hover:bg-green-500/10 transition-colors disabled:opacity-40"
             >
               <Check className="w-4 h-4" />
             </button>

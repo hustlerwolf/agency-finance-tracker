@@ -60,10 +60,10 @@ type Conjunction = 'AND' | 'OR'
 
 const STATUS_STYLES: Record<string, { bg: string; text: string; dot: string }> = {
   not_started: { bg: 'bg-muted',       text: 'text-muted-foreground',   dot: 'bg-gray-500' },
-  in_progress:  { bg: 'bg-blue-900/30',   text: 'text-blue-400',   dot: 'bg-blue-500' },
-  review:       { bg: 'bg-yellow-900/30', text: 'text-yellow-400', dot: 'bg-yellow-500' },
-  on_hold:      { bg: 'bg-orange-900/30', text: 'text-orange-400', dot: 'bg-orange-500' },
-  completed:    { bg: 'bg-green-900/30',  text: 'text-green-400',  dot: 'bg-green-500' },
+  in_progress:  { bg: 'bg-blue-500/10',   text: 'text-blue-400',   dot: 'bg-blue-500' },
+  review:       { bg: 'bg-yellow-500/10', text: 'text-yellow-400', dot: 'bg-yellow-500' },
+  on_hold:      { bg: 'bg-orange-500/10', text: 'text-orange-400', dot: 'bg-orange-500' },
+  completed:    { bg: 'bg-green-500/10',  text: 'text-green-400',  dot: 'bg-green-500' },
 }
 const STATUS_LABELS: Record<string, string> = {
   not_started: 'Not Started', in_progress: 'In Progress',
@@ -402,7 +402,7 @@ function FilterPanel({ rules, setRules, conjunction, setConjunction }: {
 
       <button
         onClick={addRule}
-        className="flex items-center gap-1.5 text-xs text-green-500 hover:text-green-400 font-medium mt-1 transition-colors"
+        className="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400 hover:text-green-400 font-medium mt-1 transition-colors"
       >
         <Plus className="w-3.5 h-3.5" />
         Add filter rule
@@ -551,7 +551,7 @@ function TableView({ projects, visibleCols }: { projects: Project[]; visibleCols
                     {p.industry && p.industry.length > 0 ? (
                       <div className="flex flex-wrap gap-1">
                         {p.industry.map(t => (
-                          <span key={t} className="text-xs px-1.5 py-0.5 rounded-full bg-green-900/30 text-green-500 border border-green-800/30 whitespace-nowrap">{t}</span>
+                          <span key={t} className="text-xs px-1.5 py-0.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 whitespace-nowrap">{t}</span>
                         ))}
                       </div>
                     ) : <span className="text-muted-foreground text-xs">—</span>}
@@ -570,9 +570,9 @@ function TableView({ projects, visibleCols }: { projects: Project[]; visibleCols
                 {v.has('portfolio') && (
                   <td className="px-3 py-3">
                     <div className="flex gap-1 flex-wrap">
-                      {p.show_publicly    && <span className="text-xs px-1.5 py-0.5 rounded bg-blue-900/30 text-blue-400 border border-blue-800/40 whitespace-nowrap">Public</span>}
-                      {p.design_portfolio && <span className="text-xs px-1.5 py-0.5 rounded bg-purple-900/30 text-purple-400 border border-purple-800/40 whitespace-nowrap">Design</span>}
-                      {p.dev_portfolio    && <span className="text-xs px-1.5 py-0.5 rounded bg-orange-900/30 text-orange-400 border border-orange-800/40 whitespace-nowrap">Dev</span>}
+                      {p.show_publicly    && <span className="text-xs px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 whitespace-nowrap">Public</span>}
+                      {p.design_portfolio && <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 whitespace-nowrap">Design</span>}
+                      {p.dev_portfolio    && <span className="text-xs px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20 whitespace-nowrap">Dev</span>}
                       {!p.show_publicly && !p.design_portfolio && !p.dev_portfolio && <span className="text-xs text-muted-foreground">—</span>}
                     </div>
                   </td>
@@ -650,7 +650,7 @@ function GalleryView({ projects }: { projects: Project[] }) {
                 {p.industry && p.industry.length > 0 && (
                   <div className="flex flex-wrap gap-1">
                     {p.industry.slice(0, 3).map(t => (
-                      <span key={t} className="text-xs px-1.5 py-0.5 rounded-full bg-green-900/30 text-green-500 border border-green-800/30">{t}</span>
+                      <span key={t} className="text-xs px-1.5 py-0.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20">{t}</span>
                     ))}
                   </div>
                 )}
@@ -706,7 +706,7 @@ function KanbanView({ projects }: { projects: Project[] }) {
                       {p.industry && p.industry.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {p.industry.slice(0, 2).map(t => (
-                            <span key={t} className="text-xs px-1.5 py-0.5 rounded-full bg-green-900/20 text-green-600 border border-green-900/40">{t}</span>
+                            <span key={t} className="text-xs px-1.5 py-0.5 rounded-full bg-green-500/10 text-green-600 border border-green-500/20">{t}</span>
                           ))}
                         </div>
                       )}
@@ -829,7 +829,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
             <button className={[
               'flex items-center gap-1.5 h-9 px-3 rounded-lg border text-sm font-medium transition-colors',
               activeRules > 0
-                ? 'border-green-600/60 bg-green-900/20 text-green-400'
+                ? 'border-green-600/60 bg-green-500/10 text-green-400'
                 : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-white/20',
             ].join(' ')}>
               <SlidersHorizontal className="w-3.5 h-3.5" />
@@ -932,7 +932,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
           <Globe className="w-12 h-12 text-gray-700 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-muted-foreground">No projects match your filters</h3>
           <p className="text-muted-foreground text-sm mt-1">Try adjusting or clearing your filters.</p>
-          <button onClick={() => { setRules([]); setSearch('') }} className="mt-4 text-sm text-green-500 hover:text-green-400">
+          <button onClick={() => { setRules([]); setSearch('') }} className="mt-4 text-sm text-green-600 dark:text-green-400 hover:text-green-400">
             Clear all filters
           </button>
         </div>

@@ -11,10 +11,10 @@ import { TasksClient } from '@/app/tasks/tasks-client'
 
 const STATUS_STYLES: Record<string, string> = {
   not_started: 'bg-muted text-foreground',
-  in_progress:  'bg-blue-900/50 text-blue-400 border border-blue-800/50',
-  review:       'bg-yellow-900/50 text-yellow-400 border border-yellow-800/50',
-  on_hold:      'bg-orange-900/50 text-orange-400 border border-orange-800/50',
-  completed:    'bg-green-900/50 text-green-400 border border-green-800/50',
+  in_progress:  'bg-blue-500/15 text-blue-400 border border-blue-500/50',
+  review:       'bg-yellow-500/15 text-yellow-400 border border-yellow-500/50',
+  on_hold:      'bg-orange-500/15 text-orange-400 border border-orange-500/50',
+  completed:    'bg-green-500/15 text-green-400 border border-green-500/50',
 }
 const STATUS_LABELS: Record<string, string> = {
   not_started: 'Not Started',
@@ -152,7 +152,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
       {project.industry && project.industry.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {project.industry.map((tag: string) => (
-            <span key={tag} className="px-2.5 py-0.5 rounded-full bg-green-900/30 text-green-400 text-xs font-medium border border-green-800/40">
+            <span key={tag} className="px-2.5 py-0.5 rounded-full bg-green-500/10 text-green-400 text-xs font-medium border border-green-500/40">
               {tag}
             </span>
           ))}
@@ -173,7 +173,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
             {project.developers?.length > 0 ? (
               <div className="flex flex-wrap gap-1">
                 {project.developers.map((d: string) => (
-                  <span key={d} className="text-xs px-2 py-0.5 rounded-full bg-green-900/30 text-green-400 border border-green-800/40">{d}</span>
+                  <span key={d} className="text-xs px-2 py-0.5 rounded-full bg-green-500/10 text-green-400 border border-green-500/40">{d}</span>
                 ))}
               </div>
             ) : (
@@ -190,9 +190,9 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
         <div className="bg-card border border-border rounded-lg p-3">
           <p className="text-xs text-muted-foreground mb-1">Portfolio</p>
           <div className="flex flex-wrap gap-1 mt-1">
-            {project.show_publicly    && <span className="text-xs px-1.5 py-0.5 rounded bg-blue-900/30 text-blue-400 border border-blue-800/40">Public</span>}
-            {project.design_portfolio && <span className="text-xs px-1.5 py-0.5 rounded bg-purple-900/30 text-purple-400 border border-purple-800/40">Design</span>}
-            {project.dev_portfolio    && <span className="text-xs px-1.5 py-0.5 rounded bg-orange-900/30 text-orange-400 border border-orange-800/40">Dev</span>}
+            {project.show_publicly    && <span className="text-xs px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/40">Public</span>}
+            {project.design_portfolio && <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20">Design</span>}
+            {project.dev_portfolio    && <span className="text-xs px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/40">Dev</span>}
             {!project.show_publicly && !project.design_portfolio && !project.dev_portfolio && (
               <span className="text-xs text-muted-foreground">Private</span>
             )}

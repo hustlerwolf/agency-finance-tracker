@@ -121,7 +121,7 @@ export function IncomeClient({
               
               {editingIncome && <input type="hidden" name="id" value={editingIncome.id} />}
 
-              <div className="space-y-2 bg-slate-50 p-4 border rounded-lg">
+              <div className="space-y-2 bg-muted/50 p-4 border rounded-lg">
                 <Label htmlFor="invoice_id">Link to Invoice</Label>
                 <select 
                   id="invoice_id" 
@@ -151,7 +151,7 @@ export function IncomeClient({
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 border p-4 rounded-lg bg-green-50/50">
+              <div className="grid grid-cols-3 gap-4 border p-4 rounded-lg bg-green-500/5">
                 <div className="space-y-2">
                   <Label htmlFor="currency">Currency *</Label>
                   <select 

@@ -49,7 +49,7 @@ export function BriefEditor({ projectId, initialBrief }: { projectId: string; in
           className={[
             'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all',
             saved
-              ? 'bg-green-900/40 text-green-400 border border-green-800/50'
+              ? 'bg-green-900/40 text-green-400 border border-green-500/50'
               : 'bg-muted hover:bg-muted text-foreground hover:text-foreground border border-border',
           ].join(' ')}
         >

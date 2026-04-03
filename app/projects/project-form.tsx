@@ -300,7 +300,7 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
               {industry.map(tag => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-900/40 text-green-400 text-xs font-medium border border-green-800/50"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-900/40 text-green-400 text-xs font-medium border border-green-500/50"
                 >
                   {tag}
                   <button type="button" onClick={() => removeIndustry(tag)} className="hover:text-green-200">

@@ -785,7 +785,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
               {editingTask.description && (
                 <div className="space-y-1">
                   <Label className="text-muted-foreground">Description</Label>
-                  <div className="text-sm space-y-3 [&_a]:text-blue-400 [&_a]:underline [&_code]:bg-muted/50 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-xs [&_code]:break-all [&_hr]:border-border [&_hr]:my-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:text-muted-foreground [&_p]:text-muted-foreground [&_strong]:text-foreground [&_img]:rounded-lg [&_img]:max-w-full" dangerouslySetInnerHTML={{ __html: editingTask.description }} />
+                  <div className="text-sm space-y-3 text-foreground/80 [&_a]:text-blue-500 [&_a]:underline [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-lg [&_code]:text-xs [&_code]:break-all [&_hr]:border-border [&_hr]:my-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:text-foreground [&_strong]:font-semibold [&_img]:rounded-lg [&_img]:max-w-full" dangerouslySetInnerHTML={{ __html: editingTask.description }} />
                 </div>
               )}
 
