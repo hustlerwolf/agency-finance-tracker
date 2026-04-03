@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 import {
   LayoutGrid, List, Columns, ExternalLink, Trash2, Edit,
   Calendar, Globe, Filter, Search, Plus, X, ChevronDown,
-  SlidersHorizontal, Eye, EyeOff, ArrowUpDown, Check,
+  SlidersHorizontal, Eye, EyeOff, ArrowUpDown, ArrowUp, ArrowDown, Check,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -480,17 +480,26 @@ function TableView({ projects, visibleCols }: { projects: Project[]; visibleCols
     return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av)
   })
 
+  const dateColumns = new Set(['start_date', 'complete_date'])
+
   function SortTh({ colKey, label }: { colKey: string; label: string }) {
     const active = sortKey === colKey
+    const isSortable = dateColumns.has(colKey)
     return (
       <th className="text-left px-3 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider whitespace-nowrap">
-        <button
-          onClick={() => handleSort(colKey)}
-          className={`flex items-center gap-1 hover:text-gray-200 transition-colors ${active ? 'text-foreground' : ''}`}
-        >
-          {label}
-          <ArrowUpDown className={`w-3 h-3 ${active ? 'text-green-400' : 'text-gray-700'}`} />
-        </button>
+        {isSortable ? (
+          <button
+            onClick={() => handleSort(colKey)}
+            className={`flex items-center gap-1 hover:text-foreground transition-colors ${active ? 'text-foreground' : ''}`}
+          >
+            {label}
+            {active && sortDir === 'asc' && <ArrowUp className="w-3 h-3" />}
+            {active && sortDir === 'desc' && <ArrowDown className="w-3 h-3" />}
+            {!active && <ArrowUpDown className="w-3 h-3 opacity-30" />}
+          </button>
+        ) : (
+          <span>{label}</span>
+        )}
       </th>
     )
   }

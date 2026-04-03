@@ -218,12 +218,15 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams])
 
-  // Auto-refresh when new tasks are added (e.g. BugHerd webhook creates a task)
+  // Auto-refresh when tasks or comments change (e.g. BugHerd webhook)
   useEffect(() => {
     const supabase = createClient()
     const channel = supabase
       .channel('tasks-realtime')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => {
+        router.refresh()
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'task_comments' }, () => {
         router.refresh()
       })
       .subscribe()
