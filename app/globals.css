@@ -100,62 +100,103 @@
     @apply bg-muted-foreground/40;
   }
 
-  /* ── Tiptap / NotionEditor prose styles ─── */
-  .notion-prose {
-    color: #1a1a1a;
+  /* ── Tiptap / ProseMirror prose styles ─── */
+  .ProseMirror,
+  .notion-prose,
+  .tiptap {
+    color: #1a1a1a !important;
   }
-  .dark .notion-prose {
-    color: #e5e5e5;
+  .dark .ProseMirror,
+  .dark .notion-prose,
+  .dark .tiptap {
+    color: #e5e5e5 !important;
   }
-  .notion-prose p {
-    color: inherit;
+  .ProseMirror p,
+  .notion-prose p,
+  .tiptap p {
+    color: #1a1a1a !important;
   }
-  .notion-prose strong {
-    color: #000;
-    font-weight: 700;
+  .dark .ProseMirror p,
+  .dark .notion-prose p,
+  .dark .tiptap p {
+    color: #e5e5e5 !important;
   }
-  .dark .notion-prose strong {
-    color: #fff;
+  .ProseMirror strong,
+  .notion-prose strong,
+  .tiptap strong {
+    color: #000 !important;
+    font-weight: 700 !important;
   }
-  .notion-prose li {
-    color: inherit;
+  .dark .ProseMirror strong,
+  .dark .notion-prose strong,
+  .dark .tiptap strong {
+    color: #fff !important;
   }
-  .notion-prose li p {
-    color: inherit;
+  .ProseMirror li,
+  .ProseMirror li p,
+  .notion-prose li,
+  .notion-prose li p,
+  .tiptap li,
+  .tiptap li p {
+    color: #1a1a1a !important;
   }
+  .dark .ProseMirror li,
+  .dark .ProseMirror li p,
+  .dark .notion-prose li,
+  .dark .notion-prose li p,
+  .dark .tiptap li,
+  .dark .tiptap li p {
+    color: #e5e5e5 !important;
+  }
+  .ProseMirror a,
   .notion-prose a,
-  .notion-prose .notion-link {
-    color: #2563eb;
-    text-decoration: underline;
+  .notion-link,
+  .tiptap a {
+    color: #2563eb !important;
+    text-decoration: underline !important;
   }
+  .dark .ProseMirror a,
   .dark .notion-prose a,
-  .dark .notion-prose .notion-link {
-    color: #60a5fa;
+  .dark .notion-link,
+  .dark .tiptap a {
+    color: #60a5fa !important;
   }
-  .notion-prose code {
-    background: #f3f4f6;
-    color: #1f2937;
+  .ProseMirror code,
+  .notion-prose code,
+  .tiptap code {
+    background: #f3f4f6 !important;
+    color: #1f2937 !important;
     padding: 2px 6px;
     border-radius: 6px;
     font-size: 0.8em;
     word-break: break-all;
   }
-  .dark .notion-prose code {
-    background: #374151;
-    color: #e5e7eb;
+  .dark .ProseMirror code,
+  .dark .notion-prose code,
+  .dark .tiptap code {
+    background: #374151 !important;
+    color: #e5e7eb !important;
   }
-  .notion-prose hr {
-    border-color: #e5e7eb;
+  .ProseMirror hr,
+  .notion-prose hr,
+  .tiptap hr {
+    border-color: #e5e7eb !important;
     margin: 12px 0;
   }
-  .dark .notion-prose hr {
-    border-color: #374151;
+  .dark .ProseMirror hr,
+  .dark .notion-prose hr,
+  .dark .tiptap hr {
+    border-color: #374151 !important;
   }
-  .notion-prose ul {
+  .ProseMirror ul,
+  .notion-prose ul,
+  .tiptap ul {
     list-style: disc;
     padding-left: 1.25rem;
   }
-  .notion-prose ol {
+  .ProseMirror ol,
+  .notion-prose ol,
+  .tiptap ol {
     list-style: decimal;
     padding-left: 1.25rem;
   }
