@@ -218,19 +218,33 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams])
 
-  // Auto-refresh when tasks or comments change (e.g. BugHerd webhook)
+  // Auto-refresh: poll for task/comment changes every 8 seconds
+  // This catches BugHerd webhook updates (service-role changes bypass Realtime)
   useEffect(() => {
-    const supabase = createClient()
-    const channel = supabase
-      .channel('tasks-realtime')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => {
+    let lastCheck = new Date().toISOString()
+
+    const interval = setInterval(async () => {
+      const supabase = createClient()
+
+      // Check if any tasks were added/updated since last check
+      const { count: taskChanges } = await supabase
+        .from('tasks')
+        .select('*', { count: 'exact', head: true })
+        .gt('updated_at', lastCheck)
+
+      // Check if any comments were added since last check
+      const { count: commentChanges } = await supabase
+        .from('task_comments')
+        .select('*', { count: 'exact', head: true })
+        .gt('created_at', lastCheck)
+
+      if ((taskChanges && taskChanges > 0) || (commentChanges && commentChanges > 0)) {
+        lastCheck = new Date().toISOString()
         router.refresh()
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'task_comments' }, () => {
-        router.refresh()
-      })
-      .subscribe()
-    return () => { supabase.removeChannel(channel) }
+      }
+    }, 8000)
+
+    return () => clearInterval(interval)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -790,7 +804,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
               {editingTask.description && (
                 <div className="space-y-1">
                   <Label className="text-muted-foreground">Description</Label>
-                  <div className="text-sm space-y-3 text-foreground/80 [&_a]:text-blue-500 [&_a]:underline [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-lg [&_code]:text-xs [&_code]:break-all [&_hr]:border-border [&_hr]:my-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:text-foreground [&_strong]:font-semibold [&_img]:rounded-lg [&_img]:max-w-full" dangerouslySetInnerHTML={{ __html: editingTask.description }} />
+                  <div className="text-sm space-y-3 text-foreground [&_a]:text-blue-500 [&_a]:underline [&_code]:bg-muted [&_code]:text-foreground [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-lg [&_code]:text-xs [&_code]:break-all [&_hr]:border-border [&_hr]:my-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:font-bold [&_img]:rounded-lg [&_img]:max-w-full" dangerouslySetInnerHTML={{ __html: editingTask.description }} />
                 </div>
               )}
 
