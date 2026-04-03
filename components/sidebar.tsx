@@ -121,10 +121,22 @@ export function Sidebar() {
 
   useEffect(() => setMounted(true), [])
 
-  // Fetch user permissions
+  // Fetch user permissions — use sessionStorage cache for instant loads
   useEffect(() => {
     async function loadPerms() {
       try {
+        // Check cache first for instant sidebar rendering
+        const cached = typeof window !== 'undefined' ? sessionStorage.getItem('sidebar_perms') : null
+        if (cached) {
+          try {
+            const c = JSON.parse(cached)
+            setUserRole(c.role)
+            setAllowedModules(c.modules)
+            if (c.tmId) setMyTeamMemberId(c.tmId)
+            setPermLoaded(true)
+          } catch {}
+        }
+
         const supabase = createClient()
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) { setPermLoaded(true); return }
@@ -135,7 +147,6 @@ export function Sidebar() {
           .single()
         if (error) {
           console.error('Failed to load user profile:', error.message)
-          // If query fails, default to showing everything (admin-like) so UI isn't blank
           setUserRole('admin')
           setAllowedModules([])
           setPermLoaded(true)
@@ -151,6 +162,15 @@ export function Sidebar() {
           .eq('auth_user_id', user.id)
           .single()
         if (tm) setMyTeamMemberId(tm.id)
+
+        // Cache for instant loads on navigation
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('sidebar_perms', JSON.stringify({
+            role: profile.role,
+            modules: profile.allowed_modules || [],
+            tmId: tm?.id || null,
+          }))
+        }
       } catch (e) {
         console.error('Permission load error:', e)
         setUserRole('admin')
@@ -209,6 +229,7 @@ export function Sidebar() {
   if (pathname === '/login') return null
 
   async function handleSignOut() {
+    if (typeof window !== 'undefined') sessionStorage.removeItem('sidebar_perms')
     const supabase = createClient()
     await supabase.auth.signOut()
     router.push('/login')
@@ -297,6 +318,15 @@ export function Sidebar() {
 
       {/* ── Navigation ── */}
       <nav className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-3 space-y-0.5 scrollbar-none">
+
+        {/* Loading skeleton while permissions load */}
+        {!permLoaded && !collapsed && (
+          <div className="space-y-2 px-1">
+            {[1,2,3,4,5].map(i => (
+              <div key={i} className="h-9 rounded-lg bg-white/[0.04] animate-pulse" />
+            ))}
+          </div>
+        )}
 
         {/* Dashboard */}
         {hasModule('dashboard') && MAIN_NAV.map(({ name, href, icon: Icon }) => {
