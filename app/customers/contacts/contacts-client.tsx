@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { Plus, Building2, Linkedin, Star } from 'lucide-react'
+import { SortableHeader, useSort } from '@/components/sortable-header'
 
 export interface Contact {
   id: string
@@ -31,6 +32,7 @@ export function ContactsClient({ contacts, companies }: { contacts: Contact[]; c
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [editing, setEditing] = useState<Contact | null>(null)
+  const { sortKey, sortDir, handleSort, sortData } = useSort()
   const [isPrimary, setIsPrimary] = useState(false)
   const [search, setSearch] = useState('')
 
@@ -123,11 +125,12 @@ export function ContactsClient({ contacts, companies }: { contacts: Contact[]; c
               <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead>Primary</TableHead>
+              <TableHead><SortableHeader label="Created" sortKey="created_at" currentSortKey={sortKey} currentDirection={sortDir} onSort={handleSort} /></TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.map(c => (
+            {sortData(filtered).map(c => (
               <TableRow key={c.id}>
                 <TableCell className="font-medium">
                   <div className="flex items-center gap-2">
@@ -160,6 +163,9 @@ export function ContactsClient({ contacts, companies }: { contacts: Contact[]; c
                     </span>
                   )}
                 </TableCell>
+                <TableCell className="text-sm text-muted-foreground">
+                  {new Date(c.created_at).toLocaleDateString('en-IN')}
+                </TableCell>
                 <TableCell className="text-right space-x-2">
                   <Button variant="outline" size="sm" onClick={() => openEdit(c)}>Edit</Button>
                   <Button variant="destructive" size="sm" onClick={() => handleDelete(c.id)}>Delete</Button>
@@ -168,7 +174,7 @@ export function ContactsClient({ contacts, companies }: { contacts: Contact[]; c
             ))}
             {filtered.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
+                <TableCell colSpan={8} className="text-center py-10 text-muted-foreground">
                   No contacts found. Add contacts from a company page or click "Add Contact".
                 </TableCell>
               </TableRow>

@@ -26,6 +26,7 @@ import {
   saveLead, deleteLead, updateLeadStage,
   saveLeadStage, deleteLeadStage, saveLeadSource, deleteLeadSource,
 } from './actions'
+import { SortableHeader, useSort } from '@/components/sortable-header'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -108,6 +109,7 @@ export function CrmClient({
 }) {
   const [localLeads, setLocalLeads] = useState(initialLeads)
   const [localSources, setLocalSources] = useState(initialSources)
+  const { sortKey, sortDir, handleSort, sortData } = useSort()
   const [view, setView] = useState<'table' | 'kanban'>('table')
 
   // Filters
@@ -399,12 +401,13 @@ export function CrmClient({
                 <TableHead>Source</TableHead>
                 <TableHead>Priority</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Next Action</TableHead>
+                <TableHead><SortableHeader label="Next Action" sortKey="next_action_date" currentSortKey={sortKey} currentDirection={sortDir} onSort={handleSort} /></TableHead>
+                <TableHead><SortableHeader label="Created" sortKey="created_at" currentSortKey={sortKey} currentDirection={sortDir} onSort={handleSort} /></TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map(lead => (
+              {sortData(filtered).map(lead => (
                 <TableRow key={lead.id}>
                   <TableCell>
                     <Link href={`/crm/${lead.id}`} className="hover:underline">
@@ -459,6 +462,9 @@ export function CrmClient({
                   <TableCell className="text-sm text-muted-foreground">
                     {formatDate(lead.next_action_date)}
                   </TableCell>
+                  <TableCell className="text-sm text-muted-foreground">
+                    {formatDate(lead.created_at)}
+                  </TableCell>
                   <TableCell className="text-right space-x-1.5">
                     <Button variant="outline" size="sm" asChild>
                       <Link href={`/crm/${lead.id}`}>View</Link>
@@ -472,7 +478,7 @@ export function CrmClient({
               ))}
               {filtered.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-10 text-muted-foreground">
+                  <TableCell colSpan={9} className="text-center py-10 text-muted-foreground">
                     No leads found. Add your first lead to get started.
                   </TableCell>
                 </TableRow>

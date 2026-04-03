@@ -17,6 +17,7 @@ import {
   Phone, Mail, MapPin, Calendar,
 } from 'lucide-react'
 import { saveTeamMember, deleteTeamMember } from './actions'
+import { SortableHeader, useSort } from '@/components/sortable-header'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -154,6 +155,7 @@ export function TeamClient({ members, departments }: { members: TeamMember[]; de
   const [search, setSearch] = useState('')
   const [filterDept, setFilterDept] = useState<string>('')
   const [filterStatus, setFilterStatus] = useState<string>('')
+  const { sortKey, sortDir, handleSort, sortData } = useSort()
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editing, setEditing] = useState<TeamMember | null>(null)
   const [showPayroll, setShowPayroll] = useState(false)
@@ -251,13 +253,13 @@ export function TeamClient({ members, departments }: { members: TeamMember[]; de
                 <TableHead>Department</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Joined</TableHead>
+                <TableHead><SortableHeader label="Joined" sortKey="date_of_joining" currentSortKey={sortKey} currentDirection={sortDir} onSort={handleSort} /></TableHead>
                 <TableHead>PL Balance</TableHead>
                 <TableHead className="w-20" />
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map(m => (
+              {sortData(filtered).map(m => (
                 <TableRow key={m.id}>
                   <TableCell>
                     <Link href={`/team/${m.id}`} className="flex items-center gap-2 hover:text-primary">

@@ -19,6 +19,7 @@ import {
   Link as LinkIcon, MoreVertical, Pencil, Trash2, Eye,
 } from 'lucide-react'
 import { saveKbEntry, deleteKbEntry } from './actions'
+import { SortableHeader, useSort } from '@/components/sortable-header'
 
 // ─── Dynamic editor ───────────────────────────────────────────────────────────
 
@@ -213,6 +214,7 @@ export function KbClient({
   const [view, setView] = useState<'gallery' | 'table'>('gallery')
 
   // Filters
+  const { sortKey, sortDir, handleSort, sortData } = useSort()
   const [searchQuery, setSearchQuery] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('')
   const [tagFilter, setTagFilter] = useState('')
@@ -411,12 +413,12 @@ export function KbClient({
                 <TableHead>Tags</TableHead>
                 <TableHead>URL</TableHead>
                 <TableHead>Created By</TableHead>
-                <TableHead>Created At</TableHead>
+                <TableHead><SortableHeader label="Created At" sortKey="created_at" currentSortKey={sortKey} currentDirection={sortDir} onSort={handleSort} /></TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map(entry => {
+              {sortData(filtered).map(entry => {
                 const color = categoryColor(entry.category)
                 return (
                   <TableRow key={entry.id}>

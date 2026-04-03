@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { Paperclip } from 'lucide-react'
+import { SortableHeader, useSort } from '@/components/sortable-header'
 
 export interface Expense {
   id: string;
@@ -35,6 +36,7 @@ export function ExpenseClient({
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { sortKey, sortDir, handleSort, sortData } = useSort()
   const [selectedCurrency, setSelectedCurrency] = useState('INR')
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null)
 
@@ -169,7 +171,7 @@ export function ExpenseClient({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Date</TableHead>
+              <TableHead><SortableHeader label="Date" sortKey="date" currentSortKey={sortKey} currentDirection={sortDir} onSort={handleSort} /></TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Receipt</TableHead>
@@ -179,7 +181,7 @@ export function ExpenseClient({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {expenses.map((expense) => (
+            {sortData(expenses).map((expense) => (
               <TableRow key={expense.id}>
                 <TableCell>{formatDate(expense.date)}</TableCell>
                 <TableCell>{expense.description || '-'}</TableCell>

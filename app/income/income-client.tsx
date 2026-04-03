@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
+import { SortableHeader, useSort } from '@/components/sortable-header'
 
 export interface Income {
   id: string;
@@ -47,6 +48,7 @@ export function IncomeClient({
   const [loading, setLoading] = useState(false)
   const [editingIncome, setEditingIncome] = useState<Income | null>(null)
   
+  const { sortKey, sortDir, handleSort, sortData } = useSort()
   const [selectedCurrency, setSelectedCurrency] = useState('INR')
   const [selectedCustomer, setSelectedCustomer] = useState('')
   const [invoiceAmount, setInvoiceAmount] = useState<string>('')
@@ -227,7 +229,8 @@ export function IncomeClient({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Date</TableHead>
+              <TableHead><SortableHeader label="Invoice Date" sortKey="invoice_date" currentSortKey={sortKey} currentDirection={sortDir} onSort={handleSort} /></TableHead>
+              <TableHead><SortableHeader label="Payment Date" sortKey="payment_date" currentSortKey={sortKey} currentDirection={sortDir} onSort={handleSort} /></TableHead>
               <TableHead>Client</TableHead>
               <TableHead>Invoice Linked</TableHead>
               <TableHead>Status</TableHead>
@@ -237,9 +240,10 @@ export function IncomeClient({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {incomeEntries.map((income) => (
+            {sortData(incomeEntries).map((income) => (
               <TableRow key={income.id}>
                 <TableCell>{formatDate(income.invoice_date)}</TableCell>
+                <TableCell>{income.payment_date ? formatDate(income.payment_date) : '-'}</TableCell>
                 <TableCell className="font-medium">{income.customers?.name || '-'}</TableCell>
                 <TableCell>
                   {income.invoice_number ? <Badge variant="outline">{income.invoice_number}</Badge> : <span className="text-muted-foreground text-sm">None</span>}
@@ -267,7 +271,7 @@ export function IncomeClient({
               </TableRow>
             ))}
             {incomeEntries.length === 0 && (
-              <TableRow><TableCell colSpan={7} className="text-center py-6 text-muted-foreground">No income logged yet.</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8} className="text-center py-6 text-muted-foreground">No income logged yet.</TableCell></TableRow>
             )}
           </TableBody>
         </Table>

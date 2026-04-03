@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { ImageUpload } from '@/components/image-upload'
 import { MentionInput, parseMentions } from './mention-input'
+import { SortableHeader, useSort } from '@/components/sortable-header'
 import { saveTask, deleteTask, updateTaskStatus, saveChecklistItem, toggleChecklistItem, deleteChecklistItem, addTaskComment, deleteTaskComment, startTimer, stopTimer, deleteTimeLog } from './actions'
 
 const NotionEditor = dynamic(
@@ -239,6 +240,7 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
       return updated || null
     })
   }, [initialTasks])
+  const { sortKey, sortDir, handleSort, sortData } = useSort()
   const [search, setSearch] = useState('')
   const [filterAssignee, setFilterAssignee] = useState('')
   const [filterPriority, setFilterPriority] = useState('')
@@ -561,13 +563,13 @@ export function TasksClient({ tasks: initialTasks, statuses, labels, members, pr
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Status</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Priority</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Assignees</th>
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Due</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground"><SortableHeader label="Due" sortKey="due_date" currentSortKey={sortKey} currentDirection={sortDir} onSort={handleSort} /></th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Project</th>
                 <th className="w-16" />
               </tr>
             </thead>
             <tbody>
-              {filtered.map(t => {
+              {sortData(filtered).map(t => {
                 const status = statuses.find(s => s.id === t.status_id)
                 const assignees = t.task_assignees?.map(a => a.team_members).filter(Boolean) as Member[]
                 return (

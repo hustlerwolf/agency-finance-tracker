@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { Plus, Building2, Users, ExternalLink } from 'lucide-react'
+import { SortableHeader, useSort } from '@/components/sortable-header'
 
 const INDIAN_STATES = [
   "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana",
@@ -46,6 +47,8 @@ export function CompaniesClient({ companies }: { companies: Company[] }) {
   const [loading, setLoading] = useState(false)
   const [editing, setEditing] = useState<Company | null>(null)
   const [clientType, setClientType] = useState<'indian' | 'overseas'>('indian')
+
+  const { sortKey, sortDir, handleSort, sortData } = useSort()
 
   function openAdd() {
     setEditing(null)
@@ -115,11 +118,12 @@ export function CompaniesClient({ companies }: { companies: Company[] }) {
               <TableHead>Email</TableHead>
               <TableHead>Website</TableHead>
               <TableHead>Contacts</TableHead>
+              <TableHead><SortableHeader label="Created" sortKey="created_at" currentSortKey={sortKey} currentDirection={sortDir} onSort={handleSort} /></TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {companies.map(c => (
+            {sortData(companies).map(c => (
               <TableRow key={c.id}>
                 <TableCell>
                   <Link href={`/customers/${c.id}`} className="font-medium hover:underline flex items-center gap-2">
@@ -155,6 +159,9 @@ export function CompaniesClient({ companies }: { companies: Company[] }) {
                     {c.contacts?.length ?? 0}
                   </Link>
                 </TableCell>
+                <TableCell className="text-sm text-muted-foreground">
+                  {new Date(c.created_at).toLocaleDateString('en-IN')}
+                </TableCell>
                 <TableCell className="text-right space-x-2">
                   <Button variant="outline" size="sm" asChild>
                     <Link href={`/customers/${c.id}`}>View</Link>
@@ -166,7 +173,7 @@ export function CompaniesClient({ companies }: { companies: Company[] }) {
             ))}
             {companies.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
+                <TableCell colSpan={8} className="text-center py-10 text-muted-foreground">
                   No companies yet. Add your first client company to get started.
                 </TableCell>
               </TableRow>
