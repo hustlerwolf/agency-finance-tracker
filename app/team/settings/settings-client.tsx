@@ -12,13 +12,15 @@ import {
 import { Plus, Pencil, Trash2, Building2, Shield, ChevronDown, MessageSquare } from 'lucide-react'
 import { saveDepartment, deleteDepartment } from '../actions'
 import { savePreset, deletePreset, saveNotificationSettings, updateTeamMemberSlackId } from '../auth-actions'
-import { ALL_MODULES, MODULE_LABELS, type ModuleSlug } from '@/lib/modules'
+import { ALL_MODULES, MODULE_LABELS, MODULES_WITH_ACTIONS, MODULE_ACTIONS, type ModuleSlug } from '@/lib/modules'
 import { MODULE_FIELDS, MODULES_WITH_FIELDS, type FieldDef } from '@/lib/field-access'
 
 interface Department { id: string; name: string; description: string | null; created_at: string }
 interface Preset {
   id: string; name: string; allowed_modules: string[]
-  hidden_fields: Record<string, string[]>; created_at: string
+  hidden_fields: Record<string, string[]>
+  module_permissions: Record<string, Record<string, boolean>>
+  created_at: string
 }
 interface NotifSettings { id: string; slack_webhook_url: string | null; slack_bot_token: string | null; slack_enabled: boolean }
 interface SlackMember { id: string; full_name: string; email: string | null; slack_member_id: string | null; slack_email?: string | null }
@@ -74,6 +76,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
   const [presetName, setPresetName] = useState('')
   const [presetModules, setPresetModules] = useState<string[]>([])
   const [presetHiddenFields, setPresetHiddenFields] = useState<Record<string, string[]>>({})
+  const [presetModulePerms, setPresetModulePerms] = useState<Record<string, Record<string, boolean>>>({})
   const [expandedModule, setExpandedModule] = useState<string | null>(null)
 
   // Slack state
@@ -105,6 +108,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
     setPresetName('')
     setPresetModules(['dashboard'])
     setPresetHiddenFields({})
+    setPresetModulePerms({})
     setExpandedModule(null)
     setPresetDialogOpen(true)
   }
@@ -114,6 +118,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
     setPresetName(p.name)
     setPresetModules(p.allowed_modules || [])
     setPresetHiddenFields(p.hidden_fields || {})
+    setPresetModulePerms(p.module_permissions || {})
     setExpandedModule(null)
     setPresetDialogOpen(true)
   }
@@ -128,6 +133,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
     fd.set('name', presetName)
     fd.set('allowed_modules', JSON.stringify(presetModules))
     fd.set('hidden_fields', JSON.stringify(presetHiddenFields))
+    fd.set('module_permissions', JSON.stringify(presetModulePerms))
     const res = await savePreset(fd)
     if (res.success) { toast.success(editingPreset ? 'Preset updated' : 'Preset created'); setPresetDialogOpen(false); router.refresh() }
     else toast.error(res.error)
@@ -182,7 +188,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
               <h2 className="font-semibold flex items-center gap-2"><Shield className="w-4 h-4" /> Access Presets</h2>
               <p className="text-xs text-muted-foreground mt-1">Create reusable access configurations to quickly assign to team members</p>
             </div>
-            <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={openPresetAdd}>
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openPresetAdd}>
               <Plus className="w-4 h-4 mr-1" /> New Preset
             </Button>
           </div>
@@ -201,6 +207,19 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
                     <span key={m} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-500/10 text-green-400 border border-green-500/20">{MODULE_LABELS[m as ModuleSlug] || m}</span>
                   ))}
                 </div>
+                {/* Show restricted actions */}
+                {Object.keys(p.module_permissions || {}).some(k => Object.values((p.module_permissions as Record<string, Record<string, boolean>>)[k] || {}).some(v => v === false)) && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {Object.entries(p.module_permissions || {}).filter(([, perms]) => Object.values(perms as Record<string, boolean>).some(v => v === false)).map(([mod, perms]) => {
+                      const denied = Object.entries(perms as Record<string, boolean>).filter(([, v]) => v === false).map(([a]) => a)
+                      return (
+                        <span key={mod} className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                          {MODULE_LABELS[mod as ModuleSlug] || mod}: no {denied.join('/')}
+                        </span>
+                      )
+                    })}
+                  </div>
+                )}
                 {Object.keys(p.hidden_fields || {}).some(k => ((p.hidden_fields as Record<string, string[]>)[k] || []).length > 0) && (
                   <p className="text-[10px] text-muted-foreground mt-2">
                     {Object.entries(p.hidden_fields || {}).filter(([, v]) => (v as string[]).length > 0).map(([mod, fields]) =>
@@ -234,7 +253,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
               <p className="text-[10px] text-muted-foreground">Create a Slack app at api.slack.com, add chat:write scope, install to workspace, and paste the Bot Token here.</p>
             </div>
 
-            <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={async () => {
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={async () => {
               const fd = new FormData()
               if (notifSettings?.id) fd.set('id', notifSettings.id)
               fd.set('slack_bot_token', slackToken)
@@ -287,7 +306,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => { setDeptDialogOpen(false); setEditingDept(null) }}>Cancel</Button>
-              <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground">{editingDept ? 'Update' : 'Add'}</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">{editingDept ? 'Update' : 'Add'}</Button>
             </div>
           </form>
         </DialogContent>
@@ -329,6 +348,20 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
                           </Button>
                         )}
                       </div>
+                      {/* Action permissions (create/edit/delete) */}
+                      {enabled && MODULES_WITH_ACTIONS.includes(slug) && (
+                        <div className="ml-6 mt-1 flex gap-3">
+                          {MODULE_ACTIONS.map(action => {
+                            const checked = presetModulePerms[slug]?.[action] !== false
+                            return (
+                              <label key={action} className={`flex items-center gap-1.5 text-xs cursor-pointer ${checked ? 'text-green-400' : 'text-muted-foreground'}`}>
+                                <input type="checkbox" checked={checked} onChange={() => setPresetModulePerms(prev => ({ ...prev, [slug]: { ...(prev[slug] || {}), [action]: !checked } }))} className="rounded w-3 h-3" />
+                                <span className="capitalize">{action}</span>
+                              </label>
+                            )
+                          })}
+                        </div>
+                      )}
                       {enabled && hasFields && isExpanded && (
                         <FieldSelector
                           module={slug}
@@ -344,7 +377,7 @@ export function TeamSettingsClient({ departments, presets, notifSettings, teamMe
 
             <div className="flex justify-end gap-2 pt-2">
               <Button variant="outline" onClick={() => setPresetDialogOpen(false)}>Cancel</Button>
-              <Button className="bg-primary hover:bg-primary/90 text-foreground" onClick={handlePresetSubmit} disabled={!presetName.trim()}>
+              <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handlePresetSubmit} disabled={!presetName.trim()}>
                 {editingPreset ? 'Update Preset' : 'Create Preset'}
               </Button>
             </div>

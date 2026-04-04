@@ -338,7 +338,7 @@ export function KbClient({
               <List className="w-4 h-4" />
             </button>
           </div>
-          <Button size="sm" onClick={openAddForm} className="bg-primary hover:bg-primary/90 text-foreground">
+          <Button size="sm" onClick={openAddForm} className="bg-primary hover:bg-primary/90 text-white">
             <Plus className="w-4 h-4 mr-1" />
             Add Entry
           </Button>

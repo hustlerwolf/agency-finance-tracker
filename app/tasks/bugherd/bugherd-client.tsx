@@ -188,7 +188,7 @@ export function BugherdSettingsClient({ settings, mappings, statusMappings, proj
               <p className="text-[10px] text-muted-foreground">Automatically checks for tasks deleted on BugHerd and removes them from our app</p>
             </div>
             <div className="flex gap-2">
-              <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={handleSaveSettings}>Save Settings</Button>
+              <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={handleSaveSettings}>Save Settings</Button>
               <Button size="sm" variant="outline" onClick={handleTestConnection} disabled={!apiKey || testing}>
                 {testing ? 'Testing...' : 'Test Connection'}
               </Button>
@@ -200,7 +200,7 @@ export function BugherdSettingsClient({ settings, mappings, statusMappings, proj
         <div className="bg-card rounded-xl border border-border p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold">Project Mappings</h2>
-            <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={openMappingDialog} disabled={!apiKey}>
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openMappingDialog} disabled={!apiKey}>
               <Plus className="w-4 h-4 mr-1" /> Add Mapping
             </Button>
           </div>
@@ -292,7 +292,7 @@ export function BugherdSettingsClient({ settings, mappings, statusMappings, proj
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => setMappingDialog(false)}>Cancel</Button>
-              <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground">Create Mapping</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">Create Mapping</Button>
             </div>
           </form>
         </DialogContent>
@@ -316,7 +316,7 @@ export function BugherdSettingsClient({ settings, mappings, statusMappings, proj
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => setStatusDialog(false)}>Cancel</Button>
-              <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground">Add</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">Add</Button>
             </div>
           </form>
         </DialogContent>

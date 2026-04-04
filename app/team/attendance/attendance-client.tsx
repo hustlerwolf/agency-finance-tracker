@@ -119,7 +119,7 @@ export function AttendanceClient({ attendance, members, today, isAdmin = true }:
           <h1 className="text-2xl font-bold">{isAdmin ? 'Attendance' : 'My Attendance'}</h1>
           <p className="text-sm text-muted-foreground mt-1">Last 30 days · {attendance.length} records</p>
         </div>
-        <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Mark Attendance</Button>
+        <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={openAdd}><Plus className="w-4 h-4 mr-1" /> Mark Attendance</Button>
       </div>
 
       {/* Today's quick stats */}
@@ -248,7 +248,7 @@ export function AttendanceClient({ attendance, members, today, isAdmin = true }:
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={() => { setDialogOpen(false); setEditing(null) }}>Cancel</Button>
-              <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground">{editing ? 'Update' : 'Mark Attendance'}</Button>
+              <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">{editing ? 'Update' : 'Mark Attendance'}</Button>
             </div>
           </form>
         </DialogContent>

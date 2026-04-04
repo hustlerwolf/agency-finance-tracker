@@ -97,7 +97,7 @@ export function ExpenseClient({
                 <Input id="date" name="date" type="date" defaultValue={editingExpense ? editingExpense.date : new Date().toISOString().split('T')[0]} required />
               </div>
 
-              <div className="grid grid-cols-3 gap-4 border p-4 rounded-lg bg-slate-50">
+              <div className="grid grid-cols-3 gap-4 border p-4 rounded-lg bg-muted/50">
                 <div className="space-y-2">
                   <Label htmlFor="currency">Currency *</Label>
                   <select 

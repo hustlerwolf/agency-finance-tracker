@@ -362,7 +362,7 @@ export function ProjectForm({ customers, options, project }: ProjectFormProps) {
         <Button type="button" variant="ghost" className="text-muted-foreground hover:text-foreground" onClick={() => router.back()}>
           Cancel
         </Button>
-        <Button type="submit" disabled={loading} className="bg-primary hover:bg-primary/90 text-foreground min-w-[120px]">
+        <Button type="submit" disabled={loading} className="bg-primary hover:bg-primary/90 text-white min-w-[120px]">
           {loading ? 'Saving…' : (project?.id ? 'Save Changes' : 'Create Project')}
         </Button>
       </div>

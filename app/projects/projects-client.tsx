@@ -811,7 +811,7 @@ export function ProjectsClient({ projects }: { projects: Project[] }) {
           </p>
         </div>
         <Link href="/projects/new">
-          <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground gap-2">
+          <Button size="sm" className="bg-primary hover:bg-primary/90 text-white gap-2">
             <Plus className="w-4 h-4" />
             New Project
           </Button>

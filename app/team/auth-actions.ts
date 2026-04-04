@@ -101,7 +101,7 @@ export async function applyPresetToMember(
 
     const { data: preset, error: presetError } = await admin
       .from('access_presets')
-      .select('allowed_modules, hidden_fields')
+      .select('allowed_modules, hidden_fields, module_permissions')
       .eq('id', presetId)
       .single()
     if (presetError || !preset) return { success: false, error: 'Preset not found' }
@@ -111,6 +111,7 @@ export async function applyPresetToMember(
       .update({
         allowed_modules: preset.allowed_modules,
         hidden_fields: preset.hidden_fields,
+        module_permissions: preset.module_permissions || {},
       })
       .eq('id', authUserId)
 
@@ -147,11 +148,13 @@ export async function savePreset(formData: FormData) {
     const name = formData.get('name') as string
     const allowedModules = JSON.parse(formData.get('allowed_modules') as string || '[]')
     const hiddenFields = JSON.parse(formData.get('hidden_fields') as string || '{}')
+    const modulePermissions = JSON.parse(formData.get('module_permissions') as string || '{}')
 
     const data = {
       name,
       allowed_modules: allowedModules,
       hidden_fields: hiddenFields,
+      module_permissions: modulePermissions,
       updated_at: new Date().toISOString(),
     }
 

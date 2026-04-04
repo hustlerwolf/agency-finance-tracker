@@ -270,7 +270,7 @@ export function InvoiceForm({
           </div>
         </div>
 
-        <div className="bg-slate-50 p-6 rounded-lg border space-y-3 shadow-sm">
+        <div className="bg-muted/50 p-6 rounded-lg border space-y-3 shadow-sm">
           <div className="flex justify-between text-sm">
             <span>Subtotal:</span>
             <span>{currency} {subtotal.toFixed(2)}</span>

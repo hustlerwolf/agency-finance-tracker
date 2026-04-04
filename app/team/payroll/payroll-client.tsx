@@ -227,7 +227,7 @@ export function PayrollClient({ runs, slips, members, agency }: {
           <h1 className="text-2xl font-bold">Payroll</h1>
           <p className="text-sm text-muted-foreground mt-1">{runs.length} payroll run{runs.length !== 1 ? 's' : ''} total</p>
         </div>
-        <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={() => setCreateDialogOpen(true)}>
+        <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={() => setCreateDialogOpen(true)}>
           <Plus className="w-4 h-4 mr-1" /> New Payroll Run
         </Button>
       </div>
@@ -270,7 +270,7 @@ export function PayrollClient({ runs, slips, members, agency }: {
                     </Button>
                   )}
                   {currentRun.status === 'finalized' && (
-                    <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={handleMarkPaid}>
+                    <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={handleMarkPaid}>
                       <CheckCircle2 className="w-4 h-4 mr-1" /> Mark as Paid
                     </Button>
                   )}
@@ -321,7 +321,7 @@ export function PayrollClient({ runs, slips, members, agency }: {
             </div>
             <h3 className="font-semibold text-lg mb-1">No Active Payroll</h3>
             <p className="text-sm text-muted-foreground mb-4">Create a new payroll run to get started for this month.</p>
-            <Button size="sm" className="bg-primary hover:bg-primary/90 text-foreground" onClick={() => setCreateDialogOpen(true)}>
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" onClick={() => setCreateDialogOpen(true)}>
               <Plus className="w-4 h-4 mr-1" /> New Payroll Run
             </Button>
           </div>
@@ -426,7 +426,7 @@ export function PayrollClient({ runs, slips, members, agency }: {
             <p className="text-xs text-muted-foreground">Salary slips will be auto-generated for all {members.length} active full-time employee{members.length !== 1 ? 's' : ''}.</p>
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>Cancel</Button>
-              <Button className="bg-primary hover:bg-primary/90 text-foreground" onClick={handleCreateRun}>Create</Button>
+              <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handleCreateRun}>Create</Button>
             </div>
           </div>
         </DialogContent>
@@ -480,7 +480,7 @@ export function PayrollClient({ runs, slips, members, agency }: {
               </div>
               <div className="flex justify-end gap-2 pt-2">
                 <Button type="button" variant="outline" onClick={() => setEditSlip(null)}>Cancel</Button>
-                <Button type="submit" className="bg-primary hover:bg-primary/90 text-foreground">Save Changes</Button>
+                <Button type="submit" className="bg-primary hover:bg-primary/90 text-white">Save Changes</Button>
               </div>
             </form>
           )}
