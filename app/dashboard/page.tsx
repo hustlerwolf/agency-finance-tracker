@@ -311,36 +311,23 @@ export default async function DashboardPage() {
       {/* ═══ ADMIN DASHBOARD ═══ */}
       {isAdmin && (
         <>
-          {/* Stats (2x2) + Quote side by side */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-4">
-            {/* Left: 2x2 stat cards */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-card rounded-xl border border-border p-4">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><Users className="w-3.5 h-3.5" /> Team</div>
-                <p className="text-2xl font-bold">{totalTeamMembers}</p>
-                {teamOnLeave.length > 0 && <p className="text-xs text-yellow-500 mt-1">{teamOnLeave.length} on leave</p>}
+          {/* Quote */}
+          <QuoteCard />
+
+          {/* Admin Stats Row */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="bg-card rounded-xl border border-border p-4">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><Users className="w-3.5 h-3.5" /> Team</div>
+              <p className="text-2xl font-bold">{totalTeamMembers}</p>
+              {teamOnLeave.length > 0 && <p className="text-xs text-yellow-500 mt-1">{teamOnLeave.length} on leave today</p>}
+            </div>
+            {Object.entries(taskStatusCounts).map(([name, count]) => (
+              <div key={name} className="bg-card rounded-xl border border-border p-4">
+                <div className="text-xs text-muted-foreground mb-1">{name}</div>
+                <p className="text-2xl font-bold">{count}</p>
               </div>
-              {Object.entries(taskStatusCounts).slice(0, 3).map(([name, count]) => (
-                <div key={name} className="bg-card rounded-xl border border-border p-4">
-                  <div className="text-xs text-muted-foreground mb-1">{name}</div>
-                  <p className="text-2xl font-bold">{count}</p>
-                </div>
-              ))}
-            </div>
-            {/* Right: Quote */}
-            <QuoteCard />
+            ))}
           </div>
-          {/* Remaining status counts */}
-          {Object.entries(taskStatusCounts).length > 3 && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {Object.entries(taskStatusCounts).slice(3).map(([name, count]) => (
-                <div key={name} className="bg-card rounded-xl border border-border p-4">
-                  <div className="text-xs text-muted-foreground mb-1">{name}</div>
-                  <p className="text-2xl font-bold">{count}</p>
-                </div>
-              ))}
-            </div>
-          )}
 
           {/* Two-column layout */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
