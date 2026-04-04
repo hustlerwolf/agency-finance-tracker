@@ -29,6 +29,7 @@ const CRM_NAV = [
 ]
 
 const FINANCE_NAV = [
+  { name: 'Overview', href: '/finance', icon: BarChart3 },
   { name: 'Invoices', href: '/invoices', icon: FileText },
   { name: 'Income', href: '/income', icon: Wallet },
   { name: 'Expenses', href: '/expenses', icon: Receipt },

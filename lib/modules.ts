@@ -59,7 +59,7 @@ const MODULE_ROUTES: Record<ModuleSlug, string[]> = {
   tasks: ['/tasks'],
   'knowledge-base': ['/knowledge-base'],
   team: ['/team'],
-  finance: ['/invoices', '/income', '/expenses', '/categories', '/vendors'],
+  finance: ['/finance', '/invoices', '/income', '/expenses', '/categories', '/vendors'],
   reports: ['/reports'],
   settings: ['/settings'],
 }
