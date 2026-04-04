@@ -192,30 +192,32 @@ export default async function DashboardPage() {
         <p className="text-muted-foreground">{new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
       </div>
 
-      {/* Motivational Quote */}
-      <QuoteCard />
-
       {/* ═══ TEAM MEMBER DASHBOARD ═══ */}
       {!isAdmin && (
         <>
-          {/* Quick Stats Row */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-card rounded-xl border border-border p-4">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><CheckSquare className="w-3.5 h-3.5" /> Pending Tasks</div>
-              <p className="text-2xl font-bold">{myTasks.length}</p>
+          {/* Stats (2x2) + Quote side by side */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-4">
+            {/* Left: 2x2 stat cards */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-card rounded-xl border border-border p-4">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><CheckSquare className="w-3.5 h-3.5" /> Pending Tasks</div>
+                <p className="text-2xl font-bold">{myTasks.length}</p>
+              </div>
+              <div className="bg-card rounded-xl border border-border p-4">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><AlertCircle className="w-3.5 h-3.5" /> Deadlines</div>
+                <p className="text-2xl font-bold">{upcomingDeadlines.length}</p>
+              </div>
+              <div className="bg-card rounded-xl border border-border p-4">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><CalendarDays className="w-3.5 h-3.5" /> Leave Balance</div>
+                <p className="text-2xl font-bold">{leaveBalance} <span className="text-sm font-normal text-muted-foreground">PL</span></p>
+              </div>
+              <div className="bg-card rounded-xl border border-border p-4">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><Clock className="w-3.5 h-3.5" /> Today</div>
+                <p className="text-sm font-medium mt-1">{attendanceMarked ? '✓ Checked in' : 'Not checked in'}</p>
+              </div>
             </div>
-            <div className="bg-card rounded-xl border border-border p-4">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><AlertCircle className="w-3.5 h-3.5" /> Upcoming Deadlines</div>
-              <p className="text-2xl font-bold">{upcomingDeadlines.length}</p>
-            </div>
-            <div className="bg-card rounded-xl border border-border p-4">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><CalendarDays className="w-3.5 h-3.5" /> Leave Balance</div>
-              <p className="text-2xl font-bold">{leaveBalance} <span className="text-sm font-normal text-muted-foreground">PL</span></p>
-            </div>
-            <div className="bg-card rounded-xl border border-border p-4">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><Clock className="w-3.5 h-3.5" /> Today</div>
-              <p className="text-sm font-medium mt-1">{attendanceMarked ? '✓ Checked in' : 'Not checked in'}</p>
-            </div>
+            {/* Right: Quote */}
+            <QuoteCard />
           </div>
 
           {/* Quick Actions */}
@@ -309,20 +311,36 @@ export default async function DashboardPage() {
       {/* ═══ ADMIN DASHBOARD ═══ */}
       {isAdmin && (
         <>
-          {/* Admin Stats Row */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-card rounded-xl border border-border p-4">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><Users className="w-3.5 h-3.5" /> Team</div>
-              <p className="text-2xl font-bold">{totalTeamMembers}</p>
-              {teamOnLeave.length > 0 && <p className="text-xs text-yellow-500 mt-1">{teamOnLeave.length} on leave today</p>}
-            </div>
-            {Object.entries(taskStatusCounts).map(([name, count]) => (
-              <div key={name} className="bg-card rounded-xl border border-border p-4">
-                <div className="text-xs text-muted-foreground mb-1">{name}</div>
-                <p className="text-2xl font-bold">{count}</p>
+          {/* Stats (2x2) + Quote side by side */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-4">
+            {/* Left: 2x2 stat cards */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-card rounded-xl border border-border p-4">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1"><Users className="w-3.5 h-3.5" /> Team</div>
+                <p className="text-2xl font-bold">{totalTeamMembers}</p>
+                {teamOnLeave.length > 0 && <p className="text-xs text-yellow-500 mt-1">{teamOnLeave.length} on leave</p>}
               </div>
-            ))}
+              {Object.entries(taskStatusCounts).slice(0, 3).map(([name, count]) => (
+                <div key={name} className="bg-card rounded-xl border border-border p-4">
+                  <div className="text-xs text-muted-foreground mb-1">{name}</div>
+                  <p className="text-2xl font-bold">{count}</p>
+                </div>
+              ))}
+            </div>
+            {/* Right: Quote */}
+            <QuoteCard />
           </div>
+          {/* Remaining status counts */}
+          {Object.entries(taskStatusCounts).length > 3 && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {Object.entries(taskStatusCounts).slice(3).map(([name, count]) => (
+                <div key={name} className="bg-card rounded-xl border border-border p-4">
+                  <div className="text-xs text-muted-foreground mb-1">{name}</div>
+                  <p className="text-2xl font-bold">{count}</p>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Two-column layout */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

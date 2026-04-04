@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X, Quote } from 'lucide-react'
+import { Quote } from 'lucide-react'
 
 // Curated fallback quotes (work/motivational only)
 const FALLBACK_QUOTES = [
@@ -47,21 +47,13 @@ function getTimeBlockIndex(max: number): number {
 
 export function QuoteCard() {
   const [quote, setQuote] = useState<{ q: string; a: string } | null>(null)
-  const [dismissed, setDismissed] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
 
-    // Check if dismissed within the current 4-hour block
-    const currentBlock = Math.floor(new Date().getHours() / 4)
-    const storedBlock = sessionStorage.getItem('quote_dismissed_block')
-    if (storedBlock === String(currentBlock)) {
-      setDismissed(true)
-      return
-    }
-
     // Try to get from cache first
+    const currentBlock = Math.floor(new Date().getHours() / 4)
     const cached = sessionStorage.getItem('quote_cache')
     const cachedBlock = sessionStorage.getItem('quote_cache_block')
     if (cached && cachedBlock === String(currentBlock)) {
@@ -87,24 +79,13 @@ export function QuoteCard() {
       })
   }, [])
 
-  function handleDismiss() {
-    const currentBlock = Math.floor(new Date().getHours() / 4)
-    sessionStorage.setItem('quote_dismissed_block', String(currentBlock))
-    setDismissed(true)
-  }
-
-  if (!mounted || dismissed || !quote) return null
+  if (!mounted || !quote) return null
 
   const gradientIdx = getTimeBlockIndex(GRADIENTS.length)
   const gradient = GRADIENTS[gradientIdx]
 
   return (
-    <div className={`relative bg-gradient-to-r ${gradient} rounded-2xl p-6 sm:p-8 overflow-hidden`}>
-      {/* Dismiss button */}
-      <button onClick={handleDismiss} className="absolute top-3 right-3 text-white/60 hover:text-white transition-colors">
-        <X className="w-4 h-4" />
-      </button>
-
+    <div className={`relative bg-gradient-to-r ${gradient} rounded-2xl p-6 sm:p-8 overflow-hidden flex flex-col justify-center h-full min-h-[160px]`}>
       {/* Quote icon */}
       <Quote className="w-8 h-8 text-white/30 mb-3" />
 
