@@ -4,7 +4,7 @@ import { ArrowDownRight, ArrowUpRight, TrendingUp, Wallet } from 'lucide-react'
 // Removed YAxis to clear the unused warning
 import { BarChart, Bar, XAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
+import Link from 'next/link'
 
 interface Activity {
   id: string;
@@ -53,7 +53,7 @@ export function DashboardClient({ totalIncome, totalExpenses, netProfit, recentA
       
       {/* 1. TOP METRIC CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-card p-6 rounded-lg border shadow-sm flex flex-col justify-between space-y-4">
+        <div className="bg-card p-6 rounded-xl border flex flex-col justify-between space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-muted-foreground">Total Income</p>
             <div className="h-10 w-10 bg-green-100 dark:bg-green-900/40 rounded-lg flex items-center justify-center">
@@ -63,7 +63,7 @@ export function DashboardClient({ totalIncome, totalExpenses, netProfit, recentA
           <h2 className="text-3xl font-bold">{formatCurrency(totalIncome)}</h2>
         </div>
 
-        <div className="bg-card p-6 rounded-lg border shadow-sm flex flex-col justify-between space-y-4">
+        <div className="bg-card p-6 rounded-xl border flex flex-col justify-between space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-muted-foreground">Total Expenses</p>
             <div className="h-10 w-10 bg-red-100 dark:bg-red-900/40 rounded-lg flex items-center justify-center">
@@ -73,7 +73,7 @@ export function DashboardClient({ totalIncome, totalExpenses, netProfit, recentA
           <h2 className="text-3xl font-bold">{formatCurrency(totalExpenses)}</h2>
         </div>
 
-        <div className="bg-card p-6 rounded-lg border shadow-sm flex flex-col justify-between space-y-4">
+        <div className="bg-card p-6 rounded-xl border flex flex-col justify-between space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-muted-foreground">Net Profit</p>
             <div className="h-10 w-10 bg-blue-100 dark:bg-blue-900/40 rounded-lg flex items-center justify-center">
@@ -87,7 +87,7 @@ export function DashboardClient({ totalIncome, totalExpenses, netProfit, recentA
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* 2. CASH FLOW CHART */}
-        <div className="bg-card p-6 rounded-lg border shadow-sm lg:col-span-1 space-y-6">
+        <div className="bg-card p-6 rounded-xl border lg:col-span-1 space-y-6">
           <h3 className="font-semibold text-lg flex items-center">
             <Wallet className="h-5 w-5 mr-2 text-muted-foreground" />
             Cash Flow Overview
@@ -113,7 +113,7 @@ export function DashboardClient({ totalIncome, totalExpenses, netProfit, recentA
         </div>
 
         {/* 3. RECENT ACTIVITY FEED */}
-        <div className="bg-card p-6 rounded-lg border shadow-sm lg:col-span-2 space-y-6">
+        <div className="bg-card p-6 rounded-xl border lg:col-span-2 space-y-6">
           <h3 className="font-semibold text-lg">Recent Transactions</h3>
           <div className="border rounded-lg">
             <Table>
@@ -127,21 +127,31 @@ export function DashboardClient({ totalIncome, totalExpenses, netProfit, recentA
               </TableHeader>
               <TableBody>
                 {recentActivity.map((activity) => (
-                  <TableRow key={`${activity.type}-${activity.id}`}>
-                    <TableCell>{formatDate(activity.date)}</TableCell>
+                  <TableRow key={`${activity.type}-${activity.id}`} className="cursor-pointer hover:bg-muted/50">
                     <TableCell>
-                      {activity.type === 'income' ? (
-                        <Badge className="bg-green-100 text-green-800 hover:bg-green-100 border-green-200">Income</Badge>
-                      ) : (
-                        <Badge variant="outline" className="text-red-600 border-red-200 bg-red-50">Expense</Badge>
-                      )}
+                      <Link href={activity.type === 'income' ? '/income' : '/expenses'} className="block">
+                        {formatDate(activity.date)}
+                      </Link>
                     </TableCell>
                     <TableCell>
-                      <p className="font-medium">{activity.name || 'Unknown'}</p>
-                      <p className="text-xs text-muted-foreground">{activity.description}</p>
+                      <Link href={activity.type === 'income' ? '/income' : '/expenses'}>
+                        {activity.type === 'income' ? (
+                          <span className="text-xs px-2 py-0.5 rounded-lg bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20">Income</span>
+                        ) : (
+                          <span className="text-xs px-2 py-0.5 rounded-lg bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20">Expense</span>
+                        )}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Link href={activity.type === 'income' ? '/income' : '/expenses'}>
+                        <p className="font-medium">{activity.name || 'Unknown'}</p>
+                        {activity.description && <p className="text-xs text-muted-foreground">{activity.description}</p>}
+                      </Link>
                     </TableCell>
                     <TableCell className={`text-right font-bold ${activity.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
-                      {activity.type === 'income' ? '+' : '-'}{formatCurrency(activity.amount)}
+                      <Link href={activity.type === 'income' ? '/income' : '/expenses'}>
+                        {activity.type === 'income' ? '+' : '-'}{formatCurrency(activity.amount)}
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}
