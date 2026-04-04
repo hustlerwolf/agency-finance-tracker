@@ -7,6 +7,7 @@ import {
   Users, AlertCircle, Bug, Timer,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { QuoteCard } from '@/components/quote-card'
 
 export const dynamic = 'force-dynamic'
 
@@ -190,6 +191,9 @@ export default async function DashboardPage() {
         <h1 className="text-3xl font-bold tracking-tight">Hey {memberName}, {getGreeting()}!</h1>
         <p className="text-muted-foreground">{new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
       </div>
+
+      {/* Motivational Quote */}
+      <QuoteCard />
 
       {/* ═══ TEAM MEMBER DASHBOARD ═══ */}
       {!isAdmin && (
